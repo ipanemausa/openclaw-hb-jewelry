@@ -1,0 +1,591 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>HB Jewelry — Piezas únicas, crafted for you</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --gold: #C9A84C;
+    --gold-light: #E8D49A;
+    --gold-dim: #8B6914;
+    --black: #0A0A0A;
+    --off-black: #111111;
+    --surface: #161616;
+    --surface-2: #1E1E1E;
+    --border: rgba(201,168,76,0.18);
+    --border-strong: rgba(201,168,76,0.4);
+    --text-primary: #F5F0E8;
+    --text-secondary: #9A9080;
+    --text-muted: #5A544A;
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'Inter', sans-serif;
+    background: var(--black);
+    color: var(--text-primary);
+    font-size: 15px;
+    line-height: 1.7;
+    font-weight: 300;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* NAV */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 0 48px;
+    height: 72px;
+    border-bottom: 0.5px solid var(--border);
+    background: rgba(10,10,10,0.92);
+    backdrop-filter: blur(12px);
+  }
+
+  .nav-logo {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 22px;
+    font-weight: 300;
+    letter-spacing: 0.18em;
+    color: var(--gold);
+    text-decoration: none;
+    text-transform: uppercase;
+  }
+
+  .nav-links { display: flex; gap: 40px; list-style: none; }
+
+  .nav-links a {
+    font-size: 12px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--text-secondary);
+    text-decoration: none;
+    transition: color 0.2s;
+  }
+  .nav-links a:hover { color: var(--gold); }
+
+  .nav-cta {
+    font-size: 12px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--gold);
+    border: 0.5px solid var(--border-strong);
+    padding: 10px 24px;
+    text-decoration: none;
+    transition: background 0.2s, color 0.2s;
+  }
+  .nav-cta:hover { background: var(--gold); color: var(--black); }
+
+  /* HERO */
+  .hero {
+    min-height: 100vh;
+    display: flex; flex-direction: column; justify-content: center;
+    padding: 120px 48px 80px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .hero::before {
+    content: '';
+    position: absolute; top: 0; right: 0;
+    width: 55%; height: 100%;
+    background: linear-gradient(135deg, transparent 40%, rgba(201,168,76,0.04) 100%);
+    pointer-events: none;
+  }
+
+  .hero-eyebrow {
+    font-size: 11px;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 32px;
+    display: flex; align-items: center; gap: 16px;
+  }
+  .hero-eyebrow::before {
+    content: '';
+    display: block; width: 32px; height: 0.5px;
+    background: var(--gold);
+  }
+
+  .hero-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(52px, 7vw, 96px);
+    font-weight: 300;
+    line-height: 1.05;
+    letter-spacing: -0.01em;
+    color: var(--text-primary);
+    max-width: 720px;
+    margin-bottom: 32px;
+  }
+
+  .hero-title em {
+    font-style: italic;
+    color: var(--gold);
+  }
+
+  .hero-subtitle {
+    font-size: 15px;
+    font-weight: 300;
+    color: var(--text-secondary);
+    max-width: 420px;
+    margin-bottom: 56px;
+    line-height: 1.8;
+  }
+
+  .hero-actions { display: flex; align-items: center; gap: 32px; }
+
+  .btn-primary {
+    font-size: 12px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--black);
+    background: var(--gold);
+    padding: 16px 40px;
+    text-decoration: none;
+    transition: opacity 0.2s;
+  }
+  .btn-primary:hover { opacity: 0.85; }
+
+  .btn-ghost {
+    font-size: 12px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--text-secondary);
+    text-decoration: none;
+    display: flex; align-items: center; gap: 10px;
+    transition: color 0.2s;
+  }
+  .btn-ghost:hover { color: var(--gold); }
+  .btn-ghost::after { content: '→'; font-size: 14px; }
+
+  .hero-ornament {
+    position: absolute; right: 48px; top: 50%;
+    transform: translateY(-50%);
+    width: 380px; height: 380px;
+    border: 0.5px solid var(--border);
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    opacity: 0.6;
+  }
+  .hero-ornament::before {
+    content: '';
+    width: 280px; height: 280px;
+    border: 0.5px solid var(--border-strong);
+    border-radius: 50%;
+    position: absolute;
+  }
+  .hero-ornament-text {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 13px;
+    font-style: italic;
+    color: var(--gold-dim);
+    letter-spacing: 0.08em;
+  }
+
+  /* DIVIDER */
+  .section-divider {
+    height: 0.5px;
+    background: var(--border);
+    margin: 0 48px;
+  }
+
+  /* STATS STRIP */
+  .stats-strip {
+    display: grid; grid-template-columns: repeat(4, 1fr);
+    border-bottom: 0.5px solid var(--border);
+  }
+  .stat-item {
+    padding: 40px 48px;
+    border-right: 0.5px solid var(--border);
+  }
+  .stat-item:last-child { border-right: none; }
+
+  .stat-number {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 42px;
+    font-weight: 300;
+    color: var(--gold);
+    line-height: 1;
+    margin-bottom: 8px;
+  }
+  .stat-label {
+    font-size: 11px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+  }
+
+  /* SERVICES */
+  .section {
+    padding: 100px 48px;
+  }
+
+  .section-header {
+    display: flex; align-items: flex-end; justify-content: space-between;
+    margin-bottom: 64px;
+  }
+
+  .section-tag {
+    font-size: 11px;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--gold);
+    display: flex; align-items: center; gap: 12px;
+    margin-bottom: 16px;
+  }
+  .section-tag::before {
+    content: ''; display: block;
+    width: 24px; height: 0.5px;
+    background: var(--gold);
+  }
+
+  .section-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(32px, 4vw, 52px);
+    font-weight: 300;
+    line-height: 1.1;
+    color: var(--text-primary);
+    max-width: 560px;
+  }
+
+  .section-title em { font-style: italic; color: var(--gold); }
+
+  .services-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1px;
+    background: var(--border);
+    border: 0.5px solid var(--border);
+  }
+
+  .service-card {
+    background: var(--off-black);
+    padding: 48px 40px;
+    transition: background 0.3s;
+  }
+  .service-card:hover { background: var(--surface); }
+
+  .service-number {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 13px;
+    color: var(--gold-dim);
+    letter-spacing: 0.1em;
+    margin-bottom: 32px;
+  }
+
+  .service-icon {
+    font-size: 24px;
+    margin-bottom: 20px;
+    color: var(--gold);
+  }
+
+  .service-name {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 26px;
+    font-weight: 300;
+    color: var(--text-primary);
+    margin-bottom: 16px;
+    line-height: 1.2;
+  }
+
+  .service-desc {
+    font-size: 13px;
+    color: var(--text-muted);
+    line-height: 1.8;
+    margin-bottom: 32px;
+  }
+
+  .service-link {
+    font-size: 11px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--gold);
+    text-decoration: none;
+    display: flex; align-items: center; gap: 8px;
+    opacity: 0;
+    transition: opacity 0.2s;
+  }
+  .service-card:hover .service-link { opacity: 1; }
+  .service-link::after { content: '→'; }
+
+  /* COTIZACION CTA */
+  .quote-cta {
+    background: var(--surface);
+    border: 0.5px solid var(--border);
+    margin: 0 48px;
+    padding: 80px;
+    display: flex; align-items: center; justify-content: space-between;
+    gap: 48px;
+  }
+
+  .quote-cta-content { max-width: 560px; }
+  .quote-cta-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 42px;
+    font-weight: 300;
+    line-height: 1.1;
+    margin-bottom: 16px;
+  }
+  .quote-cta-title em { font-style: italic; color: var(--gold); }
+  .quote-cta-subtitle {
+    font-size: 14px;
+    color: var(--text-secondary);
+    line-height: 1.8;
+  }
+
+  /* PROCESS */
+  .process-list {
+    display: flex; flex-direction: column; gap: 0;
+    border: 0.5px solid var(--border);
+  }
+
+  .process-step {
+    display: grid;
+    grid-template-columns: 80px 1fr 1fr;
+    align-items: start;
+    padding: 40px 48px;
+    border-bottom: 0.5px solid var(--border);
+    gap: 40px;
+    transition: background 0.2s;
+  }
+  .process-step:last-child { border-bottom: none; }
+  .process-step:hover { background: var(--surface); }
+
+  .step-num {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 52px;
+    font-weight: 300;
+    color: var(--border-strong);
+    line-height: 1;
+  }
+
+  .step-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 22px;
+    font-weight: 300;
+    color: var(--text-primary);
+    margin-bottom: 8px;
+  }
+
+  .step-timing {
+    font-size: 11px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--gold-dim);
+  }
+
+  .step-desc {
+    font-size: 13px;
+    color: var(--text-muted);
+    line-height: 1.8;
+    align-self: center;
+  }
+
+  /* FOOTER */
+  footer {
+    border-top: 0.5px solid var(--border);
+    padding: 48px;
+    display: flex; align-items: center; justify-content: space-between;
+  }
+
+  .footer-logo {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 18px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--gold);
+  }
+
+  .footer-links { display: flex; gap: 32px; }
+  .footer-links a {
+    font-size: 11px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    text-decoration: none;
+    transition: color 0.2s;
+  }
+  .footer-links a:hover { color: var(--text-secondary); }
+
+  .footer-copy {
+    font-size: 11px;
+    color: var(--text-muted);
+  }
+
+  /* RESPONSIVE */
+  @media (max-width: 900px) {
+    nav { padding: 0 24px; }
+    .nav-links { display: none; }
+    .hero { padding: 100px 24px 60px; }
+    .hero-ornament { display: none; }
+    .stats-strip { grid-template-columns: repeat(2, 1fr); }
+    .stat-item { padding: 32px 24px; }
+    .section { padding: 64px 24px; }
+    .services-grid { grid-template-columns: 1fr; }
+    .quote-cta { flex-direction: column; padding: 48px 24px; margin: 0 24px; }
+    .process-step { grid-template-columns: 48px 1fr; gap: 20px; }
+    .step-desc { grid-column: 2; }
+    footer { flex-direction: column; gap: 24px; text-align: center; padding: 32px 24px; }
+    .footer-links { display: none; }
+    .section-divider { margin: 0 24px; }
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <a href="/" class="nav-logo">HB Jewelry</a>
+  <ul class="nav-links">
+    <li><a href="#servicios">Servicios</a></li>
+    <li><a href="#proceso">Proceso</a></li>
+    <li><a href="#coleccion">Colección</a></li>
+    <li><a href="#contacto">Contacto</a></li>
+  </ul>
+  <a href="#cotizacion" class="nav-cta">Cotizar pieza</a>
+</nav>
+
+<main>
+
+  <!-- HERO -->
+  <section class="hero">
+    <p class="hero-eyebrow">Joyería personalizada · Desde 2018</p>
+    <h1 class="hero-title">
+      Cada pieza,<br>
+      <em>creada para ti</em>
+    </h1>
+    <p class="hero-subtitle">
+      Diseñamos y fabricamos joyas únicas a medida. Desde la primera consulta hasta la entrega, cada detalle es tuyo.
+    </p>
+    <div class="hero-actions">
+      <a href="#cotizacion" class="btn-primary">Solicitar cotización</a>
+      <a href="#proceso" class="btn-ghost">Ver proceso</a>
+    </div>
+    <div class="hero-ornament">
+      <span class="hero-ornament-text">Artesanía fina</span>
+    </div>
+  </section>
+
+  <!-- STATS -->
+  <div class="stats-strip">
+    <div class="stat-item">
+      <div class="stat-number">340+</div>
+      <div class="stat-label">Piezas entregadas</div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-number">7</div>
+      <div class="stat-label">Años de experiencia</div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-number">100%</div>
+      <div class="stat-label">Piezas únicas</div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-number">48h</div>
+      <div class="stat-label">Primera respuesta</div>
+    </div>
+  </div>
+
+  <!-- SERVICIOS -->
+  <section class="section" id="servicios">
+    <div class="section-header">
+      <div>
+        <p class="section-tag">Servicios</p>
+        <h2 class="section-title">Lo que <em>hacemos</em> por ti</h2>
+      </div>
+    </div>
+    <div class="services-grid">
+      <div class="service-card">
+        <div class="service-number">01</div>
+        <div class="service-name">Diseño personalizado</div>
+        <p class="service-desc">Tu idea, nuestra artesanía. Trabajamos desde cero contigo hasta que la pieza sea exactamente lo que imaginaste.</p>
+        <a href="#cotizacion" class="service-link">Empezar</a>
+      </div>
+      <div class="service-card">
+        <div class="service-number">02</div>
+        <div class="service-name">Restauración de joyas</div>
+        <p class="service-desc">Devolvemos vida a piezas con historia. Evaluación gratuita, presupuesto detallado, trabajo con garantía.</p>
+        <a href="#cotizacion" class="service-link">Consultar</a>
+      </div>
+      <div class="service-card">
+        <div class="service-number">03</div>
+        <div class="service-name">Rediseño y transformación</div>
+        <p class="service-desc">Convierte joyas heredadas en piezas modernas. Conservamos el material original y el valor sentimental.</p>
+        <a href="#cotizacion" class="service-link">Ver ejemplos</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- PROCESO -->
+  <section class="section" id="proceso" style="padding-top: 0;">
+    <div class="section-header">
+      <div>
+        <p class="section-tag">Proceso</p>
+        <h2 class="section-title">Cómo <em>trabajamos</em></h2>
+      </div>
+    </div>
+    <div class="process-list">
+      <div class="process-step">
+        <div class="step-num">01</div>
+        <div>
+          <div class="step-title">Consulta inicial</div>
+          <div class="step-timing">Respuesta en 24–48h</div>
+        </div>
+        <p class="step-desc">Nos cuentas tu idea, ocasión, presupuesto y materiales preferidos. Sin compromiso.</p>
+      </div>
+      <div class="process-step">
+        <div class="step-num">02</div>
+        <div>
+          <div class="step-title">Propuesta y cotización</div>
+          <div class="step-timing">2–3 días hábiles</div>
+        </div>
+        <p class="step-desc">Preparamos bocetos digitales y un presupuesto detallado. Iteramos hasta que sea perfecto.</p>
+      </div>
+      <div class="process-step">
+        <div class="step-num">03</div>
+        <div>
+          <div class="step-title">Fabricación</div>
+          <div class="step-timing">10–21 días según pieza</div>
+        </div>
+        <p class="step-desc">Elaboramos tu joya a mano. Recibirás fotos del proceso en cada etapa importante.</p>
+      </div>
+      <div class="process-step">
+        <div class="step-num">04</div>
+        <div>
+          <div class="step-title">Entrega</div>
+          <div class="step-timing">Envío asegurado o recogida</div>
+        </div>
+        <p class="step-desc">Tu pieza llega en packaging premium con certificado de autenticidad y garantía de 2 años.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA COTIZACION -->
+  <div class="quote-cta" id="cotizacion">
+    <div class="quote-cta-content">
+      <h2 class="quote-cta-title">¿Lista tu <em>próxima pieza</em>?</h2>
+      <p class="quote-cta-subtitle">Cuéntanos tu idea. En menos de 48 horas tendrás una propuesta personalizada sin ningún compromiso.</p>
+    </div>
+    <a href="cotizacion.html" class="btn-primary" style="white-space: nowrap; flex-shrink: 0;">Solicitar cotización</a>
+  </div>
+
+</main>
+
+<footer id="contacto">
+  <div class="footer-logo">HB Jewelry</div>
+  <div class="footer-links">
+    <a href="#servicios">Servicios</a>
+    <a href="#proceso">Proceso</a>
+    <a href="cotizacion.html">Cotizar</a>
+    <a href="mailto:hola@hbjewelry.com">hola@hbjewelry.com</a>
+  </div>
+  <div class="footer-copy">© 2026 HB Jewelry. Todos los derechos reservados.</div>
+</footer>
+
+</body>
+</html>

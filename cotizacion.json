@@ -1,0 +1,111 @@
+{
+  "flow_id": "hb_cotizacion_v1",
+  "nombre": "Cotización personalizada de joya",
+  "agente": "marketing",
+  "gateway": "http://localhost:8080",
+  "descripcion": "Flujo completo desde solicitud de cotización hasta propuesta enviada al cliente.",
+
+  "trigger": {
+    "tipo": "form_submit",
+    "origen": "cotizacion.html",
+    "endpoint": "/api/flows/cotizacion"
+  },
+
+  "estados": [
+    {
+      "id": "recepcion",
+      "nombre": "Recepción de solicitud",
+      "descripcion": "El formulario de cotizacion.html envía los datos al gateway Flask.",
+      "input": {
+        "campos_requeridos": ["nombre", "email", "tipo_pieza", "descripcion", "presupuesto"],
+        "campos_opcionales": ["telefono", "material", "ocasion", "referencias"]
+      },
+      "accion": "POST /api/messages → tabla messages (PostgreSQL)",
+      "siguiente": "clasificacion"
+    },
+    {
+      "id": "clasificacion",
+      "nombre": "Clasificación automática",
+      "descripcion": "El agente marketing clasifica la solicitud por tipo, presupuesto y complejidad.",
+      "agente": "marketing",
+      "prompt_template": "Eres el agente de ventas de HB Jewelry. Clasifica esta solicitud de cotización:\n\nCliente: {{nombre}}\nPieza: {{tipo_pieza}}\nMaterial: {{material}}\nPresupuesto: {{presupuesto}}\nDescripción: {{descripcion}}\n\nResponde SOLO con JSON:\n{\n  'prioridad': 'alta|media|baja',\n  'categoria': 'personalizado|restauracion|rediseno',\n  'complejidad': 'simple|intermedia|elaborada',\n  'tiempo_estimado_dias': number,\n  'notas_internas': 'string'\n}",
+      "siguiente": "propuesta"
+    },
+    {
+      "id": "propuesta",
+      "nombre": "Generación de propuesta",
+      "descripcion": "El agente redacta una propuesta personalizada para el cliente.",
+      "agente": "marketing",
+      "prompt_template": "Eres el equipo de HB Jewelry. Redacta una propuesta de cotización inicial para:\n\nCliente: {{nombre}}\nPieza: {{tipo_pieza}} en {{material}}\nOcasión: {{ocasion}}\nPresupuesto indicado: {{presupuesto}}\nDescripción: {{descripcion}}\nClasificación interna: {{clasificacion_resultado}}\n\nLa propuesta debe ser:\n- Cálida y profesional, en español\n- Incluir rango de precio estimado\n- Mencionar tiempo de fabricación\n- Solicitar una llamada/video para profundizar\n- Máximo 200 palabras\n- NO mencionar precios exactos, solo rangos\n\nFormato: texto plano listo para enviar por email.",
+      "siguiente": "notificacion"
+    },
+    {
+      "id": "notificacion",
+      "nombre": "Notificación y registro",
+      "descripcion": "Se envía la propuesta al cliente y se guarda todo en BD.",
+      "acciones": [
+        {
+          "tipo": "email",
+          "destinatario": "{{email}}",
+          "asunto": "Tu cotización HB Jewelry — {{tipo_pieza}}",
+          "cuerpo": "{{propuesta_texto}}"
+        },
+        {
+          "tipo": "db_insert",
+          "tabla": "cotizaciones",
+          "datos": {
+            "cliente_nombre": "{{nombre}}",
+            "cliente_email": "{{email}}",
+            "tipo_pieza": "{{tipo_pieza}}",
+            "presupuesto": "{{presupuesto}}",
+            "descripcion": "{{descripcion}}",
+            "clasificacion": "{{clasificacion_resultado}}",
+            "propuesta": "{{propuesta_texto}}",
+            "estado": "enviada",
+            "created_at": "NOW()"
+          }
+        },
+        {
+          "tipo": "redis_pub",
+          "canal": "hb:cotizaciones:nuevas",
+          "payload": "{{flow_id}}:{{cliente_email}}"
+        }
+      ],
+      "siguiente": "fin"
+    },
+    {
+      "id": "fin",
+      "nombre": "Flujo completado",
+      "descripcion": "Cotización enviada y registrada. Cliente en estado 'propuesta_enviada'.",
+      "estado_cliente": "propuesta_enviada",
+      "followup_dias": 3
+    }
+  ],
+
+  "manejo_errores": {
+    "campos_faltantes": "Devolver 400 con lista de campos requeridos",
+    "agente_no_disponible": "Guardar en cola Redis → reintentar en 5min",
+    "email_falla": "Log en PostgreSQL → notificar admin → continuar flujo"
+  },
+
+  "schema_db": {
+    "tabla": "cotizaciones",
+    "sql": "CREATE TABLE IF NOT EXISTS cotizaciones (id SERIAL PRIMARY KEY, cliente_nombre VARCHAR(255), cliente_email VARCHAR(255), tipo_pieza VARCHAR(100), material VARCHAR(100), ocasion VARCHAR(100), presupuesto VARCHAR(50), descripcion TEXT, referencias TEXT, clasificacion JSONB, propuesta TEXT, estado VARCHAR(50) DEFAULT 'recibida', created_at TIMESTAMP DEFAULT NOW(), updated_at TIMESTAMP DEFAULT NOW());"
+  },
+
+  "endpoint_flask": {
+    "ruta": "/api/flows/cotizacion",
+    "metodo": "POST",
+    "content_type": "application/json",
+    "ejemplo_payload": {
+      "nombre": "María García",
+      "email": "maria@ejemplo.com",
+      "tipo_pieza": "anillo",
+      "material": "Oro 18k amarillo",
+      "ocasion": "Compromiso / Matrimonio",
+      "presupuesto": "800_2000",
+      "descripcion": "Anillo de compromiso solitario, piedra central diamante redondo, banda simple, elegante.",
+      "referencias": "https://pin.it/ejemplo123"
+    }
+  }
+}

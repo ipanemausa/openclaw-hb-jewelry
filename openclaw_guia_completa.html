@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>OpenClaw + HB Jewelry — Documento Maestro</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap');
+  :root {
+    --bg:#0f0f0f;--bg2:#171717;--bg3:#1f1f1f;
+    --border:rgba(255,255,255,0.08);--border2:rgba(255,255,255,0.15);
+    --text:#f0ede8;--text2:#a09d99;--text3:#6b6866;
+    --purple:#a78bfa;--purple-bg:rgba(167,139,250,0.1);
+    --teal:#34d399;--teal-bg:rgba(52,211,153,0.1);
+    --amber:#fbbf24;--amber-bg:rgba(251,191,36,0.1);
+    --coral:#fb7185;--coral-bg:rgba(251,113,133,0.1);
+    --blue:#60a5fa;--blue-bg:rgba(96,165,250,0.1);
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;line-height:1.6}
+  .hero{padding:50px 24px 32px;max-width:900px;margin:0 auto;text-align:center}
+  .hero-badge{display:inline-flex;align-items:center;gap:6px;background:var(--teal-bg);border:1px solid rgba(52,211,153,0.2);border-radius:20px;padding:4px 14px;font-size:12px;color:var(--teal);margin-bottom:20px;letter-spacing:.05em}
+  .hero h1{font-size:clamp(24px,4vw,42px);font-weight:600;letter-spacing:-.02em;line-height:1.15;margin-bottom:12px}
+  .hero h1 span{color:var(--teal)}
+  .hero p{font-size:15px;color:var(--text2);max-width:540px;margin:0 auto 24px}
+  .pbar-wrap{background:var(--bg3);border:1px solid var(--border);border-radius:20px;height:6px;max-width:280px;margin:0 auto 6px;overflow:hidden}
+  .pbar-fill{height:100%;background:linear-gradient(90deg,var(--teal),var(--purple));border-radius:20px;width:0%;transition:width .5s}
+  .plabel{font-size:11px;color:var(--text3)}
+  nav{display:flex;gap:6px;padding:0 24px;max-width:900px;margin:0 auto 28px;flex-wrap:wrap;justify-content:center}
+  .tab{background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:7px 14px;font-size:12px;color:var(--text2);cursor:pointer;transition:all .2s;display:flex;align-items:center;gap:5px;font-family:'DM Sans',sans-serif}
+  .tab:hover{border-color:var(--border2);color:var(--text)}
+  .tab.active{border-color:var(--teal);color:var(--teal);background:var(--teal-bg)}
+  .dot{width:5px;height:5px;border-radius:50%;background:currentColor;opacity:.5}
+  .tab.active .dot{opacity:1}
+  main{max-width:900px;margin:0 auto;padding:0 24px 80px}
+  .panel{display:none}.panel.active{display:block}
+  .cgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:10px;margin-bottom:20px}
+  .ccard{background:var(--bg2);border:1px solid var(--border);border-radius:12px;padding:14px;cursor:pointer;transition:all .2s;position:relative;overflow:hidden}
+  .ccard::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:var(--acc,var(--teal));transform:scaleX(0);transition:transform .2s;transform-origin:left}
+  .ccard:hover{border-color:var(--border2);transform:translateY(-2px)}
+  .ccard:hover::before,.ccard.active::before{transform:scaleX(1)}
+  .ccard.active{border-color:var(--acc,var(--teal));background:var(--acc-bg,var(--teal-bg))}
+  .ccard.done::after{content:'✓';position:absolute;top:10px;right:12px;font-size:11px;color:var(--teal)}
+  .ci{font-size:22px;margin-bottom:6px}.cn{font-size:13px;font-weight:500;color:var(--text);margin-bottom:3px}.ch{font-size:11px;color:var(--text3)}
+  .dbox{background:var(--bg2);border:1px solid var(--border);border-radius:14px;padding:20px;display:none;animation:si .2s ease}
+  .dbox.show{display:block}
+  @keyframes si{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
+  .dh{display:flex;align-items:center;gap:10px;margin-bottom:16px}
+  .di{font-size:28px}.dt{font-size:18px;font-weight:600}.ds{font-size:12px;color:var(--text2);margin-top:2px}
+  .slabel{font-size:10px;font-weight:500;color:var(--text3);letter-spacing:.1em;text-transform:uppercase;margin:16px 0 8px}
+  .etext{font-size:13px;color:var(--text2);line-height:1.7;background:var(--bg3);border-radius:8px;padding:14px;border-left:3px solid var(--acc,var(--teal))}
+  .abox{background:var(--amber-bg);border:1px solid rgba(251,191,36,.15);border-radius:8px;padding:12px 14px}
+  .alabel{font-size:10px;color:var(--amber);font-weight:500;letter-spacing:.08em;text-transform:uppercase;margin-bottom:4px}
+  .atext{font-size:13px;color:#d4a520;line-height:1.5}
+  .tags{display:flex;gap:5px;flex-wrap:wrap}
+  .tag{font-family:'DM Mono',monospace;font-size:10px;background:var(--bg3);border:1px solid var(--border);border-radius:5px;padding:2px 7px;color:var(--text3)}
+  .qbox{background:var(--bg3);border:1px solid var(--border);border-radius:10px;padding:16px}
+  .qq{font-size:13px;font-weight:500;color:var(--text);margin-bottom:12px}
+  .qopts{display:flex;flex-direction:column;gap:6px}
+  .qopt{background:var(--bg2);border:1px solid var(--border);border-radius:7px;padding:9px 12px;font-size:12px;color:var(--text2);cursor:pointer;text-align:left;transition:all .15s;font-family:'DM Sans',sans-serif}
+  .qopt:hover:not(:disabled){border-color:var(--border2);color:var(--text)}
+  .qopt.ok{background:var(--teal-bg);border-color:var(--teal);color:var(--teal)}
+  .qopt.bad{background:var(--coral-bg);border-color:var(--coral);color:var(--coral)}
+  .qfb{margin-top:10px;font-size:12px;padding:8px 12px;border-radius:7px;display:none}
+  .qfb.show{display:block}.qfb.ok{background:var(--teal-bg);color:var(--teal)}.qfb.bad{background:var(--coral-bg);color:var(--coral)}
+  .mbtn{margin-top:14px;background:transparent;border:1px solid var(--border);border-radius:7px;padding:7px 16px;font-size:12px;color:var(--text3);cursor:pointer;font-family:'DM Sans',sans-serif;transition:all .2s}
+  .mbtn:hover{border-color:var(--teal);color:var(--teal);background:var(--teal-bg)}
+  .arch{display:flex;flex-direction:column;gap:4px;align-items:center}
+  .arow{display:flex;gap:8px;justify-content:center;flex-wrap:wrap}
+  .anode{border-radius:9px;padding:9px 14px;font-size:12px;font-weight:500;border:1px solid;cursor:pointer;transition:all .2s;text-align:center;min-width:110px}
+  .anode:hover{transform:scale(1.04)}
+  .asub{font-size:10px;opacity:.65;font-weight:400;margin-top:2px}
+  .aarrow{color:var(--text3);font-size:16px;text-align:center;padding:2px 0}
+  .anode.purple{background:rgba(167,139,250,.1);border-color:rgba(167,139,250,.3);color:var(--purple)}
+  .anode.teal{background:rgba(52,211,153,.1);border-color:rgba(52,211,153,.3);color:var(--teal)}
+  .anode.amber{background:rgba(251,191,36,.1);border-color:rgba(251,191,36,.3);color:var(--amber)}
+  .anode.blue{background:rgba(96,165,250,.1);border-color:rgba(96,165,250,.3);color:var(--blue)}
+  .anode.gray{background:rgba(160,157,153,.1);border-color:rgba(160,157,153,.2);color:var(--text2)}
+  .anode.coral{background:rgba(251,113,133,.1);border-color:rgba(251,113,133,.3);color:var(--coral)}
+  .adetail{background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:14px;margin-top:14px;font-size:13px;color:var(--text2);display:none;animation:si .2s ease}
+  .adetail.show{display:block}.adetail strong{color:var(--text)}
+  .dcgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:10px}
+  .dccard{background:var(--bg2);border:1px solid var(--border);border-radius:12px;padding:16px;cursor:pointer;transition:all .2s}
+  .dccard:hover{border-color:var(--teal);background:var(--teal-bg)}
+  .dclabel{font-size:11px;color:var(--teal);font-weight:500;letter-spacing:.08em;text-transform:uppercase;margin-bottom:6px}
+  .dcname{font-size:14px;font-weight:500;color:var(--text);margin-bottom:6px}
+  .dccode{font-family:'DM Mono',monospace;font-size:11px;color:var(--text2);background:var(--bg3);border-radius:6px;padding:8px 10px;line-height:1.6;white-space:pre-wrap;word-break:break-all}
+  .dcdetail{background:var(--bg2);border:1px solid var(--teal);border-radius:10px;padding:14px;margin-top:14px;display:none;animation:si .2s ease}
+  .dcdetail.show{display:block}
+  .roles{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:20px}
+  .role-card{background:var(--bg2);border:1px solid var(--border);border-radius:12px;padding:18px}
+  .role-title{font-size:15px;font-weight:600;margin-bottom:4px}
+  .role-sub{font-size:12px;color:var(--text2);margin-bottom:12px}
+  .role-list{list-style:none;display:flex;flex-direction:column;gap:6px}
+  .role-list li{font-size:12px;color:var(--text2);padding:6px 10px;background:var(--bg3);border-radius:6px;border-left:2px solid}
+  .role-card.di .role-title{color:var(--purple)}
+  .role-card.di .role-list li{border-color:var(--purple)}
+  .role-card.dc .role-title{color:var(--teal)}
+  .role-card.dc .role-list li{border-color:var(--teal)}
+  .sgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:8px}
+  .scard{background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:12px}
+  .sname{font-size:12px;font-weight:500;color:var(--text);margin-bottom:3px}
+  .sport{font-family:'DM Mono',monospace;font-size:10px;color:var(--text3);margin-bottom:7px}
+  .sbadge{display:inline-flex;align-items:center;gap:4px;font-size:10px;padding:2px 7px;border-radius:10px}
+  .sbadge.ok{background:var(--teal-bg);color:var(--teal)}.sbadge.warn{background:var(--amber-bg);color:var(--amber)}
+  .sbadge::before{content:'';width:4px;height:4px;border-radius:50%;background:currentColor}
+  @media(max-width:600px){.roles{grid-template-columns:1fr}}
+  footer{text-align:center;padding:20px;font-size:11px;color:var(--text3);border-top:1px solid var(--border);max-width:900px;margin:0 auto}
+</style>
+</head>
+<body>
+<div class="hero">
+  <div class="hero-badge"><span>●</span> Documento Maestro 2026</div>
+  <h1>OpenClaw + <span>HB Jewelry</span><br>Ecosistema Completo</h1>
+  <p>Guia interactiva del sistema operativo completo. Aprende cada componente, su rol y como se conecta.</p>
+  <div class="pbar-wrap"><div class="pbar-fill" id="pbar"></div></div>
+  <div class="plabel" id="plabel">0 de 15 conceptos aprendidos</div>
+</div>
+<nav>
+  <button class="tab active" onclick="showPanel('roles')"><span class="dot"></span>Roles DI/DC</button>
+  <button class="tab" onclick="showPanel('dcn')"><span class="dot"></span>Lenguaje DCn</button>
+  <button class="tab" onclick="showPanel('docker')"><span class="dot"></span>Docker</button>
+  <button class="tab" onclick="showPanel('gateway')"><span class="dot"></span>Gateway</button>
+  <button class="tab" onclick="showPanel('pickaxe')"><span class="dot"></span>Pickaxe</button>
+  <button class="tab" onclick="showPanel('persistencia')"><span class="dot"></span>Persistencia</button>
+  <button class="tab" onclick="showPanel('hbjewelry')"><span class="dot"></span>HB Jewelry</button>
+  <button class="tab" onclick="showPanel('arquitectura')"><span class="dot"></span>Arquitectura</button>
+</nav>
+<main>
+<div class="panel active" id="panel-roles">
+  <div class="roles">
+    <div class="role-card di">
+      <div class="role-title">Hermes — DI</div>
+      <div class="role-sub">Desarrollo e Integracion</div>
+      <ul class="role-list">
+        <li>Creacion de codigo</li><li>Creacion de agentes</li><li>Creacion de pipelines</li>
+        <li>Creacion de DCn</li><li>Edicion del repositorio</li><li>Validacion de arquitectura</li>
+        <li>Expansion del sistema</li>
+      </ul>
+    </div>
+    <div class="role-card dc">
+      <div class="role-title">Claude — DC</div>
+      <div class="role-sub">Direccion y Control</div>
+      <ul class="role-list">
+        <li>Ejecucion de DCn</li><li>Operacion de agentes</li><li>Operacion de pipelines</li>
+        <li>Direccion operativa</li><li>Automatizacion de contenido</li><li>Manejo Shopify y TikTok</li>
+        <li>Gestion de sync/push</li><li>Verificacion del estado</li>
+      </ul>
+    </div>
+  </div>
+  <div style="background:var(--bg2);border:1px solid var(--border);border-radius:12px;padding:18px;margin-bottom:12px">
+    <div class="slabel">Hermes vs Pickaxe</div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:8px">
+      <div style="background:var(--purple-bg);border:1px solid rgba(167,139,250,.2);border-radius:8px;padding:12px">
+        <div style="font-size:12px;font-weight:600;color:var(--purple);margin-bottom:6px">Hermes</div>
+        <div style="font-size:11px;color:var(--text2);line-height:1.6">Agentic avanzado<br>IA generativa<br>Integracion profunda<br>Desarrollo real</div>
+      </div>
+      <div style="background:var(--blue-bg);border:1px solid rgba(96,165,250,.2);border-radius:8px;padding:12px">
+        <div style="font-size:12px;font-weight:600;color:var(--blue);margin-bottom:6px">Pickaxe</div>
+        <div style="font-size:11px;color:var(--text2);line-height:1.6">Soporte basico<br>Respuestas rapidas<br>Agentes simples<br>Habilidades basicas</div>
+      </div>
+    </div>
+  </div>
+  <div style="background:var(--bg2);border:1px solid var(--border);border-radius:12px;padding:18px">
+    <div class="slabel">Herramientas externas (NO-CORE)</div>
+    <div style="font-size:12px;color:var(--text2);line-height:1.8;margin-top:8px">
+      <span style="color:var(--text3)">Antigravity:</span> utilidad para busquedas y productividad ligera. No integra con DCn, OpenClaw, Hermes o pipelines.<br>
+      <span style="color:var(--text3)">Copilot:</span> utilidad para AI Business, analisis y estrategia. No integra con DCn, OpenClaw, Hermes o pipelines.
+    </div>
+  </div>
+</div>
+<div class="panel" id="panel-dcn">
+  <div style="background:var(--bg2);border:1px solid var(--teal);border-radius:12px;padding:16px;margin-bottom:16px">
+    <div class="slabel">Reglas del lenguaje DCn</div>
+    <div style="display:flex;flex-direction:column;gap:8px;margin-top:8px">
+      <div style="font-size:12px;color:var(--text2);padding:8px 12px;background:var(--bg3);border-radius:6px;border-left:2px solid var(--teal)">Regla 1: todo DCn incluye automaticamente <span style="font-family:'DM Mono',monospace;color:var(--teal)">cd C:\Users\ipane\openclaw-cloud-2026</span></div>
+      <div style="font-size:12px;color:var(--text2);padding:8px 12px;background:var(--bg3);border-radius:6px;border-left:2px solid var(--teal)">Regla 2: DCn se usa solo para desarrollo, edicion y mantenimiento</div>
+      <div style="font-size:12px;color:var(--text2);padding:8px 12px;background:var(--bg3);border-radius:6px;border-left:2px solid var(--teal)">Regla 3: DCn no se usa para operar la app</div>
+      <div style="font-size:12px;color:var(--text2);padding:8px 12px;background:var(--bg3);border-radius:6px;border-left:2px solid var(--teal)">Regla 4: interpretacion por intencion — "arranca el sistema" → DC1</div>
+    </div>
+  </div>
+  <div class="dcgrid" id="dcgrid"></div>
+  <div class="dcdetail" id="dcdetail"></div>
+</div>
+<div class="panel" id="panel-docker">
+  <div class="cgrid" style="--acc:var(--blue);--acc-bg:var(--blue-bg)">
+    <div class="ccard" onclick="showC('docker',0)"><div class="ci">🐳</div><div class="cn">Que es Docker</div><div class="ch">El concepto basico</div></div>
+    <div class="ccard" onclick="showC('docker',1)"><div class="ci">📋</div><div class="cn">docker-compose</div><div class="ch">Orquesta los 10 servicios</div></div>
+    <div class="ccard" onclick="showC('docker',2)"><div class="ci">📦</div><div class="cn">Imagen vs Container</div><div class="ch">No son lo mismo</div></div>
+  </div>
+  <div class="dbox" id="detail-docker"></div>
+</div>
+<div class="panel" id="panel-gateway">
+  <div class="cgrid" style="--acc:var(--teal);--acc-bg:var(--teal-bg)">
+    <div class="ccard" onclick="showC('gateway',0)"><div class="ci">🔀</div><div class="cn">Que es Flask</div><div class="ch">El framework web</div></div>
+    <div class="ccard" onclick="showC('gateway',1)"><div class="ci">🚪</div><div class="cn">Endpoints</div><div class="ch">Las puertas del sistema</div></div>
+    <div class="ccard" onclick="showC('gateway',2)"><div class="ci">🎫</div><div class="cn">Session ID</div><div class="ch">Como se recuerdan conversaciones</div></div>
+  </div>
+  <div class="dbox" id="detail-gateway"></div>
+</div>
+<div class="panel" id="panel-pickaxe">
+  <div class="cgrid" style="--acc:var(--purple);--acc-bg:var(--purple-bg)">
+    <div class="ccard" onclick="showC('pickaxe',0)"><div class="ci">🧠</div><div class="cn">Que es un LLM</div><div class="ch">Large Language Model</div></div>
+    <div class="ccard" onclick="showC('pickaxe',1)"><div class="ci">🎭</div><div class="cn">System Prompt</div><div class="ch">La personalidad del agente</div></div>
+    <div class="ccard" onclick="showC('pickaxe',2)"><div class="ci">🔑</div><div class="cn">API Key</div><div class="ch">La llave de acceso</div></div>
+  </div>
+  <div class="dbox" id="detail-pickaxe"></div>
+</div>
+<div class="panel" id="panel-persistencia">
+  <div class="cgrid" style="--acc:var(--amber);--acc-bg:var(--amber-bg)">
+    <div class="ccard" onclick="showC('persistencia',0)"><div class="ci">🗄️</div><div class="cn">PostgreSQL</div><div class="ch">Memoria permanente</div></div>
+    <div class="ccard" onclick="showC('persistencia',1)"><div class="ci">⚡</div><div class="cn">Redis</div><div class="ch">Memoria rapida</div></div>
+    <div class="ccard" onclick="showC('persistencia',2)"><div class="ci">🔮</div><div class="cn">Qdrant</div><div class="ch">Memoria vectorial futura</div></div>
+  </div>
+  <div class="dbox" id="detail-persistencia"></div>
+</div>
+<div class="panel" id="panel-hbjewelry">
+  <div class="cgrid" style="--acc:var(--coral);--acc-bg:var(--coral-bg)">
+    <div class="ccard" onclick="showC('hbjewelry',0)"><div class="ci">📱</div><div class="cn">Agente Marketing</div><div class="ch">Contenido para redes</div></div>
+    <div class="ccard" onclick="showC('hbjewelry',1)"><div class="ci">🛍️</div><div class="cn">Agente Ventas</div><div class="ch">Shopify y Mercado Libre</div></div>
+    <div class="ccard" onclick="showC('hbjewelry',2)"><div class="ci">♾️</div><div class="cn">Flujo Completo</div><div class="ch">De punta a punta</div></div>
+  </div>
+  <div class="dbox" id="detail-hbjewelry"></div>
+</div>
+<div class="panel" id="panel-arquitectura">
+  <div class="arch">
+    <div class="arow"><div class="anode purple" onclick="ad('Tu App / WhatsApp / Web','Punto de entrada para el usuario. Hace peticiones HTTP al gateway. Puede ser web, movil o WhatsApp Business. Pendiente de construir para HB Jewelry.')">Tu App<div class="asub">WhatsApp · Web · Movil</div></div></div>
+    <div class="aarrow">↓</div>
+    <div class="arow"><div class="anode gray" onclick="ad('Nginx :80','Reverse proxy ya corriendo. Recibe peticiones del exterior y las redirige al gateway o app segun la URL.')">Nginx :80<div class="asub">Reverse proxy</div></div></div>
+    <div class="aarrow">↓</div>
+    <div class="arow"><div class="anode teal" onclick="ad('Gateway Flask :8080','El corazon del sistema. gateway_app.py maneja sesiones, llama a Pickaxe, guarda historial. Es el pegamento de todo.')">Gateway :8080<div class="asub">gateway_app.py</div></div></div>
+    <div class="aarrow">↓</div>
+    <div class="arow">
+      <div class="anode coral" onclick="ad('Agente Main','Asistente general del sistema.')">Main</div>
+      <div class="anode coral" onclick="ad('Agente Marketing','Posts Instagram, campanas, copy WhatsApp, estrategia de contenido para HB Jewelry.')">Marketing</div>
+      <div class="anode coral" onclick="ad('Agente Shopify','Ventas, e-commerce, inventario, Mercado Libre.')">Shopify</div>
+      <div class="anode coral" onclick="ad('Agente Video','Guiones, produccion, estrategia multimedia para HB Jewelry.')">Video</div>
+    </div>
+    <div class="aarrow">↓</div>
+    <div class="arow"><div class="anode blue" onclick="ad('Pickaxe LLM','Unico servicio externo y de pago ($276/año). Recibe mensaje + historial + system prompt y genera la respuesta.')">Pickaxe LLM<div class="asub">api.pickaxe.co · $276/año</div></div></div>
+    <div class="aarrow">↓</div>
+    <div class="arow">
+      <div class="anode amber" onclick="ad('PostgreSQL','Historial permanente. Tabla messages con session_id, agent, role, content, created_at.')">PostgreSQL<div class="asub">Historial permanente</div></div>
+      <div class="anode amber" onclick="ad('Redis','Cache de sesiones activas. Cada session_id vive 24 horas.')">Redis<div class="asub">Sesiones 24h</div></div>
+      <div class="anode amber" onclick="ad('Qdrant','Base de datos vectorial para memoria semantica de largo plazo. Pendiente de implementacion.')">Qdrant<div class="asub">Memoria vectorial</div></div>
+    </div>
+  </div>
+  <div class="adetail" id="adetail"></div>
+  <p style="font-size:11px;color:var(--text3);text-align:center;margin-top:12px">Haz clic en cualquier nodo para ver detalles</p>
+</div>
+</main>
+<footer>OpenClaw Cloud 2026 · HB Jewelry · Arquitectura DI/DC · Lenguaje DCn</footer>
+<script>
+const concepts={
+  docker:[
+    {i:'🐳',n:'Que es Docker',s:'El concepto basico',e:'Docker corre aplicaciones en contenedores — cajas selladas con todo lo necesario: codigo, librerias, configuracion. Funciona igual en cualquier computadora.',a:'Como un camion de mudanzas. Metes todo lo necesario. Llega a cualquier casa y todo funciona igual.',t:['contenedor','aislamiento','reproducible'],q:{q:'Si cierras Docker Desktop, que pasa con el gateway?',o:['Sigue funcionando','Se apaga completamente','Solo se pausa'],c:1,f:'Correcto. Sin Docker Desktop todos los containers se apagan.'}},
+    {i:'📋',n:'docker-compose',s:'Orquesta los 10 servicios',e:'docker-compose.yml define todos los servicios juntos. Un solo comando levanta los 10 containers en el orden correcto.',a:'Una partitura musical. Cada instrumento sabe que tocar y cuando entrar.',t:['docker-compose.yml','up -d','--build'],q:{q:'Que flag usas para reconstruir el gateway?',o:['docker compose restart','docker compose up -d --build gateway','docker compose reload'],c:1,f:'Exacto. --build fuerza recompilar la imagen con el codigo nuevo.'}},
+    {i:'📦',n:'Imagen vs Container',s:'No son lo mismo',e:'IMAGEN = el molde. CONTAINER = la imagen corriendo en memoria. --build recrea la imagen.',a:'La imagen es la receta en papel. El container es el plato listo en la mesa.',t:['image','container','--build'],q:{q:'Que recreas con --build?',o:['El container','La imagen Docker','La base de datos'],c:1,f:'Correcto. --build recrea la imagen.'}}
+  ],
+  gateway:[
+    {i:'🔀',n:'Que es Flask',s:'El framework web',e:'Flask convierte tu script Python en un servidor web real. Con @app.route defines que funcion responde cada URL.',a:'El mostrador de una tienda. Defines que empleado atiende cada ventanilla.',t:['Python','@app.route','jsonify',':8080'],q:{q:'Que hace @app.route("/health")?',o:['Verifica la salud fisica','Conecta esa URL con la funcion que la maneja','Reinicia el servidor'],c:1,f:'Exacto. @app.route conecta una URL con la funcion Python que debe responder.'}},
+    {i:'🚪',n:'Endpoints',s:'Las puertas del sistema',e:'Endpoints: GET /health, GET /api/mcp/status, POST /api/mcp/session, POST /api/mcp/message, GET /api/mcp/history.',a:'Botones de un ascensor. Cada boton va a un piso diferente.',t:['/health','/session','/message','/history'],q:{q:'Para enviar mensaje a Pickaxe, que endpoint usas?',o:['GET /health','POST /api/mcp/message','GET /api/mcp/status'],c:1,f:'Correcto. POST /api/mcp/message es el endpoint principal.'}},
+    {i:'🎫',n:'Session ID',s:'Como se recuerdan conversaciones',e:'Cada /api/mcp/session genera un UUID unico que identifica tu conversacion.',a:'El numero de mesa en un restaurante.',t:['UUID','Redis 24h','historial','contexto'],q:{q:'Que pasa si envias un mensaje SIN session_id?',o:['Error 401','El gateway crea un UUID automaticamente','El mensaje no se procesa'],c:1,f:'Correcto. El gateway genera un UUID nuevo automaticamente.'}}
+  ],
+  pickaxe:[
+    {i:'🧠',n:'Que es un LLM',s:'Large Language Model',e:'Modelo de IA entrenado con enormes cantidades de texto. Pickaxe usa un LLM via API. No recuerda conversaciones — el gateway le pasa el historial cada vez.',a:'Un empleado que leyo todos los libros del mundo pero no recuerda nada de antes.',t:['IA','texto','api.pickaxe.co','$276/año'],q:{q:'Pickaxe recuerda conversaciones por si solo?',o:['Si, guarda todo','No, el gateway le pasa el historial','Solo las ultimas 3'],c:1,f:'Exacto. Pickaxe no tiene memoria propia.'}},
+    {i:'🎭',n:'System Prompt',s:'La personalidad del agente',e:'Instruccion que define quien es el LLM. El agente marketing tiene un prompt diferente al agente main.',a:'El briefing al empleado nuevo antes de atender al cliente.',t:['AGENT_PROMPTS','rol','personalidad'],q:{q:'Por que marketing responde diferente a main?',o:['APIs de Pickaxe diferentes','System prompts diferentes en gateway_app.py','Puertos diferentes'],c:1,f:'Correcto. AGENT_PROMPTS en gateway_app.py define la personalidad de cada agente.'}},
+    {i:'🔑',n:'API Key',s:'La llave de acceso',e:'Se manda como "Authorization: Bearer key". Sin ella Pickaxe rechaza todo con 401. Esta en .env.',a:'Tu contrasena de streaming. Sin ella no accedes.',t:['.env','Bearer token','variable de entorno','nunca en el codigo'],q:{q:'Donde debe estar guardada la API key?',o:['En gateway_app.py','En el archivo .env','En README.md'],c:1,f:'Correcto. Nunca en el codigo.'}}
+  ],
+  persistencia:[
+    {i:'🗄️',n:'PostgreSQL',s:'Memoria permanente',e:'Tabla messages guarda: session_id, agent, role, content, created_at. Los datos sobreviven reinicios.',a:'Un cuaderno con indice que no se borra cuando apagas la luz.',t:['tabla messages','SQL','permanente','openclaw_prod'],q:{q:'Que guarda la tabla messages?',o:['Solo la respuesta de Pickaxe','session_id, agent, role, content y fecha','Solo mensajes del usuario'],c:1,f:'Correcto. Guarda todo el par conversacional.'}},
+    {i:'⚡',n:'Redis',s:'Memoria rapida',e:'Guarda en RAM. Las sesiones viven 24h. Si Redis se reinicia se pierden las sesiones pero el historial en PostgreSQL permanece.',a:'La pizarra borrable (Redis) vs el libro de recetas en el estante (PostgreSQL).',t:['RAM','TTL 24h','cache','sesiones'],q:{q:'Si Redis se reinicia, que se pierde?',o:['Todo el historial','Solo las sesiones activas de 24h','Los datos de PostgreSQL'],c:1,f:'Correcto. Solo las sesiones activas.'}},
+    {i:'🔮',n:'Qdrant',s:'Memoria vectorial futura',e:'Base de datos vectorial. Permite buscar por similitud semantica. Instalado — pendiente de implementacion.',a:'Si PostgreSQL busca por folio, Qdrant busca por tema y significado.',t:['vectores','embeddings','semantica','futuro'],q:{q:'Para que servira Qdrant?',o:['Reemplazara PostgreSQL','Busqueda semantica y memoria largo plazo','Cache mas rapido que Redis'],c:1,f:'Exacto. Memoria semantica para buscar por tema.'}}
+  ],
+  hbjewelry:[
+    {i:'📱',n:'Agente Marketing',s:'Contenido para redes',e:'Genera posts Instagram, ideas campanas, copies WhatsApp, descripciones productos. Activa con agent:"marketing".',a:'Community manager 24/7 que conoce tu marca.',t:['Instagram','campanas','copy','agent:marketing'],q:{q:'Como activas el agente de marketing?',o:['agent:"main"','agent:"marketing"','puerto 8086'],c:1,f:'Correcto. agent:"marketing" en el body del request.'}},
+    {i:'🛍️',n:'Agente Ventas',s:'Shopify y Mercado Libre',e:'Especializado en ventas, gestion de productos, atencion al cliente. Activa con agent:"shopify".',a:'Vendedor digital que conoce tu catalogo completo.',t:['Shopify','Mercado Libre','e-commerce','agent:shopify'],q:{q:'Que agent para inventario de Shopify?',o:['agent:"main"','agent:"video"','agent:"shopify"'],c:2,f:'Correcto. agent:"shopify".'}},
+    {i:'♾️',n:'Flujo Completo',s:'De punta a punta',e:'7 pasos: 1)Usuario envia. 2)Nginx redirige. 3)Gateway valida sesion. 4)Carga historial. 5)Llama Pickaxe. 6)Guarda respuesta. 7)Devuelve al usuario.',a:'Cadena de produccion de joyeria: cada eslabon tiene su funcion.',t:['7 pasos','end-to-end','automatico','persistente'],q:{q:'Cuantos sistemas en cada respuesta?',o:['Solo Pickaxe','Gateway + Pickaxe','Gateway + Redis + PostgreSQL + Pickaxe'],c:2,f:'Exacto. 4 sistemas trabajando juntos.'}}
+  ]
+};
+const dcn=[
+  {id:'DC1',name:'Arranque del sistema',code:'cd C:\\Users\\ipane\\openclaw-cloud-2026\ndocker compose -f docker-compose.yml up -d',desc:'Levanta los 10 containers.'},
+  {id:'DC2',name:'Rebuild del gateway',code:'cd C:\\Users\\ipane\\openclaw-cloud-2026\ndocker compose -f docker-compose.yml up -d --build gateway',desc:'Recompila la imagen del gateway.'},
+  {id:'DC3',name:'Estado del sistema',code:'cd C:\\Users\\ipane\\openclaw-cloud-2026\ndocker ps --format "table {{.Names}}\\t{{.Status}}\\t{{.Ports}}"',desc:'Muestra containers con estado y puertos.'},
+  {id:'DC4',name:'Healthcheck gateway',code:'Invoke-RestMethod -Uri http://localhost:8080/health -Method GET',desc:'Verifica que el gateway responde.'},
+  {id:'DC5',name:'Crear sesion marketing',code:"Invoke-RestMethod -Uri http://localhost:8080/api/mcp/session -Method POST -ContentType 'application/json' -Body '{\"agent\":\"marketing\"}'",desc:'Crea sesion nueva. Guarda el session_id.'},
+  {id:'DC6',name:'Enviar mensaje a Pickaxe',code:"Invoke-RestMethod -Uri http://localhost:8080/api/mcp/message -Method POST -ContentType 'application/json' -Body '{\"agent\":\"marketing\",\"message\":\"MENSAJE\",\"session_id\":\"ID\"}'",desc:'Envia mensaje al agente.'},
+  {id:'DC7',name:'Logs del gateway',code:'cd C:\\Users\\ipane\\openclaw-cloud-2026\ndocker compose logs -f gateway',desc:'Logs del gateway en vivo.'},
+  {id:'DC8',name:'Abrir gateway_app.py',code:'notepad C:\\Users\\ipane\\openclaw-cloud-2026\\gateway_app.py',desc:'Abre el archivo principal.'},
+];
+let learned={};
+const TOTAL=15;
+function updateProgress(){const d=Object.keys(learned).length;document.getElementById('pbar').style.width=(d/TOTAL*100)+'%';document.getElementById('plabel').textContent=d+' de '+TOTAL+' conceptos aprendidos';}
+function showPanel(id){document.querySelectorAll('.panel').forEach(p=>p.classList.remove('active'));document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));document.getElementById('panel-'+id).classList.add('active');const panels=['roles','dcn','docker','gateway','pickaxe','persistencia','hbjewelry','arquitectura'];document.querySelectorAll('.tab')[panels.indexOf(id)].classList.add('active');}
+function showC(sec,idx){const c=concepts[sec][idx];const key=sec+'_'+idx;const box=document.getElementById('detail-'+sec);document.querySelectorAll('#panel-'+sec+' .ccard').forEach((el,i)=>el.classList.toggle('active',i==idx));box.innerHTML=`<div class="dh"><div class="di">${c.i}</div><div><div class="dt">${c.n}</div><div class="ds">${c.s}</div></div></div><div class="slabel">Explicacion</div><div class="etext">${c.e}</div><div class="slabel">Analogia</div><div class="abox"><div class="alabel">Como entenderlo</div><div class="atext">${c.a}</div></div><div class="slabel">Conceptos clave</div><div class="tags">${c.t.map(t=>'<span class="tag">'+t+'</span>').join('')}</div><div class="slabel">Pregunta de repaso</div><div class="qbox"><div class="qq">${c.q.q}</div><div class="qopts" id="opts-${key}">${c.q.o.map((o,i)=>`<button class="qopt" onclick="answer('${key}',${i},${c.q.c},'${c.q.f.replace(/'/g,"\\'")}') ">${o}</button>`).join('')}</div><div class="qfb" id="fb-${key}"></div></div><button class="mbtn" id="mb-${key}" onclick="markL('${key}')">${learned[key]?'✓ Aprendido':'Marcar como aprendido'}</button>`;box.classList.add('show');box.scrollIntoView({behavior:'smooth',block:'nearest'});}
+function answer(key,chosen,correct,fb){document.querySelectorAll('#opts-'+key+' .qopt').forEach((o,i)=>{o.disabled=true;if(i===correct)o.classList.add('ok');else if(i===chosen&&chosen!==correct)o.classList.add('bad');});const el=document.getElementById('fb-'+key);el.textContent=(chosen===correct?'✓ ':'✗ ')+fb;el.className='qfb show '+(chosen===correct?'ok':'bad');}
+function markL(key){learned[key]=true;const btn=document.getElementById('mb-'+key);if(btn){btn.textContent='✓ Aprendido';btn.style.color='var(--teal)';btn.style.borderColor='var(--teal)';}const[sec,idx]=key.split('_');const cards=document.querySelectorAll('#panel-'+sec+' .ccard');if(cards[idx])cards[idx].classList.add('done');updateProgress();}
+function ad(title,desc){const box=document.getElementById('adetail');box.innerHTML='<strong>'+title+'</strong><br><br>'+desc;box.classList.add('show');}
+const g=document.getElementById('dcgrid');
+dcn.forEach((d,i)=>{const card=document.createElement('div');card.className='dccard';card.innerHTML=`<div class="dclabel">${d.id}</div><div class="dcname">${d.name}</div><div class="dccode">${d.code}</div>`;card.onclick=()=>{const box=document.getElementById('dcdetail');box.innerHTML=`<div style="font-size:13px;font-weight:500;color:var(--teal);margin-bottom:6px">${d.id} — ${d.name}</div><div style="font-size:13px;color:var(--text2);margin-bottom:10px">${d.desc}</div><div class="dccode">${d.code}</div>`;box.classList.add('show');};g.appendChild(card);});
+updateProgress();
+</script>
+</body>
+</html>

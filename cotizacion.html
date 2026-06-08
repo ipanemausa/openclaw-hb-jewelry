@@ -1,0 +1,400 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cotización — HB Jewelry</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --gold: #C9A84C;
+    --gold-light: #E8D49A;
+    --gold-dim: #8B6914;
+    --black: #0A0A0A;
+    --off-black: #111111;
+    --surface: #161616;
+    --surface-2: #1E1E1E;
+    --border: rgba(201,168,76,0.18);
+    --border-strong: rgba(201,168,76,0.4);
+    --text-primary: #F5F0E8;
+    --text-secondary: #9A9080;
+    --text-muted: #5A544A;
+  }
+  html { scroll-behavior: smooth; }
+  body {
+    font-family: 'Inter', sans-serif;
+    background: var(--black);
+    color: var(--text-primary);
+    font-size: 15px;
+    line-height: 1.7;
+    font-weight: 300;
+    -webkit-font-smoothing: antialiased;
+    min-height: 100vh;
+  }
+  nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 0 48px; height: 72px;
+    border-bottom: 0.5px solid var(--border);
+    background: rgba(10,10,10,0.95);
+    backdrop-filter: blur(12px);
+  }
+  .nav-logo {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 22px; font-weight: 300;
+    letter-spacing: 0.18em; color: var(--gold);
+    text-decoration: none; text-transform: uppercase;
+  }
+  .nav-back {
+    font-size: 12px; letter-spacing: 0.12em;
+    text-transform: uppercase; color: var(--text-secondary);
+    text-decoration: none; display: flex; align-items: center; gap: 8px;
+    transition: color 0.2s;
+  }
+  .nav-back:hover { color: var(--gold); }
+  .nav-back::before { content: '←'; }
+
+  .page-wrapper {
+    max-width: 720px;
+    margin: 0 auto;
+    padding: 120px 48px 80px;
+  }
+
+  .page-eyebrow {
+    font-size: 11px; letter-spacing: 0.22em;
+    text-transform: uppercase; color: var(--gold);
+    display: flex; align-items: center; gap: 16px;
+    margin-bottom: 24px;
+  }
+  .page-eyebrow::before { content: ''; display: block; width: 24px; height: 0.5px; background: var(--gold); }
+
+  .page-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 48px; font-weight: 300;
+    line-height: 1.05; margin-bottom: 16px;
+  }
+  .page-title em { font-style: italic; color: var(--gold); }
+
+  .page-subtitle {
+    font-size: 14px; color: var(--text-secondary);
+    line-height: 1.8; margin-bottom: 56px;
+  }
+
+  .form-section {
+    border-top: 0.5px solid var(--border);
+    padding-top: 40px; margin-bottom: 40px;
+  }
+
+  .form-section-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 20px; font-weight: 300;
+    color: var(--text-primary); margin-bottom: 28px;
+  }
+
+  .field { margin-bottom: 24px; }
+
+  label {
+    display: block;
+    font-size: 11px; letter-spacing: 0.14em;
+    text-transform: uppercase; color: var(--text-muted);
+    margin-bottom: 10px;
+  }
+
+  input[type=text], input[type=email], input[type=tel], select, textarea {
+    width: 100%;
+    background: var(--surface);
+    border: 0.5px solid var(--border);
+    color: var(--text-primary);
+    font-family: 'Inter', sans-serif;
+    font-size: 14px; font-weight: 300;
+    padding: 14px 18px;
+    outline: none;
+    transition: border-color 0.2s;
+    border-radius: 0;
+    appearance: none;
+  }
+  input:focus, select:focus, textarea:focus {
+    border-color: var(--gold);
+  }
+  input::placeholder, textarea::placeholder { color: var(--text-muted); }
+
+  textarea { resize: vertical; min-height: 120px; }
+
+  select option { background: var(--off-black); }
+
+  .field-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+
+  .radio-group { display: flex; flex-direction: column; gap: 12px; }
+
+  .radio-option {
+    display: flex; align-items: center; gap: 14px;
+    padding: 14px 18px;
+    border: 0.5px solid var(--border);
+    cursor: pointer;
+    transition: border-color 0.2s, background 0.2s;
+  }
+  .radio-option:hover { border-color: var(--border-strong); background: var(--surface); }
+  .radio-option.selected { border-color: var(--gold); background: var(--surface); }
+
+  .radio-option input { display: none; }
+  .radio-dot {
+    width: 16px; height: 16px;
+    border: 0.5px solid var(--border-strong);
+    border-radius: 50%; flex-shrink: 0;
+    position: relative;
+    transition: border-color 0.2s;
+  }
+  .radio-option.selected .radio-dot { border-color: var(--gold); }
+  .radio-option.selected .radio-dot::after {
+    content: ''; position: absolute;
+    top: 50%; left: 50%; transform: translate(-50%, -50%);
+    width: 8px; height: 8px;
+    border-radius: 50%; background: var(--gold);
+  }
+  .radio-label { font-size: 14px; color: var(--text-secondary); }
+  .radio-option.selected .radio-label { color: var(--text-primary); }
+
+  .budget-options {
+    display: grid; grid-template-columns: repeat(3, 1fr);
+    gap: 12px;
+  }
+  .budget-option {
+    padding: 16px;
+    border: 0.5px solid var(--border);
+    text-align: center;
+    cursor: pointer;
+    transition: border-color 0.2s, background 0.2s;
+  }
+  .budget-option:hover { border-color: var(--border-strong); }
+  .budget-option.selected { border-color: var(--gold); background: var(--surface); }
+  .budget-option input { display: none; }
+  .budget-range {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 18px; color: var(--gold); display: block; margin-bottom: 4px;
+  }
+  .budget-option.selected .budget-range { color: var(--gold); }
+  .budget-desc { font-size: 11px; color: var(--text-muted); }
+
+  .submit-row {
+    display: flex; align-items: center; justify-content: space-between;
+    padding-top: 40px; border-top: 0.5px solid var(--border);
+    gap: 24px;
+  }
+  .submit-note { font-size: 12px; color: var(--text-muted); max-width: 280px; line-height: 1.6; }
+
+  .btn-submit {
+    font-size: 12px; letter-spacing: 0.14em;
+    text-transform: uppercase; color: var(--black);
+    background: var(--gold); padding: 18px 48px;
+    border: none; cursor: pointer;
+    font-family: 'Inter', sans-serif;
+    transition: opacity 0.2s;
+    flex-shrink: 0;
+  }
+  .btn-submit:hover { opacity: 0.85; }
+
+  .success-msg {
+    display: none;
+    background: var(--surface);
+    border: 0.5px solid var(--border-strong);
+    padding: 40px;
+    text-align: center;
+    margin-top: 32px;
+  }
+  .success-msg.visible { display: block; }
+  .success-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 32px; font-weight: 300; color: var(--gold);
+    margin-bottom: 12px;
+  }
+  .success-sub { font-size: 14px; color: var(--text-secondary); }
+
+  @media (max-width: 680px) {
+    nav { padding: 0 24px; }
+    .page-wrapper { padding: 100px 24px 60px; }
+    .field-row { grid-template-columns: 1fr; }
+    .budget-options { grid-template-columns: 1fr; }
+    .submit-row { flex-direction: column; align-items: stretch; }
+    .btn-submit { text-align: center; }
+  }
+</style>
+</head>
+<body>
+<nav>
+  <a href="/" class="nav-logo">HB Jewelry</a>
+  <a href="index.html" class="nav-back">Volver al inicio</a>
+</nav>
+
+<div class="page-wrapper">
+  <p class="page-eyebrow">Cotización personalizada</p>
+  <h1 class="page-title">Tu próxima <em>joya única</em></h1>
+  <p class="page-subtitle">Cuéntanos tu idea. Sin compromiso, sin costo. En 24–48 horas recibirás una propuesta detallada.</p>
+
+  <form id="quoteForm">
+
+    <!-- DATOS CONTACTO -->
+    <div class="form-section">
+      <h2 class="form-section-title">Tus datos</h2>
+      <div class="field-row">
+        <div class="field">
+          <label>Nombre</label>
+          <input type="text" name="nombre" placeholder="Tu nombre completo" required>
+        </div>
+        <div class="field">
+          <label>Email</label>
+          <input type="email" name="email" placeholder="tu@email.com" required>
+        </div>
+      </div>
+      <div class="field">
+        <label>Teléfono / WhatsApp (opcional)</label>
+        <input type="tel" name="telefono" placeholder="+1 000 000 0000">
+      </div>
+    </div>
+
+    <!-- TIPO DE PIEZA -->
+    <div class="form-section">
+      <h2 class="form-section-title">¿Qué pieza necesitas?</h2>
+      <div class="field">
+        <label>Tipo de joya</label>
+        <div class="radio-group" id="tipoGrupo">
+          <label class="radio-option" onclick="selectRadio(this, 'tipoGrupo')">
+            <input type="radio" name="tipo_pieza" value="anillo">
+            <div class="radio-dot"></div>
+            <span class="radio-label">Anillo</span>
+          </label>
+          <label class="radio-option" onclick="selectRadio(this, 'tipoGrupo')">
+            <input type="radio" name="tipo_pieza" value="collar">
+            <div class="radio-dot"></div>
+            <span class="radio-label">Collar / Colgante</span>
+          </label>
+          <label class="radio-option" onclick="selectRadio(this, 'tipoGrupo')">
+            <input type="radio" name="tipo_pieza" value="pulsera">
+            <div class="radio-dot"></div>
+            <span class="radio-label">Pulsera</span>
+          </label>
+          <label class="radio-option" onclick="selectRadio(this, 'tipoGrupo')">
+            <input type="radio" name="tipo_pieza" value="aretes">
+            <div class="radio-dot"></div>
+            <span class="radio-label">Aretes / Pendientes</span>
+          </label>
+          <label class="radio-option" onclick="selectRadio(this, 'tipoGrupo')">
+            <input type="radio" name="tipo_pieza" value="otro">
+            <div class="radio-dot"></div>
+            <span class="radio-label">Otra pieza</span>
+          </label>
+        </div>
+      </div>
+
+      <div class="field">
+        <label>Material preferido</label>
+        <select name="material">
+          <option value="">Selecciona un material...</option>
+          <option>Oro 18k amarillo</option>
+          <option>Oro 18k blanco</option>
+          <option>Oro 14k</option>
+          <option>Plata 925</option>
+          <option>Platino</option>
+          <option>No lo sé aún — necesito orientación</option>
+        </select>
+      </div>
+
+      <div class="field">
+        <label>Ocasión (opcional)</label>
+        <select name="ocasion">
+          <option value="">¿Para qué ocasión?</option>
+          <option>Compromiso / Matrimonio</option>
+          <option>Aniversario</option>
+          <option>Regalo personal</option>
+          <option>Colección propia</option>
+          <option>Regalo de cumpleaños</option>
+          <option>Otro</option>
+        </select>
+      </div>
+    </div>
+
+    <!-- DESCRIPCION -->
+    <div class="form-section">
+      <h2 class="form-section-title">Cuéntanos tu idea</h2>
+      <div class="field">
+        <label>Descripción de la pieza</label>
+        <textarea name="descripcion" placeholder="Describe lo que tienes en mente: estilo, piedras, grabados, inspiración, referencias... Entre más detalle, mejor será la propuesta." required></textarea>
+      </div>
+      <div class="field">
+        <label>¿Tienes imágenes de referencia?</label>
+        <input type="text" name="referencias" placeholder="Enlace a Pinterest, Instagram, Google Drive, Dropbox...">
+      </div>
+    </div>
+
+    <!-- PRESUPUESTO -->
+    <div class="form-section">
+      <h2 class="form-section-title">Presupuesto aproximado</h2>
+      <div class="field">
+        <div class="budget-options" id="budgetGrupo">
+          <label class="budget-option" onclick="selectBudget(this)">
+            <input type="radio" name="presupuesto" value="bajo_300">
+            <span class="budget-range">< $300</span>
+            <span class="budget-desc">Piezas sencillas</span>
+          </label>
+          <label class="budget-option" onclick="selectBudget(this)">
+            <input type="radio" name="presupuesto" value="300_800">
+            <span class="budget-range">$300 – $800</span>
+            <span class="budget-desc">Diseño intermedio</span>
+          </label>
+          <label class="budget-option" onclick="selectBudget(this)">
+            <input type="radio" name="presupuesto" value="800_2000">
+            <span class="budget-range">$800 – $2,000</span>
+            <span class="budget-desc">Piezas elaboradas</span>
+          </label>
+          <label class="budget-option" onclick="selectBudget(this)">
+            <input type="radio" name="presupuesto" value="2000_5000">
+            <span class="budget-range">$2,000 – $5,000</span>
+            <span class="budget-desc">Alta joyería</span>
+          </label>
+          <label class="budget-option" onclick="selectBudget(this)">
+            <input type="radio" name="presupuesto" value="mas_5000">
+            <span class="budget-range">$5,000+</span>
+            <span class="budget-desc">Sin límite</span>
+          </label>
+          <label class="budget-option" onclick="selectBudget(this)">
+            <input type="radio" name="presupuesto" value="sin_definir">
+            <span class="budget-range">Por definir</span>
+            <span class="budget-desc">Necesito orientación</span>
+          </label>
+        </div>
+      </div>
+    </div>
+
+    <div class="submit-row">
+      <p class="submit-note">Respondemos en 24–48 horas hábiles. Tu información es confidencial.</p>
+      <button type="submit" class="btn-submit">Enviar solicitud</button>
+    </div>
+
+  </form>
+
+  <div class="success-msg" id="successMsg">
+    <div class="success-title">¡Solicitud recibida!</div>
+    <p class="success-sub">Gracias. Revisaremos tu solicitud y te responderemos en 24–48 horas con una propuesta personalizada.</p>
+  </div>
+</div>
+
+<script>
+function selectRadio(el, groupId) {
+  document.querySelectorAll('#' + groupId + ' .radio-option').forEach(o => o.classList.remove('selected'));
+  el.classList.add('selected');
+}
+function selectBudget(el) {
+  document.querySelectorAll('#budgetGrupo .budget-option').forEach(o => o.classList.remove('selected'));
+  el.classList.add('selected');
+}
+document.getElementById('quoteForm').addEventListener('submit', function(e) {
+  e.preventDefault();
+  this.style.display = 'none';
+  document.getElementById('successMsg').classList.add('visible');
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+});
+</script>
+</body>
+</html>
