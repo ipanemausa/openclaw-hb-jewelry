@@ -1,17 +1,20 @@
 import os
 import json
+import requests
 import psycopg2
 import psycopg2.extras
-from datetime import datetime
 from flask import Blueprint, request, jsonify
 
 hb_bp = Blueprint('hb_jewelry', __name__)
+
+MARKETING_URL = os.getenv('MARKETING_URL', 'http://openclaw_marketing_generator:5000')
+SHOPIFY_URL = os.getenv('SHOPIFY_URL', 'http://openclaw_shopify_integration:5000')
 
 def get_db():
     return psycopg2.connect(
         dbname=os.getenv('PG_DB', 'openclaw_prod'),
         user=os.getenv('PG_USER', 'openclaw_admin'),
-        password=os.getenv('PG_PASS', ''),
+        password='SecureDB2026!@#Xyz123',
         host='openclaw_db',
         port='5432'
     )
@@ -50,21 +53,69 @@ def hb_cotizacion():
     faltantes = [c for c in ['nombre','email','tipo_pieza','descripcion','presupuesto'] if not data.get(c)]
     if faltantes:
         return jsonify({'status': 'error', 'campos_faltantes': faltantes}), 400
+
+    nombre = data['nombre']
+    email = data['email']
+    tipo_pieza = data['tipo_pieza']
+    presupuesto = data['presupuesto']
+    descripcion = data['descripcion']
+
+    # ESTADO 1: Guardar en BD
     try:
         conn = get_db()
         cur = conn.cursor()
         cur.execute(
             'INSERT INTO cotizaciones(cliente_nombre,cliente_email,tipo_pieza,material,ocasion,presupuesto,descripcion,referencias,estado)'
             'VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s) RETURNING id',
-            (data['nombre'],data['email'],data['tipo_pieza'],data.get('material',''),data.get('ocasion',''),data['presupuesto'],data['descripcion'],data.get('referencias',''),'recibida')
+            (nombre, email, tipo_pieza, data.get('material',''), data.get('ocasion',''),
+             presupuesto, descripcion, data.get('referencias',''), 'recibida')
         )
         cid = cur.fetchone()[0]
         conn.commit()
         cur.close()
         conn.close()
-        return jsonify({'status': 'ok', 'cotizacion_id': cid}), 200
     except Exception as e:
-        return jsonify({'status': 'error', 'mensaje': str(e)}), 500
+        return jsonify({'status': 'error', 'mensaje': 'BD: ' + str(e)}), 500
+
+    # ESTADO 2: Llamar agente marketing
+    propuesta = ''
+    try:
+        res = requests.post(
+            MARKETING_URL + '/generate',
+            json={'nombre': nombre, 'tipo_pieza': tipo_pieza, 'presupuesto': presupuesto, 'descripcion': descripcion},
+            timeout=30
+        )
+        mdata = res.json()
+        propuesta = mdata.get('propuesta', '')
+        if propuesta:
+            conn = get_db()
+            cur = conn.cursor()
+            cur.execute('UPDATE cotizaciones SET propuesta=%s, estado=%s WHERE id=%s', (propuesta, 'propuesta_generada', cid))
+            conn.commit()
+            cur.close()
+            conn.close()
+    except Exception as e:
+        print('[HB] marketing error: ' + str(e))
+
+    # ESTADO 3: Llamar agente shopify
+    shopify_result = {}
+    try:
+        res2 = requests.post(
+            SHOPIFY_URL + '/sync',
+            json={'cotizacion_id': cid, 'tipo_pieza': tipo_pieza, 'presupuesto': presupuesto, 'cliente': nombre},
+            timeout=15
+        )
+        shopify_result = res2.json()
+    except Exception as e:
+        print('[HB] shopify error: ' + str(e))
+
+    return jsonify({
+        'status': 'ok',
+        'cotizacion_id': cid,
+        'propuesta': propuesta,
+        'shopify': shopify_result,
+        'mensaje': 'Flujo completo ejecutado'
+    }), 200
 
 @hb_bp.route('/api/flows/cotizacion/<int:cid>', methods=['GET'])
 def hb_get_cotizacion(cid):
