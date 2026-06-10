@@ -1,1 +1,186 @@
-
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>HB Jewelry — Dashboard</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --gold:#C9A84C;--gold-dim:#8B6914;--gold-light:rgba(201,168,76,0.12);
+  --black:#0A0A0A;--surface:#141414;--surface-2:#1C1C1C;
+  --border:rgba(201,168,76,0.15);--border-strong:rgba(201,168,76,0.35);
+  --text:#F0EBE0;--text-2:#8A8070;--text-3:#3A3530;
+  --green:#2ECC71;--red:#E74C3C;--amber:#F39C12;
+}
+html{scroll-behavior:smooth}
+body{font-family:'Inter',sans-serif;background:var(--black);color:var(--text);font-size:14px;font-weight:300;-webkit-font-smoothing:antialiased;min-height:100vh}
+header{display:flex;align-items:center;justify-content:space-between;padding:0 40px;height:64px;border-bottom:0.5px solid var(--border);background:rgba(10,10,10,0.96);position:sticky;top:0;z-index:100;backdrop-filter:blur(8px);}
+.logo{font-family:'Cormorant Garamond',serif;font-size:20px;font-weight:300;letter-spacing:0.16em;color:var(--gold);text-transform:uppercase}
+.header-right{display:flex;align-items:center;gap:24px}
+.status-dot{width:7px;height:7px;border-radius:50%;background:var(--green);box-shadow:0 0 6px var(--green)}
+.status-label{font-size:11px;letter-spacing:0.1em;color:var(--text-2);text-transform:uppercase}
+.btn-refresh{font-size:11px;letter-spacing:0.1em;text-transform:uppercase;color:var(--gold);background:none;border:0.5px solid var(--border-strong);padding:8px 16px;cursor:pointer;transition:background 0.2s}
+.btn-refresh:hover{background:var(--gold-light)}
+.main{padding:32px 40px;max-width:1400px;margin:0 auto}
+.stats-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:var(--border);border:0.5px solid var(--border);margin-bottom:32px}
+.stat-card{background:var(--surface);padding:28px 24px;transition:background 0.2s}
+.stat-card:hover{background:var(--surface-2)}
+.stat-value{font-family:'Cormorant Garamond',serif;font-size:44px;font-weight:300;color:var(--gold);line-height:1;margin-bottom:6px}
+.stat-label{font-size:11px;letter-spacing:0.12em;text-transform:uppercase;color:var(--text-2)}
+.section-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px}
+.section-title{font-family:'Cormorant Garamond',serif;font-size:22px;font-weight:300;color:var(--text)}
+.section-tag{font-size:11px;letter-spacing:0.12em;text-transform:uppercase;color:var(--text-2)}
+.table-wrap{border:0.5px solid var(--border);overflow:hidden;margin-bottom:32px}
+table{width:100%;border-collapse:collapse}
+thead{background:var(--surface)}
+th{padding:12px 20px;font-size:10px;letter-spacing:0.14em;text-transform:uppercase;color:var(--text-2);text-align:left;font-weight:400;border-bottom:0.5px solid var(--border)}
+td{padding:14px 20px;border-bottom:0.5px solid var(--border);font-size:13px;color:var(--text);vertical-align:middle}
+tr:last-child td{border-bottom:none}
+tr:hover td{background:var(--surface)}
+.td-id{font-family:'Cormorant Garamond',serif;font-size:18px;color:var(--gold-dim);width:48px}
+.td-nombre{font-weight:400}
+.td-email{color:var(--text-2);font-size:12px}
+.td-pieza{color:var(--text-2)}
+.td-presupuesto{font-size:12px;color:var(--text-2)}
+.badge{display:inline-flex;align-items:center;gap:5px;padding:3px 10px;font-size:10px;letter-spacing:0.1em;text-transform:uppercase;border-radius:0}
+.badge::before{content:'';width:5px;height:5px;border-radius:50%}
+.badge-recibida{background:rgba(243,156,18,0.12);color:#F39C12}.badge-recibida::before{background:#F39C12}
+.badge-propuesta_generada{background:rgba(52,152,219,0.12);color:#3498DB}.badge-propuesta_generada::before{background:#3498DB}
+.badge-aprobada{background:rgba(46,204,113,0.12);color:#2ECC71}.badge-aprobada::before{background:#2ECC71}
+.badge-en_produccion{background:rgba(155,89,182,0.12);color:#9B59B6}.badge-en_produccion::before{background:#9B59B6}
+.badge-entregada{background:rgba(201,168,76,0.12);color:var(--gold)}.badge-entregada::before{background:var(--gold)}
+.badge-cancelada{background:rgba(231,76,60,0.12);color:#E74C3C}.badge-cancelada::before{background:#E74C3C}
+.form-panel{border:0.5px solid var(--border);background:var(--surface);padding:32px;margin-bottom:32px}
+.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.form-group{display:flex;flex-direction:column;gap:8px}
+.form-group.full{grid-column:1/-1}
+label{font-size:10px;letter-spacing:0.14em;text-transform:uppercase;color:var(--text-2)}
+input,select,textarea{background:var(--surface-2);border:0.5px solid var(--border);color:var(--text);font-family:'Inter',sans-serif;font-size:13px;font-weight:300;padding:10px 14px;outline:none;transition:border-color 0.2s;appearance:none;border-radius:0}
+input:focus,select:focus,textarea:focus{border-color:var(--gold)}
+input::placeholder,textarea::placeholder{color:var(--text-3)}
+textarea{min-height:80px;resize:vertical}
+select option{background:var(--surface-2)}
+.form-actions{display:flex;align-items:center;gap:16px;margin-top:8px;grid-column:1/-1}
+.btn-submit{font-size:11px;letter-spacing:0.14em;text-transform:uppercase;color:var(--black);background:var(--gold);border:none;padding:12px 32px;cursor:pointer;font-family:'Inter',sans-serif;transition:opacity 0.2s}
+.btn-submit:hover{opacity:0.85}
+.btn-submit:disabled{opacity:0.4;cursor:not-allowed}
+.form-msg{font-size:12px;color:var(--green)}
+.form-msg.error{color:#E74C3C}
+.empty{text-align:center;padding:60px 20px;color:var(--text-2);font-style:italic}
+.loading{text-align:center;padding:40px;color:var(--gold-dim);font-size:12px;letter-spacing:0.1em;text-transform:uppercase}
+.ts{font-size:11px;color:var(--text-2)}
+@media(max-width:900px){
+  header{padding:0 20px}.main{padding:20px}
+  .stats-grid{grid-template-columns:repeat(2,1fr)}
+  .form-grid{grid-template-columns:1fr}
+  th:nth-child(3),td:nth-child(3),th:nth-child(4),td:nth-child(4){display:none}
+}
+</style>
+</head>
+<body>
+<header>
+  <div class="logo">HB Jewelry</div>
+  <div class="header-right">
+    <span class="status-dot" id="statusDot"></span>
+    <span class="status-label" id="statusLabel">Conectando...</span>
+    <button class="btn-refresh" onclick="loadDashboard()">↻ Actualizar</button>
+  </div>
+</header>
+<main class="main">
+  <div class="stats-grid">
+    <div class="stat-card"><div class="stat-value" id="statTotal">—</div><div class="stat-label">Total cotizaciones</div></div>
+    <div class="stat-card"><div class="stat-value" id="statHoy">—</div><div class="stat-label">Recibidas hoy</div></div>
+    <div class="stat-card"><div class="stat-value" id="statRecibidas">—</div><div class="stat-label">Pendientes</div></div>
+    <div class="stat-card"><div class="stat-value" id="statAprobadas">—</div><div class="stat-label">Aprobadas</div></div>
+  </div>
+  <div class="section-header">
+    <h2 class="section-title">Cotizaciones recientes</h2>
+    <span class="section-tag" id="lastUpdate"></span>
+  </div>
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>#</th><th>Cliente</th><th>Pieza</th><th>Presupuesto</th><th>Estado</th><th>Fecha</th></tr></thead>
+      <tbody id="tableBody"><tr><td colspan="6" class="loading">Cargando...</td></tr></tbody>
+    </table>
+  </div>
+  <div class="section-header">
+    <h2 class="section-title">Nueva cotización</h2>
+    <span class="section-tag">Test directo al gateway</span>
+  </div>
+  <div class="form-panel">
+    <div class="form-grid">
+      <div class="form-group"><label>Nombre</label><input type="text" id="fNombre" placeholder="Nombre del cliente"></div>
+      <div class="form-group"><label>Email</label><input type="email" id="fEmail" placeholder="email@ejemplo.com"></div>
+      <div class="form-group"><label>Tipo de pieza</label>
+        <select id="fTipo"><option value="">Seleccionar...</option><option>anillo</option><option>collar</option><option>pulsera</option><option>aretes</option><option>otro</option></select>
+      </div>
+      <div class="form-group"><label>Presupuesto</label>
+        <select id="fPresupuesto"><option value="">Seleccionar...</option><option value="bajo_300">Menos de $300</option><option value="300_800">$300 – $800</option><option value="800_2000">$800 – $2,000</option><option value="2000_5000">$2,000 – $5,000</option><option value="mas_5000">$5,000+</option></select>
+      </div>
+      <div class="form-group full"><label>Descripción</label><textarea id="fDesc" placeholder="Describe la pieza..."></textarea></div>
+      <div class="form-actions">
+        <button class="btn-submit" id="btnSubmit" onclick="submitCotizacion()">Enviar cotización</button>
+        <span class="form-msg" id="formMsg"></span>
+      </div>
+    </div>
+  </div>
+</main>
+<script>
+const GATEWAY='http://localhost:8080';
+async function loadDashboard(){
+  const dot=document.getElementById('statusDot');
+  const label=document.getElementById('statusLabel');
+  const body=document.getElementById('tableBody');
+  try{
+    const res=await fetch(GATEWAY+'/hb/dashboard');
+    const data=await res.json();
+    if(data.status!=='ok')throw new Error(data.mensaje);
+    dot.style.background='#2ECC71';dot.style.boxShadow='0 0 6px #2ECC71';
+    label.textContent='Gateway conectado';
+    const s=data.stats;
+    document.getElementById('statTotal').textContent=s.total??'0';
+    document.getElementById('statHoy').textContent=s.hoy??'0';
+    document.getElementById('statRecibidas').textContent=s.recibidas??'0';
+    document.getElementById('statAprobadas').textContent=s.aprobadas??'0';
+    document.getElementById('lastUpdate').textContent='Actualizado '+new Date().toLocaleTimeString('es',{hour:'2-digit',minute:'2-digit'});
+    const rows=data.cotizaciones||[];
+    if(rows.length===0){body.innerHTML='<tr><td colspan="6" class="empty">Sin cotizaciones aún</td></tr>';return;}
+    body.innerHTML=rows.map(r=>`<tr><td class="td-id">${r.id}</td><td><div class="td-nombre">${esc(r.cliente_nombre)}</div><div class="td-email">${esc(r.cliente_email||'')}</div></td><td class="td-pieza">${esc(r.tipo_pieza||'—')}</td><td class="td-presupuesto">${fmt(r.presupuesto)}</td><td>${badge(r.estado)}</td><td class="ts">${fmtDate(r.created_at)}</td></tr>`).join('');
+  }catch(err){
+    dot.style.background='#E74C3C';dot.style.boxShadow='0 0 6px #E74C3C';
+    label.textContent='Sin conexión';
+    body.innerHTML=`<tr><td colspan="6" class="empty">No se pudo conectar al gateway: ${err.message}</td></tr>`;
+  }
+}
+async function submitCotizacion(){
+  const btn=document.getElementById('btnSubmit');
+  const msg=document.getElementById('formMsg');
+  const nombre=document.getElementById('fNombre').value.trim();
+  const email=document.getElementById('fEmail').value.trim();
+  const tipo=document.getElementById('fTipo').value;
+  const presupuesto=document.getElementById('fPresupuesto').value;
+  const desc=document.getElementById('fDesc').value.trim();
+  if(!nombre||!email||!tipo||!presupuesto||!desc){msg.className='form-msg error';msg.textContent='Completa todos los campos.';return;}
+  btn.disabled=true;msg.className='form-msg';msg.textContent='Enviando...';
+  try{
+    const res=await fetch(GATEWAY+'/api/flows/cotizacion',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({nombre,email,tipo_pieza:tipo,presupuesto,descripcion:desc})});
+    const data=await res.json();
+    if(data.status==='ok'){
+      msg.className='form-msg';msg.textContent=`✓ Cotización #${data.cotizacion_id} creada`;
+      ['fNombre','fEmail','fTipo','fPresupuesto','fDesc'].forEach(id=>document.getElementById(id).value='');
+      setTimeout(loadDashboard,800);
+    }else throw new Error(data.mensaje);
+  }catch(err){msg.className='form-msg error';msg.textContent='Error: '+err.message;}
+  finally{btn.disabled=false;}
+}
+function badge(e){return`<span class="badge badge-${e||'recibida'}">${(e||'recibida').replace('_',' ')}</span>`;}
+function fmt(p){return({'bajo_300':'< $300','300_800':'$300–800','800_2000':'$800–2k','2000_5000':'$2k–5k','mas_5000':'$5k+'})[p]||p||'—';}
+function fmtDate(d){if(!d)return'—';const dt=new Date(d);return dt.toLocaleDateString('es',{day:'2-digit',month:'short'})+' '+dt.toLocaleTimeString('es',{hour:'2-digit',minute:'2-digit'});}
+function esc(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
+loadDashboard();
+setInterval(loadDashboard,30000);
+</script>
+</body>
+</html>
