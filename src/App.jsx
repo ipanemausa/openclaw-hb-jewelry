@@ -5,6 +5,7 @@ import Productos from './components/Productos/Productos'
 import Ventas from './components/Ventas/Ventas'
 import Dashboard from './components/Dashboard/Dashboard'
 import Marketing from './components/Marketing/Marketing'
+import Ordenes from './components/Ordenes/Ordenes'
 
 export default function App() {
   const [activeSection, setActiveSection] = useState('dashboard')
@@ -16,7 +17,7 @@ export default function App() {
       {activeSection === 'productos' && <Productos />}
       {activeSection === 'ventas' && <Ventas />}
       {activeSection === 'marketing' && <Marketing />}
-      {activeSection === 'ordenes' && <div style={{padding:'20px',color:'#a09d99'}}>Ordenes proximamente</div>}
+      {activeSection === 'ordenes' && <Ordenes />}
     </Layout>
   )
 }
