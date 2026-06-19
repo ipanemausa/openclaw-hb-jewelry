@@ -6,11 +6,11 @@ export default defineConfig({
   server: {
     proxy: {
       '/api': {
-        target: 'http://localhost:8080',
+        target: 'https://openclaw-operativo-2026.onrender.com',
         changeOrigin: true
       },
       '/health': {
-        target: 'http://localhost:8080',
+        target: 'https://openclaw-operativo-2026.onrender.com',
         changeOrigin: true
       }
     }

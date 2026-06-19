@@ -8,7 +8,7 @@ const AGENTS = [
   { value: 'main', label: 'General' },
 ]
 
-const API = ''
+const API = 'https://openclaw-operativo-2026.onrender.com'
 
 export default function Chat() {
   const [messages, setMessages] = useState([
