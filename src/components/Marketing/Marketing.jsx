@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 
-const API = 'https://openclaw-operativo-2026.onrender.com'
+const API = ''
 
 const TIPOS = [
   { id: 'instagram_post', label: 'Post Instagram', icon: '📸', prompt: 'Crea un post completo para Instagram de HB Jewelry con caption, hashtags en ingles y espanol, y llamada a la accion. Producto: ' },

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 
-const API = 'https://openclaw-operativo-2026.onrender.com'
+const API = ''
 
 const ESTADOS = ['Pendiente', 'Confirmado', 'En proceso', 'Enviado', 'Entregado', 'Cancelado']
 const ESTADO_COLORS = {

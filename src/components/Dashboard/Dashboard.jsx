@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 
-const API = 'https://openclaw-operativo-2026.onrender.com'
+const API = ''
 
 export default function Dashboard() {
   const [products, setProducts] = useState([])
