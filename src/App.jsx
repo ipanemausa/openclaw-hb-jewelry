@@ -14,6 +14,7 @@ import Pipeline from './components/Pipeline/Pipeline'
 import Workspace from './components/Workspace/Workspace'
 import Monitor from './components/Monitor/Monitor'
 import Terminal from './components/Terminal/Terminal'
+import AdminDashboard from './components/AdminDashboard/AdminDashboard'
 
 // Placeholder simple para secciones en desarrollo
 function Placeholder({ name }) {
@@ -51,6 +52,7 @@ export default function App() {
       case 'workspace':      return <Workspace />
       case 'monitor':        return <Monitor />
       case 'terminal':       return <Terminal />
+      case 'admin':          return <AdminDashboard />
       case 'historial':      return <Placeholder name="Historial" />
       case 'chat-historial': return <Placeholder name="Chat Historial" />
       case 'auditoria':      return <Placeholder name="Auditoria" />

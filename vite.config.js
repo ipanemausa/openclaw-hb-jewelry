@@ -24,6 +24,10 @@ export default defineConfig({
         target: ORCHESTRATOR_URL,
         changeOrigin: true
       },
+      '/dashboard': {
+        target: GATEWAY_URL,
+        changeOrigin: true
+      },
       '/api': {
         target: GATEWAY_URL,
         changeOrigin: true
