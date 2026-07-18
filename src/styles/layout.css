@@ -77,3 +77,12 @@
 .app-content::-webkit-scrollbar-track { background: #0d0d0d; }
 .app-content::-webkit-scrollbar-thumb { background: rgba(212,175,106,0.2); border-radius: 10px; }
 .app-content::-webkit-scrollbar-thumb:hover { background: rgba(212,175,106,0.4); }
+
+@media (max-width: 768px) {
+  .app-content {
+    padding: 0.75rem;
+  }
+  .app-header {
+    padding: 0 16px;
+  }
+}

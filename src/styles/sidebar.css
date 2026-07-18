@@ -91,3 +91,37 @@
 .sidebar::-webkit-scrollbar-track { background: transparent; }
 .sidebar::-webkit-scrollbar-thumb { background: rgba(212,175,106,0.2); border-radius: 4px; }
 .sidebar::-webkit-scrollbar-thumb:hover { background: rgba(212,175,106,0.4); }
+
+@media (max-width: 768px) {
+  .sidebar {
+    width: 64px;
+    min-width: 64px;
+    padding: 0.5rem 0;
+  }
+  .sidebar-group-label {
+    display: none;
+  }
+  .sidebar-label {
+    display: none;
+  }
+  .sidebar-item {
+    justify-content: center;
+    padding: 10px;
+    border-radius: 50%;
+    width: 44px;
+    height: 44px;
+    margin: 4px auto;
+  }
+  .sidebar-item.active {
+    border-left: none;
+    border: 1px solid #d4af6a;
+    padding-left: 10px;
+  }
+  .sidebar-icon {
+    font-size: 16px;
+    margin: 0;
+  }
+  .sidebar-footer {
+    display: none;
+  }
+}
