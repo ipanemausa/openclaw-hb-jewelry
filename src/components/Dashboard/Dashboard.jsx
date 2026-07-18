@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import '../../styles/hb.css'
+import BotonEmergencia from '../Botónemergencia/Botónemergencia'
 
 export default function Dashboard() {
   const [stack,   setStack]   = useState([])
@@ -117,6 +118,7 @@ export default function Dashboard() {
           <button className='hb-btn'>Agregar producto</button>
           <button className='hb-btn'>Ver pedidos</button>
           <button className='hb-btn'>Reportes</button>
+          <BotonEmergencia onClick={() => alert('🚨 ¡Alerta de emergencia activada en HB Jewelry!')} texto="Botón Emergencia" />
         </div>
       </div>
 
