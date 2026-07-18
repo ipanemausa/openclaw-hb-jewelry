@@ -13,6 +13,7 @@ import Reportes from './components/Reportes/Reportes'
 import Pipeline from './components/Pipeline/Pipeline'
 import Workspace from './components/Workspace/Workspace'
 import Monitor from './components/Monitor/Monitor'
+import Terminal from './components/Terminal/Terminal'
 
 // Placeholder simple para secciones en desarrollo
 function Placeholder({ name }) {
@@ -49,6 +50,7 @@ export default function App() {
       case 'pipeline':       return <Pipeline />
       case 'workspace':      return <Workspace />
       case 'monitor':        return <Monitor />
+      case 'terminal':       return <Terminal />
       case 'historial':      return <Placeholder name="Historial" />
       case 'chat-historial': return <Placeholder name="Chat Historial" />
       case 'auditoria':      return <Placeholder name="Auditoria" />

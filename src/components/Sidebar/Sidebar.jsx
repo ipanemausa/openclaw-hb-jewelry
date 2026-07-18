@@ -9,6 +9,7 @@ const GROUPS = [
       { id: 'chat',          label: 'Chat Agentes',    icon: '◎' },
       { id: 'workspace',     label: 'Workspace',       icon: '○' },
       { id: 'monitor',       label: 'Monitor',         icon: '○' },
+      { id: 'terminal',      label: 'Terminal Logs',   icon: '▶_' },
     ],
   },
   {

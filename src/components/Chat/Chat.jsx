@@ -109,15 +109,20 @@ export default function Chat() {
 
       {/* Input fijo abajo en móvil */}
       <div className="chat-input-row fixed-mobile-input">
-        <input
-          type="text"
+        <textarea
+          rows="3"
           value={input}
           onChange={(e) => setInput(e.target.value)}
-          onKeyDown={(e) => e.key === "Enter" && sendMessage()}
+          onKeyDown={(e) => {
+            if (e.key === "Enter" && !e.shiftKey) {
+              e.preventDefault();
+              sendMessage();
+            }
+          }}
           placeholder="Escribe tu mensaje..."
           disabled={loading}
         />
-        <button onClick={sendMessage} disabled={loading}>
+        <button className="hb-btn" onClick={sendMessage} disabled={loading}>
           Enviar
         </button>
       </div>
