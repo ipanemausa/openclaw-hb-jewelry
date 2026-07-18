@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react'
 import '../../styles/hb.css'
 import BotonEmergencia from '../Botónemergencia/Botónemergencia'
 
-export default function Dashboard() {
+export default function Dashboard({ onNavigate }) {
   const [stack,   setStack]   = useState([])
   const [tareas,  setTareas]  = useState({})
   const [gateway, setGateway] = useState({})
@@ -115,9 +115,9 @@ export default function Dashboard() {
       <div className='hb-card'>
         <div style={{ color: '#d4af6a', fontWeight: '600', marginBottom: '12px' }}>Acciones rápidas</div>
         <div style={{ display: 'flex', gap: '10px' }}>
-          <button className='hb-btn'>Agregar producto</button>
-          <button className='hb-btn'>Ver pedidos</button>
-          <button className='hb-btn'>Reportes</button>
+          <button className='hb-btn' onClick={() => onNavigate && onNavigate('productos')}>Agregar producto</button>
+          <button className='hb-btn' onClick={() => onNavigate && onNavigate('ordenes')}>Ver pedidos</button>
+          <button className='hb-btn' onClick={() => onNavigate && onNavigate('reportes')}>Reportes</button>
           <BotonEmergencia onClick={() => alert('🚨 ¡Alerta de emergencia activada en HB Jewelry!')} texto="Botón Emergencia" />
         </div>
       </div>

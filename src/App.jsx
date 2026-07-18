@@ -38,7 +38,7 @@ export default function App() {
 
   const renderSection = () => {
     switch (activeSection) {
-      case 'dashboard':      return <Dashboard />
+      case 'dashboard':      return <Dashboard onNavigate={setActiveSection} />
       case 'chat':           return <Chat />
       case 'productos':      return <Productos />
       case 'ventas':         return <Ventas />
@@ -56,7 +56,7 @@ export default function App() {
       case 'historial':      return <Placeholder name="Historial" />
       case 'chat-historial': return <Placeholder name="Chat Historial" />
       case 'auditoria':      return <Placeholder name="Auditoria" />
-      default:               return <Dashboard />
+      default:               return <Dashboard onNavigate={setActiveSection} />
     }
   }
 
