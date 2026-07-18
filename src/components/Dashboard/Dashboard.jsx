@@ -1,173 +1,125 @@
 import React, { useState, useEffect } from 'react'
 import '../../styles/hb.css'
 
-const estadoColor = s => ({
-  completada:  '#4ade80',
-  pendiente:   '#fbbf24',
-  en_cola:     '#60a5fa',
-  ejecutando:  '#fb923c',
-}[s] || '#a09d99')
-
-const STAT_CARDS = [
-  { label: 'Ventas hoy',   value: '$0', sub: '0 órdenes',   icon: '◆', color: '#d4af6a' },
-  { label: 'Productos',    value: '0',  sub: 'en catálogo', icon: '◇', color: '#60a5fa' },
-  { label: 'Clientes',     value: '0',  sub: 'registrados', icon: '👥', color: '#34d399' },
-  { label: 'Contenedores', value: '0',  sub: 'activos',     icon: '🐳', color: '#a78bfa' },
-]
-
 export default function Dashboard() {
   const [stack,   setStack]   = useState([])
   const [tareas,  setTareas]  = useState({})
   const [gateway, setGateway] = useState({})
-  const [stats,   setStats]   = useState(STAT_CARDS)
   const [loading, setLoading] = useState(true)
-  const [ts, setTs] = useState('')
 
   useEffect(() => {
-    setTs(new Date().toLocaleString('es-MX', { dateStyle: 'medium', timeStyle: 'short' }))
-
     async function load() {
-      const [s, t, g, ventas, productos] = await Promise.allSettled([
-        fetch('/api/stack').then(r => r.json()),
+      const [s, t, g] = await Promise.allSettled([
+        fetch('/stack').then(r => r.json()),
         fetch('/api/tareas').then(r => r.json()),
         fetch('/api/mcp/status').then(r => r.json()),
-        fetch('/api/ventas').then(r => r.json()),
-        fetch('/api/productos').then(r => r.json()),
       ])
-
-      if (s.status === 'fulfilled') {
-        const containers = s.value.containers || []
-        setStack(containers)
-        const running = containers.filter(c => c.status === 'running').length
-        setStats(prev => prev.map(st => st.label === 'Contenedores'
-          ? { ...st, value: running, sub: `${running} running` } : st))
-      }
+      if (s.status === 'fulfilled') setStack(s.value.containers || [])
       if (t.status === 'fulfilled') setTareas(t.value.tareas || {})
       if (g.status === 'fulfilled') setGateway(g.value)
-      if (ventas.status === 'fulfilled') {
-        const vv = ventas.value.ventas || []
-        const total = vv.reduce((a, v) => a + (v.total || 0), 0)
-        setStats(prev => prev.map(st => st.label === 'Ventas hoy'
-          ? { ...st, value: `$${total.toLocaleString()}`, sub: `${vv.length} órdenes` } : st))
-      }
-      if (productos.status === 'fulfilled') {
-        const n = (productos.value.productos || []).length
-        setStats(prev => prev.map(st => st.label === 'Productos'
-          ? { ...st, value: n, sub: `${n} en catálogo` } : st))
-      }
       setLoading(false)
     }
-
     load()
     const interval = setInterval(load, 10000)
     return () => clearInterval(interval)
   }, [])
 
+  const estadoColor = s => ({
+    completada: '#4ade80',
+    pendiente:  '#fbbf24',
+    en_cola:    '#60a5fa',
+    ejecutando: '#fb923c',
+  }[s] || '#a09d99')
+
   if (loading) return (
-    <div style={{ padding:'2rem', color:'#d4af6a', fontFamily:'monospace', fontSize:'14px' }}>
+    <div style={{ padding: '2rem', color: '#d4af6a', fontFamily: 'monospace', fontSize: '14px' }}>
       ⬡ Cargando LAMAUTONOMIA...
     </div>
   )
 
   return (
-    <div className="hb-page">
+    <div className='hb-page'>
 
-      {/* Header */}
-      <div className="hb-page-header">
-        <div>
-          <h1 style={{ color:'#d4af6a', fontSize:'18px', fontWeight:'700', marginBottom:'4px' }}>
-            ⬡ LAMAUTONOMIA
-          </h1>
-          <p className="hb-page-subtitle">auto-refresh 10s · {ts}</p>
-        </div>
-        <button className="hb-btn hb-btn-sm" onClick={() => window.location.reload()}>↻ Refrescar</button>
+      {/* Título central */}
+      <div style={{ textAlign: 'center', marginBottom: '24px' }}>
+        <h1 style={{ color: '#d4af6a', fontSize: '1.4rem', marginBottom: '4px' }}>⬡ LAMAUTONOMIA</h1>
+        <p style={{ color: '#6b6866', fontSize: '0.8rem' }}>auto-refresh 10s</p>
       </div>
 
-      {/* Stat cards row */}
-      <div style={{ display:'grid', gridTemplateColumns:'repeat(auto-fit,minmax(160px,1fr))', gap:'10px', marginBottom:'20px' }}>
-        {stats.map((s, i) => (
-          <div key={i} className="hb-card" style={{ borderTop:`2px solid ${s.color}`, padding:'12px 14px' }}>
-            <div style={{ display:'flex', justifyContent:'space-between', alignItems:'flex-start' }}>
-              <div>
-                <div style={{ fontSize:'10px', color:'#a09d99', textTransform:'uppercase', letterSpacing:'.06em', marginBottom:'4px' }}>{s.label}</div>
-                <div style={{ fontSize:'20px', fontWeight:'700', color:'#f0ede8' }}>{s.value}</div>
-                <div style={{ fontSize:'11px', color:'#6b6866', marginTop:'2px' }}>{s.sub}</div>
-              </div>
-              <span style={{ fontSize:'18px', opacity:0.65 }}>{s.icon}</span>
-            </div>
-          </div>
-        ))}
-      </div>
-
-      {/* LAMAUTONOMIA 3-panel grid */}
-      <div style={{ display:'grid', gridTemplateColumns:'repeat(auto-fit,minmax(260px,1fr))', gap:'12px' }}>
+      {/* 3 paneles principales */}
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit,minmax(280px,1fr))', gap: '16px', marginBottom: '24px' }}>
 
         {/* CONTENEDORES */}
-        <div className="hb-table-wrap">
-          <div style={{ padding:'10px 14px', fontSize:'11px', color:'#d4af6a', letterSpacing:'2px', fontWeight:'600', textTransform:'uppercase', borderBottom:'1px solid rgba(255,255,255,0.07)' }}>
-            🐳 Contenedores
+        <div className='hb-card'>
+          <div style={{ color: '#d4af6a', fontSize: '0.85rem', letterSpacing: '2px', marginBottom: '12px', fontWeight: '600' }}>
+            CONTENEDORES
           </div>
-          {stack.length === 0
-            ? <div style={{ padding:'16px 14px', color:'#6b6866', fontSize:'13px' }}>Sin datos del orquestador</div>
-            : stack.map(c => (
-                <div key={c.name} style={{ display:'flex', justifyContent:'space-between', alignItems:'center', padding:'8px 14px', borderBottom:'1px solid rgba(255,255,255,0.04)', fontSize:'13px' }}>
-                  <span style={{ display:'flex', alignItems:'center', gap:'8px', color:'#f0ede8' }}>
-                    <span style={{ width:'7px', height:'7px', borderRadius:'50%', background: c.status==='running' ? '#4ade80' : '#fb7185', display:'inline-block', flexShrink:0 }}/>
-                    {c.name}
-                  </span>
-                  <span style={{ color: c.status==='running' ? '#4ade80' : '#fb7185', fontSize:'11px' }}>{c.status}</span>
-                </div>
-              ))
-          }
+          {stack.map(c => (
+            <div key={c.name} style={{ display: 'flex', justifyContent: 'space-between', padding: '6px 0', borderBottom: '1px solid rgba(255,255,255,0.05)', fontSize: '0.85rem' }}>
+              <span>
+                <span style={{ display: 'inline-block', width: '8px', height: '8px', borderRadius: '50%', background: c.status === 'running' ? '#4ade80' : '#fb7185', marginRight: '6px' }}/>
+                {c.name}
+              </span>
+              <span style={{ color: c.status === 'running' ? '#4ade80' : '#fb7185' }}>{c.status}</span>
+            </div>
+          ))}
+          {stack.length === 0 && <p className='hb-empty'>Sin datos de contenedores</p>}
         </div>
 
-        {/* HB JEWELRY GATEWAY */}
-        <div className="hb-table-wrap">
-          <div style={{ padding:'10px 14px', fontSize:'11px', color:'#d4af6a', letterSpacing:'2px', fontWeight:'600', textTransform:'uppercase', borderBottom:'1px solid rgba(255,255,255,0.07)' }}>
-            ⬡ HB Jewelry — Gateway
+        {/* HB JEWELRY — GATEWAY */}
+        <div className='hb-card'>
+          <div style={{ color: '#d4af6a', fontSize: '0.85rem', letterSpacing: '2px', marginBottom: '12px', fontWeight: '600' }}>
+            HB JEWELRY — GATEWAY
           </div>
-          <div style={{ display:'flex', justifyContent:'space-between', alignItems:'center', padding:'8px 14px', borderBottom:'1px solid rgba(255,255,255,0.04)', fontSize:'13px' }}>
-            <span style={{ color:'#a09d99' }}>estado</span>
-            <span style={{ color: gateway.status === 'ok' ? '#4ade80' : '#fb7185' }}>
-              {gateway.status || 'sin respuesta'}
-            </span>
+          <div style={{ display: 'flex', justifyContent: 'space-between', padding: '6px 0', borderBottom: '1px solid rgba(255,255,255,0.05)', fontSize: '0.85rem' }}>
+            <span>estado</span>
+            <span style={{ color: gateway.status === 'ok' ? '#4ade80' : '#fb7185' }}>{gateway.status || 'sin respuesta'}</span>
           </div>
-          {(gateway.agents || []).length === 0
-            ? <div style={{ padding:'8px 14px', color:'#6b6866', fontSize:'12px' }}>Sin agentes reportados</div>
-            : (gateway.agents || []).map(a => (
-                <div key={a} style={{ display:'flex', justifyContent:'space-between', alignItems:'center', padding:'8px 14px', borderBottom:'1px solid rgba(255,255,255,0.04)', fontSize:'13px' }}>
-                  <span style={{ color:'#d4af6a' }}>⬡ {a}</span>
-                  <span style={{ color:'#4ade80', fontSize:'11px' }}>activo</span>
-                </div>
-              ))
-          }
+          {(gateway.agents || []).map(a => (
+            <div key={a} style={{ display: 'flex', justifyContent: 'space-between', padding: '6px 0', borderBottom: '1px solid rgba(255,255,255,0.05)', fontSize: '0.85rem' }}>
+              <span style={{ color: '#d4af6a' }}>⬡ {a}</span>
+              <span style={{ color: '#4ade80' }}>activo</span>
+            </div>
+          ))}
         </div>
 
-        {/* DAG TAREAS */}
-        <div className="hb-table-wrap">
-          <div style={{ padding:'10px 14px', fontSize:'11px', color:'#d4af6a', letterSpacing:'2px', fontWeight:'600', textTransform:'uppercase', borderBottom:'1px solid rgba(255,255,255,0.07)' }}>
-            🔄 DAG — Tareas
+        {/* DAG — TAREAS */}
+        <div className='hb-card'>
+          <div style={{ color: '#d4af6a', fontSize: '0.85rem', letterSpacing: '2px', marginBottom: '12px', fontWeight: '600' }}>
+            DAG — TAREAS
           </div>
-          {Object.keys(tareas).length === 0
-            ? <div style={{ padding:'16px 14px', color:'#6b6866', fontSize:'13px' }}>Sin tareas en ejecución</div>
-            : Object.entries(tareas).map(([k, v]) => (
-                <div key={k} style={{ display:'flex', justifyContent:'space-between', alignItems:'center', padding:'8px 14px', borderBottom:'1px solid rgba(255,255,255,0.04)', fontSize:'13px' }}>
-                  <span style={{ color:'#f0ede8' }}>{k.replace(/_/g, ' ')}</span>
-                  <span style={{
-                    fontSize:'11px', padding:'2px 8px', borderRadius:'4px',
-                    color: estadoColor(v.estado),
-                    border: `1px solid ${estadoColor(v.estado)}40`,
-                    background: `${estadoColor(v.estado)}15`,
-                  }}>{v.estado}</span>
-                </div>
-              ))
-          }
+          {Object.entries(tareas).map(([k, v]) => (
+            <div key={k} style={{ display: 'flex', justifyContent: 'space-between', padding: '6px 0', borderBottom: '1px solid rgba(255,255,255,0.05)', fontSize: '0.85rem' }}>
+              <span>{k.replace(/_/g, ' ')}</span>
+              <span style={{
+                fontSize: '0.7rem', padding: '2px 8px', borderRadius: '4px',
+                color: estadoColor(v.estado),
+                border: '1px solid ' + estadoColor(v.estado) + '40',
+                background: estadoColor(v.estado) + '20'
+              }}>{v.estado}</span>
+            </div>
+          ))}
+          {Object.keys(tareas).length === 0 && <p className='hb-empty'>Sin tareas</p>}
         </div>
 
       </div>
+
+      {/* Actividad reciente */}
+      <div className='hb-card' style={{ marginBottom: '16px' }}>
+        <div style={{ color: '#d4af6a', fontWeight: '600', marginBottom: '12px' }}>Actividad reciente</div>
+        <p className='hb-empty'>No hay actividad reciente</p>
+      </div>
+
+      {/* Acciones rápidas */}
+      <div className='hb-card'>
+        <div style={{ color: '#d4af6a', fontWeight: '600', marginBottom: '12px' }}>Acciones rápidas</div>
+        <div style={{ display: 'flex', gap: '10px' }}>
+          <button className='hb-btn'>Agregar producto</button>
+          <button className='hb-btn'>Ver pedidos</button>
+          <button className='hb-btn'>Reportes</button>
+        </div>
+      </div>
+
     </div>
   )
 }
-
-
-

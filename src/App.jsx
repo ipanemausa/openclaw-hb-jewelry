@@ -6,14 +6,27 @@ import Ventas from './components/Ventas/Ventas'
 import Dashboard from './components/Dashboard/Dashboard'
 import Marketing from './components/Marketing/Marketing'
 import Ordenes from './components/Ordenes/Ordenes'
+import Inventario from './components/Inventario/Inventario'
+import Clientes from './components/Clientes/Clientes'
+import Analytics from './components/Analytics/Analytics'
+import Reportes from './components/Reportes/Reportes'
+import Pipeline from './components/Pipeline/Pipeline'
+import Workspace from './components/Workspace/Workspace'
+import Monitor from './components/Monitor/Monitor'
 
-// Placeholder para secciones en desarrollo
+// Placeholder simple para secciones en desarrollo
 function Placeholder({ name }) {
   return (
-    <div style={{ padding: '40px 24px', color: '#a09d99', fontFamily: 'monospace' }}>
-      <div style={{ fontSize: '12px', color: '#6b6866', marginBottom: '8px' }}>SECCIÓN</div>
-      <div style={{ fontSize: '20px', color: '#d4af6a', marginBottom: '16px' }}>{name}</div>
-      <div style={{ fontSize: '13px', color: '#6b6866' }}>Módulo en construcción</div>
+    <div style={{ padding: '32px 0' }}>
+      <div style={{ fontSize: '11px', color: '#6b6866', letterSpacing: '2px', textTransform: 'uppercase', marginBottom: '8px' }}>MÓDULO</div>
+      <div style={{ fontSize: '22px', color: '#d4af6a', fontWeight: '600', marginBottom: '8px' }}>{name}</div>
+      <div style={{
+        background: '#1a1a1a', border: '1px solid rgba(255,255,255,0.07)',
+        borderRadius: '12px', padding: '40px', textAlign: 'center',
+        color: '#6b6866', fontSize: '13px', marginTop: '16px'
+      }}>
+        Módulo en construcción — próximamente disponible
+      </div>
     </div>
   )
 }
@@ -29,13 +42,13 @@ export default function App() {
       case 'ventas':         return <Ventas />
       case 'marketing':      return <Marketing />
       case 'ordenes':        return <Ordenes />
-      case 'inventario':     return <Placeholder name="Inventario" />
-      case 'clientes':       return <Placeholder name="Clientes" />
-      case 'analytics':      return <Placeholder name="Analytics" />
-      case 'reportes':       return <Placeholder name="Reportes" />
-      case 'pipeline':       return <Placeholder name="Pipeline" />
-      case 'workspace':      return <Placeholder name="Workspace" />
-      case 'monitor':        return <Placeholder name="Monitor" />
+      case 'inventario':     return <Inventario />
+      case 'clientes':       return <Clientes />
+      case 'analytics':      return <Analytics />
+      case 'reportes':       return <Reportes />
+      case 'pipeline':       return <Pipeline />
+      case 'workspace':      return <Workspace />
+      case 'monitor':        return <Monitor />
       case 'historial':      return <Placeholder name="Historial" />
       case 'chat-historial': return <Placeholder name="Chat Historial" />
       case 'auditoria':      return <Placeholder name="Auditoria" />

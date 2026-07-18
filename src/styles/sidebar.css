@@ -1,10 +1,93 @@
-.sidebar { width: 220px; min-width: 220px; background: #111; border-right: 1px solid rgba(255,255,255,0.07); display: flex; flex-direction: column; padding: 12px 8px; height: 100%; overflow-y: auto; }
-.sidebar-nav { display: flex; flex-direction: column; gap: 0; flex: 1; }
-.sidebar-group { margin-bottom: 8px; }
-.sidebar-group-label { font-size: 10px; font-weight: 600; color: #4a4845; letter-spacing: 0.1em; text-transform: uppercase; padding: 10px 12px 5px; }
-.sidebar-item { display: flex; align-items: center; gap: 10px; padding: 8px 12px; border-radius: 7px; border: none; background: transparent; color: #a09d99; cursor: pointer; font-size: 13px; font-family: inherit; text-align: left; transition: all 0.15s; width: 100%; }
-.sidebar-item:hover { background: rgba(255,255,255,0.05); color: #f0ede8; }
-.sidebar-item.active { background: rgba(212,175,106,0.12); color: #d4af6a; }
-.sidebar-icon { font-size: 14px; width: 16px; flex-shrink: 0; }
-.sidebar-label { font-size: 13px; }
-.sidebar-footer { font-size: 11px; color: #6b6866; padding: 8px 12px; border-top: 1px solid rgba(255,255,255,0.05); margin-top: 8px; }
+/* ── SIDEBAR — HB Jewelry / OpenClaw 2026 ── */
+.sidebar {
+  width: 220px;
+  min-width: 220px;
+  background: #0f0f0f;
+  border-right: 1px solid rgba(212,175,106,0.15);
+  display: flex;
+  flex-direction: column;
+  padding: 0.75rem 0 0.5rem;
+  height: 100%;
+  overflow-y: auto;
+  flex-shrink: 0;
+}
+
+.sidebar-nav {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+
+.sidebar-group {
+  padding: 0 0.5rem;
+  margin-bottom: 4px;
+}
+
+.sidebar-group-label {
+  font-size: 10px;
+  font-weight: 600;
+  color: #d4af6a;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  padding: 8px 8px 4px;
+  margin: 0;
+}
+
+.sidebar-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 7px 10px;
+  border-radius: 6px;
+  border: none;
+  background: transparent;
+  color: #a09d99;
+  cursor: pointer;
+  font-size: 13px;
+  font-family: inherit;
+  text-align: left;
+  transition: background 0.15s, color 0.15s;
+  width: 100%;
+}
+
+.sidebar-item:hover {
+  background: rgba(212,175,106,0.07);
+  color: #f0ede8;
+}
+
+.sidebar-item.active {
+  background: rgba(212,175,106,0.12);
+  color: #d4af6a;
+  border-left: 2px solid #d4af6a;
+  padding-left: 8px;
+}
+
+.sidebar-icon {
+  font-size: 14px;
+  width: 16px;
+  text-align: center;
+  flex-shrink: 0;
+}
+
+.sidebar-label {
+  font-size: 13px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.sidebar-footer {
+  font-size: 10px;
+  color: #3a3836;
+  padding: 8px 16px;
+  border-top: 1px solid rgba(255,255,255,0.04);
+  margin-top: auto;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+}
+
+/* Scrollbar dorado */
+.sidebar::-webkit-scrollbar { width: 4px; }
+.sidebar::-webkit-scrollbar-track { background: transparent; }
+.sidebar::-webkit-scrollbar-thumb { background: rgba(212,175,106,0.2); border-radius: 4px; }
+.sidebar::-webkit-scrollbar-thumb:hover { background: rgba(212,175,106,0.4); }
