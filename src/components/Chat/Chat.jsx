@@ -1,4 +1,5 @@
 import React, { useState, useRef, useEffect } from "react";
+import ReactMarkdown from "react-markdown";
 import "../../styles/chat.css";
 
 const AGENTS = [
@@ -22,52 +23,94 @@ export default function Chat() {
   const [loading, setLoading] = useState(false);
   const [sessionId, setSessionId] = useState(null);
   const bottomRef = useRef(null);
+  const sseRef = useRef(null);
 
   useEffect(() => {
     bottomRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages]);
 
+  useEffect(() => {
+    return () => sseRef.current?.close();
+  }, []);
+
+  async function sendViaMCP(userMsg) {
+    let sid = sessionId;
+    if (!sid) {
+      const sr = await fetch(API + "/api/mcp/session", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ agent }),
+      });
+      const sd = await sr.json();
+      sid = sd.session_id;
+      setSessionId(sid);
+    }
+    const r = await fetch(API + "/api/mcp/message", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ agent, message: userMsg, session_id: sid }),
+    });
+    const d = await r.json();
+    setMessages((prev) => [
+      ...prev,
+      { role: "assistant", content: d.response },
+    ]);
+    setLoading(false);
+  }
+
+  async function sendViaSSE(userMsg) {
+    const r = await fetch(API + "/api/chat/input", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ mensaje: userMsg, agente: agent }),
+    });
+    const { job_id } = await r.json();
+
+    const es = new EventSource(API + `/api/chat/status/${job_id}`);
+    sseRef.current = es;
+
+    es.onmessage = (e) => {
+      const { status, respuesta } = JSON.parse(e.data);
+      if (status === "completed" && respuesta) {
+        setMessages((prev) => [
+          ...prev,
+          { role: "assistant", content: respuesta },
+        ]);
+        es.close();
+        setLoading(false);
+      }
+    };
+
+    es.onerror = () => {
+      setMessages((prev) => [
+        ...prev,
+        { role: "assistant", content: "Error conectando con el agente." },
+      ]);
+      es.close();
+      setLoading(false);
+    };
+  }
+
   async function sendMessage() {
     if (!input.trim() || loading) return;
-
     const userMsg = input.trim();
     setInput("");
     setMessages((prev) => [...prev, { role: "user", content: userMsg }]);
     setLoading(true);
 
     try {
-      let sid = sessionId;
-
-      if (!sid) {
-        const sr = await fetch(API + "/api/mcp/session", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ agent }),
-        });
-        const sd = await sr.json();
-        sid = sd.session_id;
-        setSessionId(sid);
+      if (agent === "main") {
+        await sendViaSSE(userMsg);
+      } else {
+        await sendViaMCP(userMsg);
       }
-
-      const r = await fetch(API + "/api/mcp/message", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ agent, message: userMsg, session_id: sid }),
-      });
-
-      const d = await r.json();
-      setMessages((prev) => [
-        ...prev,
-        { role: "assistant", content: d.response },
-      ]);
     } catch (e) {
       setMessages((prev) => [
         ...prev,
         { role: "assistant", content: "Error conectando con el agente." },
       ]);
+      setLoading(false);
     }
-
-    setLoading(false);
   }
 
   return (
@@ -80,6 +123,7 @@ export default function Chat() {
           onChange={(e) => {
             setAgent(e.target.value);
             setSessionId(null);
+            sseRef.current?.close();
           }}
         >
           {AGENTS.map((a) => (
@@ -94,13 +138,21 @@ export default function Chat() {
       <div className="chat-messages responsive-scroll">
         {messages.map((m, i) => (
           <div key={i} className={`chat-msg ${m.role}`}>
-            <div className="chat-bubble">{m.content}</div>
+            <div className="chat-bubble">
+              {m.role === "assistant" ? (
+                <ReactMarkdown>{m.content}</ReactMarkdown>
+              ) : (
+                m.content
+              )}
+            </div>
           </div>
         ))}
 
         {loading && (
           <div className="chat-msg assistant">
-            <div className="chat-bubble loading">Pensando...</div>
+            <div className="chat-bubble loading">
+              {agent === "main" ? "⏳ Gemini procesando..." : "Pensando..."}
+            </div>
           </div>
         )}
 

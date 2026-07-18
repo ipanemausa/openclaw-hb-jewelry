@@ -13,7 +13,7 @@ export default defineConfig({
         changeOrigin: true
       },
       '/api/chat': {
-        target: GATEWAY_URL,
+        target: ORCHESTRATOR_URL,
         changeOrigin: true
       },
       '/api/tareas': {
