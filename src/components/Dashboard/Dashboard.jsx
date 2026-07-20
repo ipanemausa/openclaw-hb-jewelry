@@ -47,6 +47,18 @@ export default function Dashboard({ onNavigate }) {
         <p style={{ color: '#6b6866', fontSize: '0.8rem' }}>auto-refresh 10s</p>
       </div>
 
+      {/* Video Showcase Promocional */}
+      <div className='hb-card' style={{ marginBottom: '24px', textAlign: 'center' }}>
+        <div style={{ color: '#d4af6a', fontSize: '1rem', letterSpacing: '1px', marginBottom: '12px', fontWeight: '600' }}>
+          TECH SHOWCASE
+        </div>
+        <video 
+          src="/showcase_video.mp4" 
+          controls 
+          style={{ width: '100%', maxWidth: '800px', borderRadius: '12px', boxShadow: '0 4px 20px rgba(0,0,0,0.5)' }}
+        />
+      </div>
+
       {/* 3 paneles principales */}
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit,minmax(280px,1fr))', gap: '16px', marginBottom: '24px' }}>
 
