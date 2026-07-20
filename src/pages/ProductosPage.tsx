@@ -1,0 +1,1 @@
+import React from "react";\nimport Productos from "../components/Productos";\n\nexport default function ProductosPage() {\n  return <Productos />;\n}\n

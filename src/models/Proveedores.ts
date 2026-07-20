@@ -1,0 +1,1 @@
+export interface Proveedores {\n  id: string;\n  nombre: string;\n}\n

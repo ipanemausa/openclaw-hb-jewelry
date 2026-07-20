@@ -1,0 +1,1 @@
+import React from "react";\nimport Pagos from "../components/Pagos";\n\nexport default function PagosPage() {\n  return <Pagos />;\n}\n

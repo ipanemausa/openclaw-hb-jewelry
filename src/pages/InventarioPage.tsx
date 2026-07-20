@@ -1,0 +1,1 @@
+import React from "react";\nimport Inventario from "../components/Inventario";\n\nexport default function InventarioPage() {\n  return <Inventario />;\n}\n

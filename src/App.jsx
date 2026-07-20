@@ -15,7 +15,10 @@ import Workspace from './components/Workspace/Workspace'
 import Monitor from './components/Monitor/Monitor'
 import Terminal from './components/Terminal/Terminal'
 import AdminDashboard from './components/AdminDashboard/AdminDashboard'
-
+import Historial from './components/Historial/Historial'
+import Chathistorial from './components/Chathistorial/Chathistorial'
+import Auditoria from './components/Auditoria/Auditoria'
+import AvatarMeet from './components/AvatarMeet/AvatarMeet'
 // Placeholder simple para secciones en desarrollo
 function Placeholder({ name }) {
   return (
@@ -53,9 +56,10 @@ export default function App() {
       case 'monitor':        return <Monitor />
       case 'terminal':       return <Terminal />
       case 'admin':          return <AdminDashboard />
-      case 'historial':      return <Placeholder name="Historial" />
-      case 'chat-historial': return <Placeholder name="Chat Historial" />
-      case 'auditoria':      return <Placeholder name="Auditoria" />
+      case 'historial':      return <Historial />
+      case 'chat-historial': return <Chathistorial />
+      case 'auditoria':      return <Auditoria />
+      case 'avatar':         return <AvatarMeet />
       default:               return <Dashboard onNavigate={setActiveSection} />
     }
   }

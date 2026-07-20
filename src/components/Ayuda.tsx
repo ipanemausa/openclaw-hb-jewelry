@@ -1,0 +1,1 @@
+import React from "react";\n\nexport const Ayuda = () => {\n  return (\n    <div style={{ padding: "1rem" }}>\n      <h2>Ayuda</h2>\n      <p>Componente base generado automáticamente.</p>\n    </div>\n  );\n};\n\nexport default Ayuda;\n

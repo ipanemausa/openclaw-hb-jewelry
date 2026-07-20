@@ -1,0 +1,1 @@
+import React from "react";\nimport Ayuda from "../components/Ayuda";\n\nexport default function AyudaPage() {\n  return <Ayuda />;\n}\n

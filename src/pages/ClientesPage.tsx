@@ -1,0 +1,1 @@
+import React from "react";\nimport Clientes from "../components/Clientes";\n\nexport default function ClientesPage() {\n  return <Clientes />;\n}\n

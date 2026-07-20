@@ -1,0 +1,1 @@
+import React from "react";\nimport Ventas from "../components/Ventas";\n\nexport default function VentasPage() {\n  return <Ventas />;\n}\n

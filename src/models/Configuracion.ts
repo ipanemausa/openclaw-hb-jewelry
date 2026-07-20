@@ -1,0 +1,1 @@
+export interface Configuracion {\n  id: string;\n  nombre: string;\n}\n

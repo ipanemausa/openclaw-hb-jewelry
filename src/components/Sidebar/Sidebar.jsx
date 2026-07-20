@@ -37,6 +37,7 @@ const GROUPS = [
       { id: 'historial',      label: 'Historial',       icon: '○' },
       { id: 'chat-historial', label: 'Chat Historial',  icon: '▣' },
       { id: 'auditoria',      label: 'Auditoria',       icon: '▣' },
+      { id: 'avatar',         label: 'Avatar (Gemini)', icon: '🎙️' },
       { id: 'admin',          label: 'Backend Admin',   icon: '⚙️' },
     ],
   },

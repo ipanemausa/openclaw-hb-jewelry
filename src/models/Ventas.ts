@@ -1,0 +1,1 @@
+export interface Ventas {\n  id: string;\n  nombre: string;\n}\n

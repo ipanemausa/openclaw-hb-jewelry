@@ -1,0 +1,1 @@
+import React from "react";\nimport Ordenes from "../components/Ordenes";\n\nexport default function OrdenesPage() {\n  return <Ordenes />;\n}\n

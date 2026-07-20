@@ -1,0 +1,1 @@
+export interface Reportes {\n  id: string;\n  nombre: string;\n}\n

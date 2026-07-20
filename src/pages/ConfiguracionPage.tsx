@@ -1,0 +1,1 @@
+import React from "react";\nimport Configuracion from "../components/Configuracion";\n\nexport default function ConfiguracionPage() {\n  return <Configuracion />;\n}\n

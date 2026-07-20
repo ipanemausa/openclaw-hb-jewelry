@@ -1,0 +1,1 @@
+export interface Inventario {\n  id: string;\n  nombre: string;\n}\n

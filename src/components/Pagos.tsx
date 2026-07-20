@@ -1,0 +1,1 @@
+import React from "react";\n\nexport const Pagos = () => {\n  return (\n    <div style={{ padding: "1rem" }}>\n      <h2>Pagos</h2>\n      <p>Componente base generado automáticamente.</p>\n    </div>\n  );\n};\n\nexport default Pagos;\n

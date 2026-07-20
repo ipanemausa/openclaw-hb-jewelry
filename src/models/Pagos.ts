@@ -1,0 +1,1 @@
+export interface Pagos {\n  id: string;\n  nombre: string;\n}\n

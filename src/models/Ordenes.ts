@@ -1,0 +1,1 @@
+export interface Ordenes {\n  id: string;\n  nombre: string;\n}\n

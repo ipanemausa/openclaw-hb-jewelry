@@ -1,0 +1,1 @@
+import React from "react";\nimport Reportes from "../components/Reportes";\n\nexport default function ReportesPage() {\n  return <Reportes />;\n}\n

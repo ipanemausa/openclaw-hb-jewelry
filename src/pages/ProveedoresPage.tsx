@@ -1,0 +1,1 @@
+import React from "react";\nimport Proveedores from "../components/Proveedores";\n\nexport default function ProveedoresPage() {\n  return <Proveedores />;\n}\n

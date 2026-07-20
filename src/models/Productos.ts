@@ -1,0 +1,1 @@
+export interface Productos {\n  id: string;\n  nombre: string;\n}\n

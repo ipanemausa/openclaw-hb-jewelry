@@ -1,0 +1,1 @@
+export interface Ayuda {\n  id: string;\n  nombre: string;\n}\n
