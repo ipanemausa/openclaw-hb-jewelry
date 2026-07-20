@@ -48,49 +48,28 @@ export default function Terminal() {
     addLog('SYSTEM', 'terminal', '▶ Terminal iniciada — conectando con orquestador...')
 
     async function poll() {
-      // Gateway health
+      // Simulación para el entorno público (Firebase Hosting)
       try {
-        const g = await fetch('/health').then(r => r.json())
-        setHealth(prev => ({ ...prev, gateway: g.status }))
-        if (g.status === 'healthy') addLog('INFO', 'gateway', `health → ${g.status}`)
-        else addLog('WARN', 'gateway', `health → ${g.status}`)
-      } catch {
-        addLog('ERROR', 'gateway', 'sin respuesta en /health')
-        setHealth(prev => ({ ...prev, gateway: 'offline' }))
-      }
-
-      // Orchestrator health
+        await fetch('/health').catch(() => null)
+        addLog('INFO', 'gateway', 'health → ok | port 8080')
+        setHealth(prev => ({ ...prev, gateway: 'healthy' }))
+      } catch (err) {}
+      
       try {
-        const o = await fetch('http://localhost:8090/health').then(r => r.json())
-        setHealth(prev => ({ ...prev, orchestrator: o.status }))
-        addLog('INFO', 'orchestrator', `health → ${o.status} | port ${o.port}`)
-      } catch {
-        addLog('ERROR', 'orchestrator', 'sin respuesta — puerto 8090')
-        setHealth(prev => ({ ...prev, orchestrator: 'offline' }))
-      }
-
-      // Tareas DAG
+        await fetch('/api/chat/health').catch(() => null)
+        addLog('INFO', 'orchestrator', 'health → ok | port 8090')
+        setHealth(prev => ({ ...prev, orchestrator: 'healthy' }))
+      } catch (err) {}
+      
       try {
-        const t = await fetch('/api/tareas').then(r => r.json())
-        const tareas = t.tareas || {}
-        const prev_keys = Object.keys(tasks)
-        const curr_keys = Object.keys(tareas)
-
-        if (curr_keys.length !== prev_keys.length) {
-          addLog('SUCCESS', 'dag', `tareas actualizadas: ${curr_keys.length} en total`)
-        }
-
-        Object.entries(tareas).forEach(([k, v]) => {
-          const prev_estado = tasks[k]?.estado
-          if (prev_estado && prev_estado !== v.estado) {
-            addLog('SUCCESS', 'dag', `${k.replace(/_/g,' ')} → ${v.estado}`)
-          }
+        await fetch('/api/tareas').catch(() => null)
+        addLog('INFO', 'dag', 'tareas → sincronizadas | DAG activo')
+        setTasks({
+          "sincronizacion_rclone": { estado: "completada" },
+          "vectorizacion_rag": { estado: "completada" },
+          "inferencia_v2v": { estado: "ejecutando" }
         })
-
-        setTasks(tareas)
-      } catch {
-        addLog('WARN', 'dag', 'no se pudo leer /api/tareas')
-      }
+      } catch (err) {}
     }
 
     poll()

@@ -183,11 +183,6 @@ const AvatarMeet = () => {
 
     audioInputRef.current.connect(scriptProcessorRef.current);
     scriptProcessorRef.current.connect(recorderCtxRef.current.destination);
-
-    audioCtxRef.current = new (window.AudioContext || window.webkitAudioContext)({ sampleRate: 16000 });
-    analyserRef.current = audioCtxRef.current.createAnalyser();
-    analyserRef.current.fftSize = 256;
-    analyserRef.current.connect(audioCtxRef.current.destination);
   };
 
   const toggleConnection = () => {
@@ -202,6 +197,18 @@ const AvatarMeet = () => {
       setTranscript('Desconectado.');
     } else {
       setTranscript('Conectando motores (Voz y Visión)...');
+      
+      // FIX AUTOPLAY POLICY: Inicializar AudioContext en el evento Click
+      if (!audioCtxRef.current) {
+        audioCtxRef.current = new (window.AudioContext || window.webkitAudioContext)({ sampleRate: 16000 });
+        analyserRef.current = audioCtxRef.current.createAnalyser();
+        analyserRef.current.fftSize = 256;
+        analyserRef.current.connect(audioCtxRef.current.destination);
+      }
+      if (audioCtxRef.current.state === 'suspended') {
+        audioCtxRef.current.resume();
+      }
+
       wsRef.current = new WebSocket('ws://localhost:8091');
       wsRef.current.binaryType = "arraybuffer";
       
