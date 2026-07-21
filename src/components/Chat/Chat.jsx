@@ -6,6 +6,7 @@ const AGENTS = [
   { value: "marketing", label: "Marketing" },
   { value: "video", label: "Video" },
   { value: "shopify", label: "Ventas" },
+  { value: "bilingual_cs", label: "Atención Bilingüe" },
   { value: "main", label: "General" },
 ];
 
