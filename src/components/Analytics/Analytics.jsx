@@ -21,6 +21,27 @@ export default function Analytics() {
   const [messages, setMessages] = useState([{ role: 'assistant', text: 'Hola, soy tu Copiloto Financiero. Basado en el RAG de Muncher y Teso, ¿qué métricas deseas analizar hoy?' }]);
   const [loading, setLoading] = useState(false);
 
+  const [metrics, setMetrics] = useState(null);
+
+  // Fetch observability metrics
+  React.useEffect(() => {
+    const fetchMetrics = async () => {
+      try {
+        // Asumiendo que el orquestador está en localhost:8090
+        const res = await fetch('http://localhost:8090/api/observability');
+        if (res.ok) {
+          const data = await res.json();
+          setMetrics(data.metrics);
+        }
+      } catch (e) {
+        console.error("No se pudo conectar al orquestador", e);
+      }
+    };
+    fetchMetrics();
+    const interval = setInterval(fetchMetrics, 10000);
+    return () => clearInterval(interval);
+  }, []);
+
   const handleAsk = async () => {
     if (!query) return;
     const userMsg = { role: 'user', text: query };
@@ -63,13 +84,32 @@ export default function Analytics() {
       <div style={{ flex: 2 }}>
       <div className="hb-page-header">
         <div>
-          <div className="hb-page-title">Analytics</div>
-          <div className="hb-page-subtitle">Métricas del mes actual</div>
+          <div className="hb-page-title">Analytics & Operations</div>
+          <div className="hb-page-subtitle">Monitoreo de negocio y colas del sistema (M/M/c)</div>
         </div>
         <button className="hb-btn">Exportar</button>
       </div>
 
-      <div className="hb-grid" style={{ marginBottom: '20px' }}>
+      {metrics && (
+        <div style={{ marginBottom: '30px', padding: '20px', background: '#1c1c1c', borderRadius: '12px', border: '1px solid #333' }}>
+          <h3 style={{ color: '#d4af37', margin: '0 0 15px 0' }}><i className="bi bi-activity"></i> Orchestrator Math & Queues (Live)</h3>
+          <div style={{ display: 'flex', gap: '20px' }}>
+            {Object.keys(metrics).map(qName => (
+              <div key={qName} style={{ flex: 1, background: '#000', padding: '15px', borderRadius: '8px' }}>
+                <div style={{ color: '#aaa', fontSize: '14px', textTransform: 'uppercase', marginBottom: '10px' }}>Worker: {qName}</div>
+                <div style={{ fontSize: '18px', color: metrics[qName].rho > 0.85 ? '#fb7185' : '#4ade80' }}>
+                  ρ (Saturación): {(metrics[qName].rho * 100).toFixed(1)}%
+                </div>
+                <div style={{ fontSize: '14px', color: '#ccc', marginTop: '5px' }}>Lq (En cola): {metrics[qName].Lq === 'inf' ? '∞' : metrics[qName].Lq.toFixed(2)}</div>
+                <div style={{ fontSize: '14px', color: '#ccc' }}>Wq (Espera): {metrics[qName].Wq === 'inf' ? '∞' : metrics[qName].Wq.toFixed(2)}s</div>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
+
+      <h3 style={{ color: '#fff', fontSize: '18px', margin: '0 0 15px 0' }}>Métricas de Negocio</h3>
+      <div className="hb-grid" style={{ marginBottom: '30px' }}>
         {stats.map(s => (
           <div key={s.label} className="hb-card">
             <div className="hb-card-meta">{s.label}</div>

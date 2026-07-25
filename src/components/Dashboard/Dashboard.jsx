@@ -69,8 +69,11 @@ export default function Dashboard({ onNavigate }) {
           TECH SHOWCASE
         </div>
         <video 
-          src="/final_showcase.mp4" 
+          src="/tiktok_showcase.mp4" 
           controls 
+          autoPlay
+          playsInline
+          preload="auto"
           style={{ width: '100%', maxWidth: '800px', borderRadius: '12px', boxShadow: '0 4px 20px rgba(0,0,0,0.5)' }}
         />
       </div>

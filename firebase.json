@@ -15,11 +15,41 @@
     ],
     "headers": [
       {
-        "source": "**/*",
+        "source": "**/*.mp4",
+        "headers": [
+          {
+            "key": "Content-Type",
+            "value": "video/mp4"
+          },
+          {
+            "key": "Cache-Control",
+            "value": "public, max-age=3600"
+          },
+          {
+            "key": "Accept-Ranges",
+            "value": "bytes"
+          }
+        ]
+      },
+      {
+        "source": "**/*.mp3",
+        "headers": [
+          {
+            "key": "Content-Type",
+            "value": "audio/mpeg"
+          },
+          {
+            "key": "Cache-Control",
+            "value": "public, max-age=3600"
+          }
+        ]
+      },
+      {
+        "source": "index.html",
         "headers": [
           {
             "key": "Cache-Control",
-            "value": "no-store, no-cache, must-revalidate, max-age=0"
+            "value": "no-cache, no-store, must-revalidate"
           }
         ]
       }

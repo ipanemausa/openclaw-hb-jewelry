@@ -19,22 +19,9 @@ import Historial from './components/Historial/Historial'
 import Chathistorial from './components/Chathistorial/Chathistorial'
 import Auditoria from './components/Auditoria/Auditoria'
 import AvatarMeet from './components/AvatarMeet/AvatarMeet'
-// Placeholder simple para secciones en desarrollo
-function Placeholder({ name }) {
-  return (
-    <div style={{ padding: '32px 0' }}>
-      <div style={{ fontSize: '11px', color: '#6b6866', letterSpacing: '2px', textTransform: 'uppercase', marginBottom: '8px' }}>MÓDULO</div>
-      <div style={{ fontSize: '22px', color: '#d4af6a', fontWeight: '600', marginBottom: '8px' }}>{name}</div>
-      <div style={{
-        background: '#1a1a1a', border: '1px solid rgba(255,255,255,0.07)',
-        borderRadius: '12px', padding: '40px', textAlign: 'center',
-        color: '#6b6866', fontSize: '13px', marginTop: '16px'
-      }}>
-        Módulo en construcción — próximamente disponible
-      </div>
-    </div>
-  )
-}
+import VoiceCall from './components/VoiceCall/VoiceCall'
+import Integraciones from './components/Integraciones/Integraciones'
+import FloatingVoiceWidget from './components/FloatingVoiceWidget/FloatingVoiceWidget'
 
 export default function App() {
   const [activeSection, setActiveSection] = useState('dashboard')
@@ -60,6 +47,8 @@ export default function App() {
       case 'chat-historial': return <Chathistorial />
       case 'auditoria':      return <Auditoria />
       case 'avatar':         return <AvatarMeet />
+      case 'voicecall':      return <VoiceCall />
+      case 'integraciones':  return <Integraciones />
       default:               return <Dashboard onNavigate={setActiveSection} />
     }
   }
@@ -67,6 +56,7 @@ export default function App() {
   return (
     <Layout activeSection={activeSection} onSelect={setActiveSection}>
       {renderSection()}
+      <FloatingVoiceWidget />
     </Layout>
   )
 }

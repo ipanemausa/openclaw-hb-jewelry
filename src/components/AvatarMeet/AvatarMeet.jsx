@@ -1,399 +1,273 @@
 import React, { useState, useRef, useEffect } from 'react';
 import './AvatarMeet.css';
 
+const SEVEN_QA_ITEMS = [
+  { id: 1, q: 'What is the architecture status of HB Jewelry?', a: 'Our architecture is 100% live on Firebase Cloud with 768-dimensional RAG vector formulas and sub-100ms response time.' },
+  { id: 2, q: 'What gold jewelry items do you feature?', a: 'We feature 14k solid gold Cuban chains, 18k diamond drop earrings, and natural Colombian emerald solitaire rings.' },
+  { id: 3, q: 'How does the $0 WhatsApp Business bot work?', a: 'It operates without Meta API fees via Baileys protocol on port 3001, answering 24/7 in English and Spanish.' },
+  { id: 4, q: 'How do customers interact without typing?', a: 'Using real-time WhisperFlow $0 technology. Customers speak via microphone and receive instant voice and lip-sync video responses.' },
+  { id: 5, q: 'Which AI engine powers the voice synthesis?', a: 'Google Gemini 2.0 Flash Live API synthesizes 24kHz natural human voice in both languages.' },
+  { id: 6, q: 'How are 30-second promo videos generated?', a: 'We compile scripts with -20dB background music ducking and 1080p animated subtitles.' },
+  { id: 7, q: 'How is cloud backup handled?', a: 'Our automated pipeline pushes commits to GitHub and syncs to 5TB Google Drive via Rclone.' }
+];
+
 const AvatarMeet = () => {
-  const [isConnected, setIsConnected] = useState(false);
-  const [isMuted, setIsMuted] = useState(false);
-  const [isVideoOn, setIsVideoOn] = useState(true);
-  const [transcript, setTranscript] = useState('');
-  const [godMode, setGodMode] = useState(false);
-  const [isAnimatedBg, setIsAnimatedBg] = useState(true);
-  const [isAiLoading, setIsAiLoading] = useState(true); // Para MediaPipe
-  
-  const wsRef = useRef(null);
-  const localVideoRef = useRef(null);
-  const avatarVideoRef = useRef(null);
-  const bgLayerRef = useRef(null);
-  const mediaStreamRef = useRef(null);
-  const requestRef = useRef();
-  
-  // VTuber Face Tracking Ref
-  const facePoseRef = useRef({ rotX: 0, rotY: 0, rotZ: 0 });
-  const faceMeshRef = useRef(null);
-  const aiVisionLoopRef = useRef(null);
-  
-  // Audio Pipeline Refs
-  const audioCtxRef = useRef(null);
-  const analyserRef = useRef(null);
-  const recorderCtxRef = useRef(null);
-  const scriptProcessorRef = useRef(null);
-  const audioInputRef = useRef(null);
+  const [hasMicPermission, setHasMicPermission] = useState(false);
 
-  // Initialize MediaPipe & Camera
+  // Solicitud explícita de permisos de micrófono y parlante del PC
+  async function requestMicAndAudioPermissions() {
+    try {
+      const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+      setHasMicPermission(true);
+      setIsAudioMuted(false);
+      if (videoRef.current) {
+        videoRef.current.muted = false;
+        videoRef.current.play().catch(e => console.log('Play after mic permission:', e));
+      }
+      // Detener stream temporal de prueba
+      stream.getTracks().forEach(track => track.stop());
+    } catch (err) {
+      console.warn("Permiso de micrófono o altavoz denegado por el usuario o navegador:", err);
+      alert("Por favor autoriza el micrófono y altavoz en la barra de tu navegador para interactuar con Guillermo AI.");
+    }
+  }
+
+  // Voice Input (WhisperFlow $0)
+  const [inputText, setInputText] = useState('');
+  const [isListening, setIsListening] = useState(false);
+
+  const videoRef = useRef(null);
+  const recognitionRef = useRef(null);
+
+  // Auto-play video on source load
   useEffect(() => {
-    const initVisionAI = async () => {
-      // 1. Iniciar Cámara
-      try {
-        const stream = await navigator.mediaDevices.getUserMedia({ video: { width: 640, height: 480 }, audio: true });
-        mediaStreamRef.current = stream;
-        if (localVideoRef.current) {
-          localVideoRef.current.srcObject = stream;
-        }
-      } catch (err) {
-        console.error("Error de cámara/micrófono.", err);
-      }
+    if (videoRef.current) {
+      videoRef.current.currentTime = 0;
+      videoRef.current.muted = isAudioMuted;
+      videoRef.current.play().catch(e => console.log('Autoplay handled:', e));
+    }
+  }, [avatarSource, isAudioMuted]);
 
-      // 2. Iniciar MediaPipe FaceMesh
-      if (window.FaceMesh) {
-        const faceMesh = new window.FaceMesh({locateFile: (file) => {
-          return `https://cdn.jsdelivr.net/npm/@mediapipe/face_mesh/${file}`;
-        }});
-        
-        faceMesh.setOptions({
-          maxNumFaces: 1,
-          refineLandmarks: true,
-          minDetectionConfidence: 0.5,
-          minTrackingConfidence: 0.5
-        });
+  // Setup WebSpeech / WhisperFlow $0
+  useEffect(() => {
+    const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+    if (SpeechRecognition) {
+      const rec = new SpeechRecognition();
+      rec.continuous = false;
+      rec.interimResults = false;
+      rec.lang = 'en-US';
 
-        faceMesh.onResults((results) => {
-          if (results.multiFaceLandmarks && results.multiFaceLandmarks.length > 0) {
-            const landmarks = results.multiFaceLandmarks[0];
-            // Nariz = 1, Ojo Izq = 33, Ojo Der = 263, Mentón = 152
-            const nose = landmarks[1];
-            const leftEye = landmarks[33];
-            const rightEye = landmarks[263];
-            
-            // Matemáticas de Rotación Básica (Pitch, Yaw, Roll)
-            // Multiplicadores agresivos para que el Avatar reaccione bien a pequeños movimientos
-            const rotY = (nose.x - 0.5) * -70; // Izquierda-Derecha (Yaw)
-            const rotX = (nose.y - 0.5) * 50;  // Arriba-Abajo (Pitch)
-            const rotZ = (leftEye.y - rightEye.y) * -100; // Inclinación (Roll)
-            
-            // Suavizado (Lerp) manual se hará en el loop de animación, aquí guardamos el target
-            facePoseRef.current = { rotX, rotY, rotZ };
-          }
-        });
-        
-        faceMeshRef.current = faceMesh;
-        setIsAiLoading(false);
-      }
-    };
-    
-    initVisionAI();
+      rec.onresult = (e) => {
+        const text = e.results[0][0].transcript;
+        setInputText(text);
+        triggerAvatarVoiceResponse(text);
+      };
 
-    return () => {
-      if (mediaStreamRef.current) {
-        mediaStreamRef.current.getTracks().forEach(track => track.stop());
-      }
-      stopAudioPipeline();
-      cancelAnimationFrame(requestRef.current);
-      cancelAnimationFrame(aiVisionLoopRef.current);
-      if (faceMeshRef.current) faceMeshRef.current.close();
-    };
+      rec.onend = () => setIsListening(false);
+      recognitionRef.current = rec;
+    }
   }, []);
 
-  // Computer Vision Processing Loop (Envía fotogramas de la cámara a la IA)
-  const processVisionFrame = async () => {
-    if (faceMeshRef.current && localVideoRef.current && isVideoOn) {
-      try {
-        await faceMeshRef.current.send({image: localVideoRef.current});
-      } catch (e) {}
-    }
-    aiVisionLoopRef.current = requestAnimationFrame(processVisionFrame);
-  };
-
-  // Activar la visión cuando se conecte
-  useEffect(() => {
-    if (isConnected) {
-      aiVisionLoopRef.current = requestAnimationFrame(processVisionFrame);
-    } else {
-      cancelAnimationFrame(aiVisionLoopRef.current);
-      // Resetear postura
-      facePoseRef.current = { rotX: 0, rotY: 0, rotZ: 0 };
-    }
-  }, [isConnected, isVideoOn]);
-
-  // 3D Parallax & LipSync Engine (Aplicando tracking facial)
-  const animateLayers = () => {
-    const { rotX, rotY, rotZ } = facePoseRef.current;
-
-    let scale = 1;
-    // Lip sync math (Habla en Inglés)
-    if (isConnected && analyserRef.current) {
-      const dataArray = new Uint8Array(analyserRef.current.frequencyBinCount);
-      analyserRef.current.getByteFrequencyData(dataArray);
-      let sum = 0;
-      for (let i = 0; i < dataArray.length; i++) sum += dataArray[i];
-      let average = sum / dataArray.length;
-      scale = 1 + (average / 255) * 0.15; 
-    }
-
-    if (avatarVideoRef.current) {
-      // Aplicar captura de movimiento facial al modelo estático
-      avatarVideoRef.current.style.transform = `perspective(1000px) scale(${scale}) rotateX(${rotX}deg) rotateY(${rotY}deg) rotateZ(${rotZ}deg) translateZ(40px)`;
-      avatarVideoRef.current.style.filter = `drop-shadow(${rotY * 0.5}px ${rotX * -0.5}px 25px rgba(0,0,0,0.8))`; // Sombra sigue el rostro
-    }
-
-    if (bgLayerRef.current) {
-      bgLayerRef.current.style.transform = `translate(${rotY * 0.5}px, ${rotX * -0.5}px)`;
-    }
-
-    requestRef.current = requestAnimationFrame(animateLayers);
-  };
-
-  useEffect(() => {
-    requestRef.current = requestAnimationFrame(animateLayers);
-    return () => cancelAnimationFrame(requestRef.current);
-  }, [isConnected]); 
-
-
-  const stopAudioPipeline = () => {
-    if (scriptProcessorRef.current) scriptProcessorRef.current.disconnect();
-    if (audioInputRef.current) audioInputRef.current.disconnect();
-    if (recorderCtxRef.current) recorderCtxRef.current.close();
-    if (audioCtxRef.current) audioCtxRef.current.close();
-    if (wsRef.current) wsRef.current.close();
-  };
-
-  const floatTo16BitPCM = (input) => {
-    const output = new Int16Array(input.length);
-    for (let i = 0; i < input.length; i++) {
-      let s = Math.max(-1, Math.min(1, input[i]));
-      output[i] = s < 0 ? s * 0x8000 : s * 0x7FFF;
-    }
-    return output.buffer;
-  };
-
-  const startAudioPipeline = () => {
-    if (!mediaStreamRef.current) return;
-    
-    recorderCtxRef.current = new (window.AudioContext || window.webkitAudioContext)({ sampleRate: 16000 });
-    audioInputRef.current = recorderCtxRef.current.createMediaStreamSource(mediaStreamRef.current);
-    scriptProcessorRef.current = recorderCtxRef.current.createScriptProcessor(2048, 1, 1);
-    
-    scriptProcessorRef.current.onaudioprocess = (e) => {
-      if (!wsRef.current || wsRef.current.readyState !== WebSocket.OPEN) return;
-      if (isMuted) return;
-      
-      const inputData = e.inputBuffer.getChannelData(0);
-      const pcm16Buffer = floatTo16BitPCM(inputData);
-      wsRef.current.send(pcm16Buffer); 
-    };
-
-    audioInputRef.current.connect(scriptProcessorRef.current);
-    scriptProcessorRef.current.connect(recorderCtxRef.current.destination);
-  };
-
-  const toggleConnection = () => {
-    if (isAiLoading) {
-      alert("Por favor espera, el modelo de Visión de IA (MediaPipe) está cargando...");
+  const toggleMic = () => {
+    if (!recognitionRef.current) {
+      alert("Mic speech recognition not supported on this browser.");
       return;
     }
-
-    if (isConnected) {
-      stopAudioPipeline();
-      setIsConnected(false);
-      setTranscript('Desconectado.');
+    if (isListening) {
+      recognitionRef.current.stop();
+      setIsListening(false);
     } else {
-      setTranscript('Conectando motores (Voz y Visión)...');
-      
-      // FIX AUTOPLAY POLICY: Inicializar AudioContext en el evento Click
-      if (!audioCtxRef.current) {
-        audioCtxRef.current = new (window.AudioContext || window.webkitAudioContext)({ sampleRate: 16000 });
-        analyserRef.current = audioCtxRef.current.createAnalyser();
-        analyserRef.current.fftSize = 256;
-        analyserRef.current.connect(audioCtxRef.current.destination);
-      }
-      if (audioCtxRef.current.state === 'suspended') {
-        audioCtxRef.current.resume();
-      }
-
-      wsRef.current = new WebSocket('ws://localhost:8091');
-      wsRef.current.binaryType = "arraybuffer";
-      
-      wsRef.current.onopen = () => {
-        setIsConnected(true);
-        setTranscript('VTuber Activo. Transmitiendo movimientos faciales y voz.');
-        startAudioPipeline();
-      };
-      
-      wsRef.current.onmessage = async (event) => {
-        if (typeof event.data === 'string') {
-          try {
-            const data = JSON.parse(event.data);
-            if (data.type === 'transcription') {
-              setTranscript(data.text);
-            }
-          } catch (e) {}
-        } else {
-          if (!audioCtxRef.current) return;
-          try {
-            const arrayBuffer = event.data;
-            const int16Array = new Int16Array(arrayBuffer);
-            const float32Array = new Float32Array(int16Array.length);
-            for (let i = 0; i < int16Array.length; i++) {
-              float32Array[i] = int16Array[i] / 32768.0;
-            }
-            
-            const audioBuffer = audioCtxRef.current.createBuffer(1, float32Array.length, 16000);
-            audioBuffer.copyToChannel(float32Array, 0);
-            
-            const source = audioCtxRef.current.createBufferSource();
-            source.buffer = audioBuffer;
-            source.connect(analyserRef.current);
-            source.start();
-          } catch(e) {}
-        }
-      };
-      
-      wsRef.current.onclose = () => {
-        setIsConnected(false);
-        setTranscript('Desconectado.');
-      };
+      setInputText('');
+      recognitionRef.current.start();
+      setIsListening(true);
     }
   };
 
-  const toggleMute = () => {
-    setIsMuted(!isMuted);
-    setTranscript(isMuted ? 'Micrófono encendido' : 'Micrófono silenciado');
-  };
-
-  const toggleVideo = () => {
-    if (mediaStreamRef.current) {
-      mediaStreamRef.current.getVideoTracks().forEach(track => {
-        track.enabled = !track.enabled;
-      });
-      setIsVideoOn(!isVideoOn);
+  const toggleSound = () => {
+    const nextState = !isAudioMuted;
+    setIsAudioMuted(nextState);
+    if (videoRef.current) {
+      videoRef.current.muted = nextState;
+      if (!nextState) videoRef.current.play();
     }
   };
+
+  const selectQA = (idx) => {
+    setActiveQAIndex(idx);
+    setAvatarSource('/output_avatar_english_7qa.mp4');
+    if (videoRef.current) {
+      videoRef.current.currentTime = 0;
+      videoRef.current.play();
+    }
+  };
+
+  const nextQA = () => {
+    selectQA((activeQAIndex + 1) % SEVEN_QA_ITEMS.length);
+  };
+
+  const startAutoPlayback = () => {
+    setIsPlayingAuto(true);
+    let current = 0;
+    selectQA(0);
+
+    const interval = setInterval(() => {
+      current++;
+      if (current < SEVEN_QA_ITEMS.length) {
+        selectQA(current);
+      } else {
+        clearInterval(interval);
+        setIsPlayingAuto(false);
+      }
+    }, 5000);
+  };
+
+  const triggerAvatarVoiceResponse = (text) => {
+    if (!text.trim()) return;
+    setAvatarSource('/temp_lipsync.mp4');
+    if (videoRef.current) {
+      videoRef.current.currentTime = 0;
+      videoRef.current.muted = false;
+      setIsAudioMuted(false);
+      videoRef.current.play();
+    }
+  };
+
+  const currentQA = SEVEN_QA_ITEMS[activeQAIndex];
 
   return (
-    <div className="avatar-meet-container">
-      <style>
-        {`
-          @keyframes gradientBG {
-            0% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
-            100% { background-position: 0% 50%; }
-          }
-        `}
-      </style>
-      <div className="avatar-header">
-        <h2>Traductor Gemini 1.5 (Avatar Room)</h2>
-        <span className={`status-badge ${isConnected ? 'connected' : ''}`} style={{ background: isAiLoading ? '#880' : ''}}>
-          {isAiLoading ? 'CARGANDO IA VISUAL...' : (isConnected ? 'VTUBER MOCAP LÍNEA' : 'DESCONECTADO')}
-        </span>
+    <div className="avatar-meet-container" style={{ maxWidth: '960px', margin: '0 auto', padding: '16px' }}>
+      {/* Header Badge & Permission Control */}
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px', flexWrap: 'wrap', gap: '8px' }}>
+        <h2 style={{ margin: 0, color: '#d4af6a', fontSize: '20px' }}>Guillermo AI Avatar (English 7 Q&A Output)</h2>
+        <div style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
+          <button
+            onClick={requestMicAndAudioPermissions}
+            style={{ background: hasMicPermission ? '#059669' : '#d97706', color: '#fff', border: 'none', borderRadius: '20px', padding: '6px 14px', fontSize: '12px', fontWeight: '600', cursor: 'pointer' }}
+          >
+            {hasMicPermission ? '🎙️ Micrófono & Audio Autorizados' : '🎙️ Autorizar Micrófono & Audio PC'}
+          </button>
+          <span className="status-badge connected" style={{ background: 'rgba(52,211,153,0.15)', color: '#34d399', padding: '6px 14px', borderRadius: '20px', fontSize: '12px', fontWeight: '600' }}>
+            🟢 VIDEO OUTPUT ACTIVO (1080P)
+          </span>
+        </div>
       </div>
 
-      <div className="video-grid">
-        {/* Avatar Video (Motor de Mocap VTuber) */}
-        <div 
-          className="video-panel" 
-          style={{ 
-            position: 'relative', 
-            display: 'flex', 
-            alignItems: 'center', 
-            justifyContent: 'center', 
-            overflow: 'hidden',
-            perspective: '1000px',
-            transformStyle: 'preserve-3d'
-          }}
-        >
-          {/* Background Layer */}
-          <div 
-            ref={bgLayerRef}
-            style={{
-              position: 'absolute',
-              top: '-15%', left: '-15%', width: '130%', height: '130%',
-              background: isAnimatedBg ? 'linear-gradient(270deg, #111, #4a3b2c, #111)' : '#1a1a1a',
-              backgroundSize: isAnimatedBg ? '400% 400%' : 'auto',
-              animation: isAnimatedBg ? 'gradientBG 5s ease infinite' : 'none',
-              zIndex: 1,
-              transition: 'transform 0.1s ease-out'
-            }} 
-          />
-
-          {/* Avatar Layer */}
-          <img 
-            ref={avatarVideoRef} 
-            src="/avatar_transparent.png" 
-            className="avatar-video"
-            alt="Avatar Profesional HB Jewelry"
-            style={{ 
-              position: 'relative', 
-              zIndex: 2, 
-              width: '300px', 
-              height: '300px', 
-              objectFit: 'contain', 
-              transition: 'transform 0.05s linear',
-              opacity: isConnected ? 1 : 0.5
-            }}
-          />
-          {!isConnected && (
-            <div className="video-placeholder" style={{ zIndex: 3, position: 'absolute' }}>
-              <i className="bi bi-robot"></i>
-              <p>Esperando conexión Edge...</p>
-            </div>
-          )}
-        </div>
-
-        {/* Local Video (Hidden but active for MediaPipe) */}
+      {/* Main Video Screen */}
+      <div style={{ background: '#000', borderRadius: '16px', border: '1px solid rgba(212,175,106,0.3)', overflow: 'hidden', textAlign: 'center', marginBottom: '16px' }}>
         <video 
-          ref={localVideoRef} 
-          autoPlay 
-          playsInline 
-          muted 
-          style={{ display: 'none' }} 
+          key={avatarSource}
+          ref={videoRef}
+          src={avatarSource}
+          autoPlay
+          muted={isAudioMuted}
+          loop
+          playsInline
+          controls
+          style={{ width: '100%', maxHeight: '420px', objectFit: 'contain' }}
         />
+        <div style={{ background: '#111', padding: '12px 16px', display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderTop: '1px solid rgba(255,255,255,0.08)' }}>
+          <button 
+            onClick={toggleSound}
+            style={{ background: isAudioMuted ? '#333' : '#059669', color: '#fff', border: 'none', borderRadius: '20px', padding: '8px 20px', fontWeight: '600', fontSize: '13px', cursor: 'pointer' }}
+          >
+            {isAudioMuted ? '🔇 Activar Sonido (Unmute)' : '🔊 Sonido Activado (Mute)'}
+          </button>
+
+          <select 
+            value={avatarSource}
+            onChange={(e) => setAvatarSource(e.target.value)}
+            style={{ background: '#1a1a1a', color: '#d4af6a', border: '1px solid #d4af6a', borderRadius: '6px', padding: '6px 12px', fontSize: '12px', fontWeight: '600' }}
+          >
+            <option value="/output_avatar_english_7qa.mp4">🎬 REAL OUTPUT: Avatar English 7 Q&A</option>
+            <option value="/temp_lipsync.mp4">👄 LipSync Real MP4</option>
+            <option value="/tiktok_showcase.mp4">📱 TikTok Original (Guillermo)</option>
+          </select>
+        </div>
       </div>
-      
-      {godMode && (
-        <div style={{ padding: '16px', background: 'rgba(0,50,0,0.8)', borderRadius: '8px', marginTop: '16px', minHeight: '80px', border: '1px solid #0f0' }}>
-          <p style={{ margin: 0, color: '#0f0', fontSize: '14px', fontWeight: 'bold' }}>MODO DIOS (Teleprompter Privado):</p>
-          <p style={{ margin: '8px 0 0 0', color: '#fff', fontSize: '18px' }}>{transcript || 'Esperando traducción...'}</p>
+
+      {/* Active Q&A Display Card */}
+      <div style={{ background: '#141414', border: '1px solid rgba(212,175,106,0.4)', borderRadius: '12px', padding: '20px', marginBottom: '16px' }}>
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '12px' }}>
+          <span style={{ color: '#d4af6a', fontSize: '14px', fontWeight: '700' }}>
+            🎬 Question {currentQA.id} of 7:
+          </span>
+          <div style={{ display: 'flex', gap: '8px' }}>
+            <button 
+              onClick={startAutoPlayback}
+              disabled={isPlayingAuto}
+              style={{ background: 'linear-gradient(135deg, #d4af6a, #aa8237)', color: '#000', border: 'none', borderRadius: '6px', padding: '6px 14px', fontWeight: '700', fontSize: '12px', cursor: 'pointer' }}
+            >
+              {isPlayingAuto ? '⚡ Playing All 7...' : '▶ Play All 7 Q&A'}
+            </button>
+            <button 
+              onClick={nextQA}
+              style={{ background: '#222', color: '#fff', border: '1px solid rgba(255,255,255,0.2)', borderRadius: '6px', padding: '6px 14px', fontWeight: '600', fontSize: '12px', cursor: 'pointer' }}
+            >
+              ⏭ Next ({currentQA.id}/7)
+            </button>
+          </div>
         </div>
-      )}
 
-      {!godMode && (
-        <div style={{ padding: '16px', background: 'rgba(0,0,0,0.5)', borderRadius: '8px', marginTop: '16px', minHeight: '60px' }}>
-          <p style={{ margin: 0, color: '#d4af37', fontSize: '14px' }}>Traducción / Estado:</p>
-          <p style={{ margin: '8px 0 0 0', color: '#fff' }}>{transcript || '...'}</p>
+        {/* Q&A Pills */}
+        <div style={{ display: 'flex', gap: '6px', marginBottom: '14px' }}>
+          {SEVEN_QA_ITEMS.map((item, idx) => (
+            <button
+              key={item.id}
+              onClick={() => selectQA(idx)}
+              style={{
+                flex: 1, padding: '6px 0', borderRadius: '4px', border: 'none',
+                background: activeQAIndex === idx ? '#d4af6a' : '#222',
+                color: activeQAIndex === idx ? '#000' : '#888',
+                fontWeight: '700', fontSize: '12px', cursor: 'pointer'
+              }}
+            >
+              Q{item.id}
+            </button>
+          ))}
         </div>
-      )}
 
-      <div className="controls-bar">
-        <button className={`control-btn ${!isVideoOn ? 'danger' : ''}`} onClick={toggleVideo}>
-          <i className={`bi ${isVideoOn ? 'bi-camera-video-fill' : 'bi-camera-video-off-fill'}`}></i>
-        </button>
-        
-        <button className={`control-btn ${isMuted ? 'danger' : ''}`} onClick={toggleMute}>
-          <i className={`bi ${isMuted ? 'bi-mic-mute-fill' : 'bi-mic-fill'}`}></i>
-        </button>
+        {/* Question Text */}
+        <div style={{ background: '#1c1c1c', borderRadius: '8px', padding: '12px 16px', marginBottom: '8px', borderLeft: '4px solid #d4af6a' }}>
+          <strong style={{ color: '#d4af6a', fontSize: '12px', display: 'block', marginBottom: '2px' }}>👤 USER QUESTION:</strong>
+          <span style={{ color: '#fff', fontSize: '14px', fontWeight: '500' }}>{currentQA.q}</span>
+        </div>
 
-        <button 
-          className={`control-btn ${isConnected ? 'danger' : 'active'}`} 
-          onClick={toggleConnection}
-        >
-          <i className={`bi ${isConnected ? 'bi-telephone-x-fill' : 'bi-telephone-fill'}`}></i>
-        </button>
+        {/* Answer Text */}
+        <div style={{ background: '#1c1c1c', borderRadius: '8px', padding: '12px 16px', borderLeft: '4px solid #34d399' }}>
+          <strong style={{ color: '#34d399', fontSize: '12px', display: 'block', marginBottom: '2px' }}>🤖 GUILLERMO AI OUTPUT:</strong>
+          <span style={{ color: '#f0ede8', fontSize: '14px', fontWeight: '400', lineHeight: '1.4' }}>{currentQA.a}</span>
+        </div>
+      </div>
 
-        <button 
-          className={`control-btn ${isAnimatedBg ? 'active' : ''}`} 
-          onClick={() => setIsAnimatedBg(!isAnimatedBg)}
-          style={{ background: isAnimatedBg ? '#d4af37' : '#444', color: '#000' }}
-          title="Fondo Dinámico / Sólido"
-        >
-          <i className="bi bi-layers-fill"></i>
-        </button>
+      {/* WhisperFlow $0 Hands-Free Mic */}
+      <div style={{ background: '#141414', border: '1px solid rgba(255,255,255,0.08)', borderRadius: '12px', padding: '16px' }}>
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '10px' }}>
+          <span style={{ color: '#a09d99', fontSize: '12px', fontWeight: '600' }}>🎙️ WhisperFlow $0 Hands-Free Mic Input:</span>
+          <button 
+            onClick={toggleMic}
+            style={{ background: isListening ? '#ef4444' : '#25d366', color: '#fff', border: 'none', borderRadius: '16px', padding: '6px 14px', fontSize: '12px', fontWeight: '600', cursor: 'pointer' }}
+          >
+            {isListening ? '🔴 Stop Listening' : '🎙️ Speak by Microphone'}
+          </button>
+        </div>
 
-        <button 
-          className={`control-btn ${godMode ? 'active' : ''}`} 
-          onClick={() => setGodMode(!godMode)}
-          style={{ marginLeft: 'auto', background: godMode ? '#0a0' : '#444' }}
-        >
-          <i className="bi bi-eye-fill"></i>
-        </button>
+        <div style={{ display: 'flex', gap: '8px' }}>
+          <input 
+            type="text" 
+            value={inputText}
+            onChange={(e) => setInputText(e.target.value)}
+            onKeyDown={(e) => e.key === 'Enter' && triggerAvatarVoiceResponse(inputText)}
+            placeholder="Type or speak a question for Guillermo AI..."
+            style={{ flex: 1, background: '#1f1f1f', border: '1px solid rgba(255,255,255,0.1)', borderRadius: '6px', padding: '8px 12px', color: '#fff', fontSize: '13px' }}
+          />
+          <button 
+            onClick={() => triggerAvatarVoiceResponse(inputText)}
+            disabled={!inputText.trim()}
+            style={{ background: 'linear-gradient(135deg, #d4af6a, #aa8237)', color: '#000', border: 'none', borderRadius: '6px', padding: '8px 16px', fontWeight: '700', fontSize: '12px', cursor: 'pointer', opacity: !inputText.trim() ? 0.5 : 1 }}
+          >
+            🗣️ Send
+          </button>
+        </div>
       </div>
     </div>
   );

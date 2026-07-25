@@ -1,0 +1,30 @@
+{
+  "pipeline": "30s_avatar_render",
+  "timestamp": 1784820372.5097692,
+  "steps": [
+    {
+      "step": 1,
+      "name": "Generación de Guión 30s",
+      "status": "OK",
+      "detail": "Guión comercial de 30s optimizado para TikTok / Reels"
+    },
+    {
+      "step": 2,
+      "name": "Síntesis de Voz (Gemini Live API)",
+      "status": "OK",
+      "detail": "Audio generado en 24kHz con voz natural de Guillermo"
+    },
+    {
+      "step": 3,
+      "name": "Mezcla de Audio Ducking (-20dB)",
+      "status": "OK",
+      "detail": "Fondo musical atenuado a -20dB bajo la voz principal"
+    },
+    {
+      "step": 4,
+      "name": "Renderizado 9:16 HD",
+      "status": "OK",
+      "detail": "Video vertical de 30s compilado en public/tiktok_showcase.mp4"
+    }
+  ]
+}
