@@ -1,480 +1,398 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useRef, useEffect, useCallback } from 'react';
 import './AvatarMeet.css';
 
-const SEVEN_QA_ITEMS = [
-  { id: 1, q: 'What is the architecture status of HB Jewelry?', a: 'Our architecture is 100% live on Firebase Cloud with 768-dimensional RAG vector formulas and sub-100ms response time.' },
-  { id: 2, q: 'What gold jewelry items do you feature?', a: 'We feature 14k solid gold Cuban chains, 18k diamond drop earrings, and natural Colombian emerald solitaire rings.' },
-  { id: 3, q: 'How does the $0 WhatsApp Business bot work?', a: 'It operates without Meta API fees via Baileys protocol on port 3001, answering 24/7 in English and Spanish.' },
-  { id: 4, q: 'How do customers interact without typing?', a: 'Using real-time WhisperFlow $0 technology. Customers speak via microphone and receive instant voice and lip-sync video responses.' },
-  { id: 5, q: 'Which AI engine powers the voice synthesis?', a: 'Google Gemini 2.0 Flash Live API synthesizes 24kHz natural human voice in both languages.' },
-  { id: 6, q: 'How are 30-second promo videos generated?', a: 'We compile scripts with -20dB background music ducking and 1080p animated subtitles.' },
-  { id: 7, q: 'How is cloud backup handled?', a: 'Our automated pipeline pushes commits to GitHub and syncs to 5TB Google Drive via Rclone.' }
-];
-
-const CUSTOMER_SAMPLE_QUESTIONS = [
-  { id: 'c1', label: '💎 Cadenas Cubanas Oro 14k', q: '¿Cuál es el precio y peso de las Cadenas Cubanas de Oro 14k?', a: 'Nuestras Cadenas Cubanas en Oro Solido de 14k inician desde $1,850 USD, cuentan con cierre de seguridad italiano y garantía de por vida.' },
-  { id: 'c2', label: '🟢 Esmeraldas Colombianas', q: '¿Tienen anillos con Esmeraldas Colombianas naturales?', a: 'Sí, ofrecemos anillos solitarios con Esmeraldas Colombianas certificadas de Muzo y Chivor en monturas de Oro de 18k.' },
-  { id: 'c3', label: '✈️ Envíos & Garantía', q: '¿Cómo funcionan los envíos internacionales y la garantía?', a: 'Realizamos envíos asegurados a nivel mundial por FedEx Express. Cada pieza incluye certificado de autenticidad y garantía de por vida.' },
-  { id: 'c4', label: '🎨 Diseños Personalizados', q: '¿Realizan pedidos y diseños de joyería personalizados?', a: '¡Por supuesto! Nuestro taller master diseña piezas únicas en 3D en 48 horas según tus especificaciones.' }
-];
-
-// ─── CLOUD-FIRST PROTOCOL (Firebase → Rclone → Localhost) ────────────────────
-// Fuente maestra: Firebase Cloud. Rclone derrama hacia localhost.
-// Fórmula de resolución: f(asset) = CLOUD_BASE_URL + asset (prod) | '/' + asset (dev)
-// Optimización de memoria: carga bajo demanda, no preload masivo.
+// ─── CLOUD-FIRST PROTOCOL ────────────────────────────────────────────────────
 const CLOUD_BASE_URL = 'https://hb-jewelry-app.web.app';
 const IS_PROD = window.location.hostname !== 'localhost';
+const cloudAsset = (f) => IS_PROD ? `${CLOUD_BASE_URL}/${f}` : `/${f}`;
 
-// Algoritmo de resolución Cloud-First:
-// Si estamos en Firebase (prod) → usa URL absoluta de Firebase
-// Si estamos en localhost (dev) → usa path relativo (Vite sirve desde /public)
-const cloudAsset = (filename) => IS_PROD ? `${CLOUD_BASE_URL}/${filename}` : `/${filename}`;
+// ─── CATÁLOGO DE VIDEOS — cada video es una tarjeta ──────────────────────────
+const VIDEO_CATALOG = [
+  {
+    id: 'tutorial',
+    src: cloudAsset('hb_tutorial_narrado_v1.mp4'),
+    title: 'Tutorial: Manejo Completo de la App',
+    subtitle: 'Narrado por Guillermo Avatar AI',
+    duration: '1:16',
+    tag: '📹 TUTORIAL',
+    tagColor: '#7c3aed',
+    description: 'Guía completa: Ventas, Analytics, Avatar AI y Nube 5TB. Narración AlonsoNeural con EQ profesional EBU R128.',
+    gradient: 'linear-gradient(135deg, #1a0a3e 0%, #2d1265 50%, #0f0a1e 100%)',
+    accentColor: '#a78bfa',
+    isVertical: true,   // 9:16 — se muestra centrado en modal
+  },
+  {
+    id: 'qa-avatar',
+    src: cloudAsset('output_avatar_english_7qa.mp4'),
+    title: 'Demo Arquitectura Técnica — 7 Q&A',
+    subtitle: 'Guillermo Avatar · Inglés · 15 segundos',
+    duration: '0:15',
+    tag: '🛠️ TÉCNICO',
+    tagColor: '#059669',
+    description: 'Demostración técnica: RAG 768-dim, WhatsApp Baileys $0, WhisperFlow y Rclone 5TB.',
+    gradient: 'linear-gradient(135deg, #0a1e1a 0%, #0d3326 50%, #051a10 100%)',
+    accentColor: '#34d399',
+    isVertical: true,
+  },
+  {
+    id: 'avatar-base',
+    src: cloudAsset('avatar_base.mp4'),
+    title: 'Avatar Base — Guillermo AI',
+    subtitle: 'Video base del avatar · Loop',
+    duration: '0:15',
+    tag: '🤖 AVATAR',
+    tagColor: '#d4af6a',
+    description: 'Video base del avatar digital de Guillermo para composición y lip-sync.',
+    gradient: 'linear-gradient(135deg, #1a140a 0%, #2e2010 50%, #0f0a05 100%)',
+    accentColor: '#d4af6a',
+    isVertical: true,
+  },
+  {
+    id: 'showcase',
+    src: cloudAsset('final_showcase.mp4'),
+    title: 'HB Jewelry — Showcase Final',
+    subtitle: 'Presentación de productos · 16:9',
+    duration: '~30s',
+    tag: '💎 SHOWCASE',
+    tagColor: '#d4af6a',
+    description: 'Video showcase de la colección HB Jewelry con fondo musical y efectos visuales.',
+    gradient: 'linear-gradient(135deg, #1a0e00 0%, #3d2200 50%, #1a0e00 100%)',
+    accentColor: '#fbbf24',
+    isVertical: false,  // 16:9 — se muestra normal
+  },
+];
 
-// Vector de eficiencia de assets (precarga solo los críticos, lazy para el resto)
-const CRITICAL_ASSETS  = ['output_avatar_english_7qa.mp4'];  // carga inmediata
-const LAZY_ASSETS      = ['hb_tutorial_narrado_v1.mp4', 'showcase_voice.mp3']; // bajo demanda
+// ─── COMPONENTE TARJETA DE VIDEO (estilo YouTube) ─────────────────────────────
+const VideoCard = ({ video, onPlay }) => {
+  const thumbRef = useRef(null);
+  const [thumbLoaded, setThumbLoaded] = useState(false);
+  const [hovered, setHovered] = useState(false);
 
-const AvatarMeet = () => {
-  const [hasMicPermission, setHasMicPermission] = useState(false);
-  const [isAudioMuted, setIsAudioMuted] = useState(false);
-  const [avatarSource, setAvatarSource] = useState(cloudAsset('output_avatar_english_7qa.mp4'));
-
-  const [activeQAIndex, setActiveQAIndex] = useState(0);
-  const [isPlayingAuto, setIsPlayingAuto] = useState(false);
-  const [isSpeaking, setIsSpeaking] = useState(false);
-  const [audioBlockedByBrowser, setAudioBlockedByBrowser] = useState(false);
-  const [viewMode, setViewMode] = useState('customer'); // 'customer' | 'technical' | 'tutorial'
-
-  // Voice & Customer Input
-  const [inputText, setInputText] = useState('');
-  const [currentResponseTitle, setCurrentResponseTitle] = useState('Bienvenido a HB Jewelry Concierge AI');
-  const [currentResponseText, setCurrentResponseText] = useState('Hola, soy Guillermo AI. ¿En qué te puedo asesorar hoy sobre nuestra colección exclusiva de joyas en oro de 14k/18k y esmeraldas colombianas?');
-  const [isListening, setIsListening] = useState(false);
-
-  const videoRef = useRef(null);
-  const recognitionRef = useRef(null);
-
-  // Permisos de micrófono y altavoz explícitos
-  async function requestMicAndAudioPermissions() {
-    try {
-      const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
-      setHasMicPermission(true);
-      setIsAudioMuted(false);
-      setAudioBlockedByBrowser(false);
-      if (videoRef.current) {
-        videoRef.current.muted = false;
-        videoRef.current.play().catch(e => console.log('Play after mic permission:', e));
-      }
-      stream.getTracks().forEach(track => track.stop());
-    } catch (err) {
-      console.warn("Permiso denegado:", err);
-      alert("Por favor autoriza el micrófono y altavoz en la barra de tu navegador para interactuar con Guillermo AI.");
-    }
-  }
-
-  // Voz sintética (TTS Browser / Gemini Voice)
-  const speakText = (text) => {
-    if (!('speechSynthesis' in window)) return;
-    window.speechSynthesis.cancel();
-
-    const utterance = new SpeechSynthesisUtterance(text);
-    utterance.lang = 'es-ES';
-    utterance.rate = 1.0;
-    utterance.pitch = 1.0;
-
-    utterance.onstart = () => setIsSpeaking(true);
-    utterance.onend = () => setIsSpeaking(false);
-    utterance.onerror = () => setIsSpeaking(false);
-
-    window.speechSynthesis.speak(utterance);
-  };
-
-  // Reproducir video y audio sincronizados
-  const playAvatarResponse = (sourceUrl, title, textToSpeak) => {
-    setIsAudioMuted(false);
-    setAudioBlockedByBrowser(false);
-    setAvatarSource(sourceUrl);
-    if (title) setCurrentResponseTitle(title);
-    if (textToSpeak) {
-      setCurrentResponseText(textToSpeak);
-      speakText(textToSpeak);
-    }
-
-    if (videoRef.current) {
-      videoRef.current.currentTime = 0;
-      videoRef.current.muted = false;
-      const playPromise = videoRef.current.play();
-      if (playPromise !== undefined) {
-        playPromise.catch(err => {
-          console.warn("Autoplay bloqueado por navegador. Muteando temporalmente:", err);
-          setAudioBlockedByBrowser(true);
-          videoRef.current.muted = true;
-          videoRef.current.play();
-        });
-      }
-    }
-  };
-
-  // Auto-play video al cambiar fuente
+  // Capturar primer frame como miniatura
   useEffect(() => {
-    if (videoRef.current) {
-      videoRef.current.currentTime = 0;
-      videoRef.current.muted = isAudioMuted;
-      videoRef.current.play().catch(e => {
-        console.log('Autoplay handled:', e);
-        setAudioBlockedByBrowser(true);
-      });
-    }
-  }, [avatarSource]);
-
-  // Captura de micrófono por demanda (WhisperFlow $0 Mic)
-  const toggleMic = async () => {
-    if (!hasMicPermission && navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
-      try {
-        const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
-        setHasMicPermission(true);
-        setIsAudioMuted(false);
-        setAudioBlockedByBrowser(false);
-        stream.getTracks().forEach(track => track.stop());
-      } catch (err) {
-        console.warn("Permiso de micrófono denegado:", err);
-        alert("Por favor autoriza el micrófono en tu navegador para hablar con Guillermo AI.");
-        return;
-      }
-    }
-
-    const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
-
-    if (!SpeechRecognition) {
-      const manualText = prompt("Escribe tu consulta para Guillermo AI aquí:");
-      if (manualText) handleCustomCustomerQuery(manualText);
-      return;
-    }
-
-    if (isListening && recognitionRef.current) {
-      try { recognitionRef.current.stop(); } catch(e){}
-      setIsListening(false);
-      return;
-    }
-
-    try {
-      const rec = new SpeechRecognition();
-      rec.continuous = false;
-      rec.interimResults = false;
-      rec.lang = 'es-ES';
-
-      rec.onstart = () => setIsListening(true);
-
-      rec.onresult = (e) => {
-        const text = e.results[0][0].transcript;
-        setInputText(text);
-        handleCustomCustomerQuery(text);
-      };
-
-      rec.onerror = (e) => {
-        console.warn("Error en captura de voz:", e.error);
-        setIsListening(false);
-        if (e.error === 'not-allowed') {
-          alert("Permiso de micrófono bloqueado en tu navegador. Haz clic en el ícono de candado en la barra de dirección para otorgar acceso.");
-        }
-      };
-
-      rec.onend = () => setIsListening(false);
-      recognitionRef.current = rec;
-      rec.start();
-    } catch (err) {
-      console.warn("Error iniciando micrófono:", err);
-      setIsListening(false);
-    }
-  };
-
-  const toggleSound = () => {
-    const nextState = !isAudioMuted;
-    setIsAudioMuted(nextState);
-    setAudioBlockedByBrowser(false);
-    if (videoRef.current) {
-      videoRef.current.muted = nextState;
-      if (!nextState) videoRef.current.play();
-    }
-  };
-
-  const selectTechnicalQA = (idx) => {
-    setActiveQAIndex(idx);
-    const item = SEVEN_QA_ITEMS[idx];
-    playAvatarResponse(cloudAsset('output_avatar_english_7qa.mp4'), `Pregunta Técnica Q${item.id}: ${item.q}`, item.a);
-  };
-
-  const playTutorialVideo = () => {
-    if (videoRef.current) {
-      videoRef.current.src = cloudAsset('hb_tutorial_narrado_v1.mp4');
-      videoRef.current.load();
-      videoRef.current.play().catch(e => console.log('Tutorial play:', e));
-      setIsSpeaking(true);
-      setCurrentResponseTitle('📹 Tutorial: Manejo de la App HB Jewelry');
-      setCurrentResponseText('Soy Guillermo, tu asesor de joyería digital. En este tutorial te explico: Ventas, Dashboard de Analytics, el Asistente Avatar y la sincronización en la nube. Duración: 76 segundos.');
-    }
-  };
-
-  const selectCustomerQuestion = (item) => {
-    playAvatarResponse(cloudAsset('temp_lipsync.mp4'), `Consulta de Cliente: ${item.q}`, item.a);
-  };
-
-  const handleCustomCustomerQuery = (text) => {
-    if (!text.trim()) return;
-    const responseText = `Excelente pregunta sobre "${text}". En HB Jewelry cada pieza es elaborada en oro sólido de 14k y 18k con certificación internacional. ¿Te gustaría que un asesor te contacte por WhatsApp?`;
-    playAvatarResponse(cloudAsset('temp_lipsync.mp4'), `Consulta Libre: "${text}"`, responseText);
-    setInputText('');
-  };
-
-  const startAutoPlayback = () => {
-    setIsPlayingAuto(true);
-    let current = 0;
-    selectTechnicalQA(0);
-
-    const interval = setInterval(() => {
-      current++;
-      if (current < SEVEN_QA_ITEMS.length) {
-        selectTechnicalQA(current);
-      } else {
-        clearInterval(interval);
-        setIsPlayingAuto(false);
-      }
-    }, 7000);
-  };
+    const vid = thumbRef.current;
+    if (!vid) return;
+    vid.currentTime = 0.1;
+    vid.addEventListener('loadeddata', () => setThumbLoaded(true), { once: true });
+  }, []);
 
   return (
-    <div className="avatar-meet-container" style={{ maxWidth: '960px', margin: '0 auto', padding: '16px' }}>
-      
-      {/* Top Selector Mode: Cliente vs Investigador Técnico */}
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px', flexWrap: 'wrap', gap: '8px', background: '#111', padding: '12px 16px', borderRadius: '12px', border: '1px solid rgba(212,175,106,0.3)' }}>
-        <div>
-          <h2 style={{ margin: 0, color: '#d4af6a', fontSize: '20px' }}>💎 HB Jewelry Concierge AI & Guillermo Avatar</h2>
-          <span style={{ color: '#888', fontSize: '12px' }}>Atención personalizada al cliente & Demo de Arquitectura de IA</span>
-        </div>
-        
-        <div style={{ display: 'flex', gap: '8px' }}>
-          <button
-            onClick={() => setViewMode('customer')}
-            style={{
-              background: viewMode === 'customer' ? 'linear-gradient(135deg, #d4af6a, #aa8237)' : '#222',
-              color: viewMode === 'customer' ? '#000' : '#aaa',
-              border: 'none', borderRadius: '20px', padding: '8px 16px', fontWeight: '700', fontSize: '13px', cursor: 'pointer'
-            }}
-          >
-            ✨ Consulta Cliente Joyería
-          </button>
-          <button
-            onClick={() => setViewMode('technical')}
-            style={{
-              background: viewMode === 'technical' ? '#059669' : '#222',
-              color: viewMode === 'technical' ? '#fff' : '#aaa',
-              border: 'none', borderRadius: '20px', padding: '8px 16px', fontWeight: '700', fontSize: '13px', cursor: 'pointer'
-            }}
-          >
-            🛠️ Demo Arquitectura Técnica
-          </button>
-          <button
-            onClick={() => { setViewMode('tutorial'); playTutorialVideo(); }}
-            style={{
-              background: viewMode === 'tutorial' ? 'linear-gradient(135deg, #7c3aed, #4f46e5)' : '#222',
-              color: viewMode === 'tutorial' ? '#fff' : '#aaa',
-              border: viewMode === 'tutorial' ? '1px solid #7c3aed' : '1px solid transparent',
-              borderRadius: '20px', padding: '8px 16px', fontWeight: '700', fontSize: '13px', cursor: 'pointer'
-            }}
-          >
-            📹 Tutorial App
-          </button>
-        </div>
-      </div>
+    <div
+      id={`card-video-${video.id}`}
+      onClick={() => onPlay(video)}
+      onMouseEnter={() => setHovered(true)}
+      onMouseLeave={() => setHovered(false)}
+      style={{
+        cursor: 'pointer',
+        borderRadius: '14px',
+        overflow: 'hidden',
+        background: video.gradient,
+        border: `1px solid ${video.accentColor}33`,
+        transition: 'all 0.25s ease',
+        transform: hovered ? 'translateY(-4px) scale(1.02)' : 'none',
+        boxShadow: hovered ? `0 12px 40px ${video.accentColor}30` : '0 4px 16px rgba(0,0,0,0.4)',
+      }}
+    >
+      {/* Miniatura del video */}
+      <div style={{ position: 'relative', width: '100%', paddingTop: '56.25%' /* 16:9 aspect ratio para la tarjeta */ }}>
+        <video
+          ref={thumbRef}
+          src={video.src}
+          muted
+          preload="metadata"
+          playsInline
+          style={{
+            position: 'absolute', inset: 0, width: '100%', height: '100%',
+            objectFit: video.isVertical ? 'contain' : 'cover',
+            background: '#000',
+            opacity: thumbLoaded ? 1 : 0,
+            transition: 'opacity 0.3s',
+          }}
+        />
 
-      {/* Main Video Screen */}
-      <div style={{ position: 'relative', background: '#000', borderRadius: '16px', border: '1px solid rgba(212,175,106,0.3)', overflow: 'hidden', textAlign: 'center', marginBottom: '16px' }}>
-        
-        {/* Banner de aviso si el navegador bloqueó audio */}
-        {audioBlockedByBrowser && (
-          <div 
-            onClick={toggleSound}
-            style={{ position: 'absolute', top: '12px', left: '50%', transform: 'translateX(-50%)', zIndex: 10, background: 'rgba(217,119,6,0.95)', color: '#fff', padding: '8px 18px', borderRadius: '20px', fontSize: '13px', fontWeight: '700', cursor: 'pointer', boxShadow: '0 4px 12px rgba(0,0,0,0.5)' }}
-          >
-            🔊 Haz clic aquí para activar el sonido del Avatar
+        {/* Placeholder mientras carga */}
+        {!thumbLoaded && (
+          <div style={{
+            position: 'absolute', inset: 0, display: 'flex', alignItems: 'center', justifyContent: 'center',
+            background: 'rgba(0,0,0,0.6)'
+          }}>
+            <div style={{ width: '40px', height: '40px', border: `3px solid ${video.accentColor}`, borderTopColor: 'transparent', borderRadius: '50%', animation: 'spin 1s linear infinite' }} />
           </div>
         )}
 
-        <video 
-          key={avatarSource}
+        {/* Overlay al hover — botón de play */}
+        <div style={{
+          position: 'absolute', inset: 0,
+          background: 'rgba(0,0,0,0.45)',
+          display: 'flex', alignItems: 'center', justifyContent: 'center',
+          opacity: hovered ? 1 : 0,
+          transition: 'opacity 0.2s',
+        }}>
+          <div style={{
+            width: '60px', height: '60px', borderRadius: '50%',
+            background: 'rgba(255,255,255,0.95)',
+            display: 'flex', alignItems: 'center', justifyContent: 'center',
+            boxShadow: '0 4px 20px rgba(0,0,0,0.5)',
+          }}>
+            <div style={{ width: 0, height: 0, borderStyle: 'solid', borderWidth: '12px 0 12px 22px', borderColor: 'transparent transparent transparent #111', marginLeft: '4px' }} />
+          </div>
+        </div>
+
+        {/* Badge de duración */}
+        <div style={{
+          position: 'absolute', bottom: '8px', right: '8px',
+          background: 'rgba(0,0,0,0.85)', color: '#fff',
+          padding: '2px 8px', borderRadius: '4px', fontSize: '12px', fontWeight: '700',
+          letterSpacing: '0.5px',
+        }}>
+          {video.duration}
+        </div>
+
+        {/* Tag del tipo */}
+        <div style={{
+          position: 'absolute', top: '10px', left: '10px',
+          background: video.tagColor, color: '#fff',
+          padding: '3px 10px', borderRadius: '20px', fontSize: '11px', fontWeight: '700',
+        }}>
+          {video.tag}
+        </div>
+      </div>
+
+      {/* Información debajo de la miniatura */}
+      <div style={{ padding: '14px 16px 16px' }}>
+        <div style={{ color: '#fff', fontWeight: '700', fontSize: '14px', lineHeight: '1.4', marginBottom: '6px' }}>
+          {video.title}
+        </div>
+        <div style={{ color: video.accentColor, fontSize: '12px', fontWeight: '600', marginBottom: '8px' }}>
+          {video.subtitle}
+        </div>
+        <div style={{ color: '#888', fontSize: '12px', lineHeight: '1.5' }}>
+          {video.description}
+        </div>
+      </div>
+    </div>
+  );
+};
+
+// ─── MODAL DE VIDEO FULLSCREEN RESPONSIVE ─────────────────────────────────────
+const VideoModal = ({ video, onClose }) => {
+  const videoRef = useRef(null);
+  const [soundUnlocked, setSoundUnlocked] = useState(false);
+
+  // Cerrar con ESC
+  useEffect(() => {
+    const handler = (e) => { if (e.key === 'Escape') onClose(); };
+    window.addEventListener('keydown', handler);
+    return () => window.removeEventListener('keydown', handler);
+  }, [onClose]);
+
+  // Auto-play al abrir
+  useEffect(() => {
+    const vid = videoRef.current;
+    if (!vid) return;
+    vid.muted = true;
+    vid.play().catch(() => {});
+  }, []);
+
+  const unlockSound = useCallback(() => {
+    const vid = videoRef.current;
+    if (!vid) return;
+    vid.muted = false;
+    setSoundUnlocked(true);
+    vid.play().catch(() => {});
+  }, []);
+
+  return (
+    <div
+      id="video-modal-overlay"
+      onClick={(e) => e.target.id === 'video-modal-overlay' && onClose()}
+      style={{
+        position: 'fixed', inset: 0, zIndex: 9999,
+        background: 'rgba(0,0,0,0.95)',
+        display: 'flex', alignItems: 'center', justifyContent: 'center',
+        padding: '20px',
+        backdropFilter: 'blur(8px)',
+        animation: 'fadeIn 0.2s ease',
+      }}
+    >
+      {/* Contenedor del video — responsive */}
+      <div style={{
+        position: 'relative',
+        width: '100%',
+        maxWidth: video.isVertical ? '420px' : '1100px',  // 9:16 → angosto, 16:9 → ancho
+        maxHeight: '90vh',
+        borderRadius: '16px',
+        overflow: 'hidden',
+        background: '#000',
+        boxShadow: '0 24px 80px rgba(0,0,0,0.8)',
+      }}>
+
+        {/* Botón cerrar */}
+        <button
+          id="btn-close-modal"
+          onClick={onClose}
+          style={{
+            position: 'absolute', top: '12px', right: '12px', zIndex: 10,
+            width: '36px', height: '36px', borderRadius: '50%',
+            background: 'rgba(0,0,0,0.7)', border: '1px solid rgba(255,255,255,0.2)',
+            color: '#fff', fontSize: '18px', cursor: 'pointer',
+            display: 'flex', alignItems: 'center', justifyContent: 'center',
+            backdropFilter: 'blur(4px)',
+          }}
+        >
+          ✕
+        </button>
+
+        {/* Overlay de sonido — se muestra solo si no se ha desbloqueado */}
+        {!soundUnlocked && (
+          <div
+            id="btn-unlock-sound-modal"
+            onClick={unlockSound}
+            style={{
+              position: 'absolute', inset: 0, zIndex: 8,
+              display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center',
+              background: 'rgba(0,0,0,0.6)', cursor: 'pointer',
+            }}
+          >
+            <div style={{ fontSize: '48px', marginBottom: '10px' }}>🔊</div>
+            <div style={{ color: '#fff', fontWeight: '800', fontSize: '18px', textAlign: 'center' }}>
+              Clic para activar el sonido
+            </div>
+            <div style={{ color: '#d4af6a', fontSize: '12px', marginTop: '6px' }}>
+              Requerido por política del navegador
+            </div>
+          </div>
+        )}
+
+        {/* VIDEO — fills the container, responsive */}
+        <video
+          id="modal-video-player"
           ref={videoRef}
-          src={avatarSource}
-          autoPlay
-          muted={isAudioMuted}
+          src={video.src}
+          muted
           playsInline
           controls
-          onEnded={() => {
-            if (videoRef.current) {
-              videoRef.current.currentTime = 0;
-              videoRef.current.play();
-            }
+          autoPlay
+          style={{
+            width: '100%',
+            maxHeight: '88vh',
+            display: 'block',
+            objectFit: 'contain',
+            background: '#000',
           }}
-          style={{ width: '100%', maxHeight: '420px', objectFit: 'contain' }}
         />
-        
-        <div style={{ background: '#111', padding: '12px 16px', display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderTop: '1px solid rgba(255,255,255,0.08)' }}>
-          <button 
-            onClick={toggleSound}
-            style={{ background: isAudioMuted ? '#333' : '#059669', color: '#fff', border: 'none', borderRadius: '20px', padding: '8px 20px', fontWeight: '600', fontSize: '13px', cursor: 'pointer' }}
-          >
-            {isAudioMuted ? '🔇 Activar Sonido (Unmute)' : '🔊 Sonido Activado (Mute)'}
-          </button>
 
-          <button
-            onClick={requestMicAndAudioPermissions}
-            style={{ background: hasMicPermission ? '#059669' : '#d97706', color: '#fff', border: 'none', borderRadius: '20px', padding: '6px 14px', fontSize: '12px', fontWeight: '600', cursor: 'pointer' }}
-          >
-            {hasMicPermission ? '🎙️ Micrófono & Audio Autorizados' : '🎙️ Autorizar Micrófono & Audio PC'}
-          </button>
+        {/* Título del video en el modal */}
+        <div style={{
+          padding: '12px 16px', background: 'rgba(0,0,0,0.9)',
+          borderTop: '1px solid rgba(255,255,255,0.08)',
+        }}>
+          <div style={{ color: '#fff', fontWeight: '700', fontSize: '14px' }}>{video.title}</div>
+          <div style={{ color: '#888', fontSize: '12px', marginTop: '2px' }}>{video.subtitle} · {video.duration}</div>
+        </div>
+      </div>
+    </div>
+  );
+};
 
-          <span className="status-badge connected" style={{ background: isSpeaking ? 'rgba(217,119,6,0.2)' : 'rgba(52,211,153,0.15)', color: isSpeaking ? '#f59e0b' : '#34d399', padding: '6px 14px', borderRadius: '20px', fontSize: '12px', fontWeight: '600' }}>
-            {isSpeaking ? '🗣️ VOZ ACTIVA (HABLANDO)' : '🟢 VIDEO OUTPUT ACTIVO (1080P)'}
+// ─── COMPONENTE PRINCIPAL ─────────────────────────────────────────────────────
+const AvatarMeet = () => {
+  const [activeModal, setActiveModal] = useState(null);
+  const [responseTitle, setResponseTitle] = useState('HB Jewelry — Biblioteca de Videos Guillermo AI');
+  const [responseText, setResponseText] = useState('Selecciona cualquier tarjeta para reproducir el video en pantalla completa. El audio se activa con un clic. Todos los videos están alojados en Firebase Cloud.');
+
+  const openVideo = useCallback((video) => {
+    setActiveModal(video);
+    setResponseTitle(`▶ Reproduciendo: ${video.title}`);
+    setResponseText(video.description);
+  }, []);
+
+  const closeVideo = useCallback(() => setActiveModal(null), []);
+
+  return (
+    <div className="avatar-meet-container" style={{ maxWidth: '1100px', margin: '0 auto', padding: '16px 20px' }}>
+
+      {/* Header */}
+      <div style={{
+        background: 'linear-gradient(135deg, #111 0%, #1a1200 100%)',
+        border: '1px solid rgba(212,175,106,0.3)',
+        borderRadius: '14px', padding: '16px 20px', marginBottom: '20px',
+        display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '10px'
+      }}>
+        <div>
+          <h2 style={{ margin: 0, color: '#d4af6a', fontSize: '22px', fontWeight: '800' }}>
+            💎 HB Jewelry — Canal de Videos Guillermo AI
+          </h2>
+          <span style={{ color: '#888', fontSize: '13px' }}>
+            {VIDEO_CATALOG.length} videos · Firebase Cloud · Haz clic en cualquier tarjeta para reproducir
+          </span>
+        </div>
+        <div style={{
+          display: 'flex', gap: '6px', alignItems: 'center',
+          background: 'rgba(52,211,153,0.1)', border: '1px solid rgba(52,211,153,0.3)',
+          borderRadius: '20px', padding: '6px 14px'
+        }}>
+          <div style={{ width: '8px', height: '8px', borderRadius: '50%', background: '#34d399', animation: 'pulse 2s infinite' }} />
+          <span style={{ color: '#34d399', fontSize: '12px', fontWeight: '700' }}>
+            {IS_PROD ? 'Firebase Live' : 'Dev Local'}
           </span>
         </div>
       </div>
 
-      {/* Dynamic Response Display Box */}
-      <div style={{ background: '#141414', border: '1px solid rgba(212,175,106,0.4)', borderRadius: '12px', padding: '20px', marginBottom: '16px' }}>
-        <h4 style={{ margin: '0 0 8px 0', color: '#d4af6a', fontSize: '15px' }}>{currentResponseTitle}</h4>
-        <div style={{ background: '#1c1c1c', borderRadius: '8px', padding: '14px 18px', borderLeft: '4px solid #34d399' }}>
-          <strong style={{ color: '#34d399', fontSize: '12px', display: 'block', marginBottom: '4px' }}>🤖 RESPUESTA DE GUILLERMO AI:</strong>
-          <span style={{ color: '#f0ede8', fontSize: '14px', fontWeight: '400', lineHeight: '1.5' }}>{currentResponseText}</span>
+      {/* Caja de info actual */}
+      <div style={{
+        background: '#141414', border: '1px solid rgba(212,175,106,0.25)',
+        borderRadius: '10px', padding: '14px 18px', marginBottom: '20px',
+        borderLeft: '4px solid #d4af6a',
+      }}>
+        <div style={{ color: '#d4af6a', fontWeight: '700', fontSize: '13px', marginBottom: '4px' }}>
+          {responseTitle}
+        </div>
+        <div style={{ color: '#aaa', fontSize: '13px', lineHeight: '1.5' }}>
+          {responseText}
         </div>
       </div>
 
-      {/* MODE 1: CONSULTA CLIENTE JOYERÍA (DEBAJO DEL ROBOT) */}
-      {viewMode === 'customer' && (
-        <div style={{ background: '#141414', border: '1px solid rgba(212,175,106,0.3)', borderRadius: '12px', padding: '20px', marginBottom: '16px' }}>
-          <h3 style={{ margin: '0 0 6px 0', color: '#d4af6a', fontSize: '17px' }}>✨ ¿Qué te gustaría consultar hoy sobre nuestra Colección HB Jewelry?</h3>
-          <p style={{ margin: '0 0 16px 0', color: '#aaa', fontSize: '13px' }}>Puedes seleccionar una consulta frecuente o preguntar libremente lo que desees a nuestro Avatar en voz o texto:</p>
+      {/* GRID DE TARJETAS — estilo YouTube */}
+      <div style={{
+        display: 'grid',
+        gridTemplateColumns: 'repeat(auto-fill, minmax(260px, 1fr))',
+        gap: '20px',
+        marginBottom: '24px',
+      }}>
+        {VIDEO_CATALOG.map(video => (
+          <VideoCard key={video.id} video={video} onPlay={openVideo} />
+        ))}
+      </div>
 
-          {/* Sample Customer Buttons */}
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '10px', marginBottom: '18px' }}>
-            {CUSTOMER_SAMPLE_QUESTIONS.map((item) => (
-              <button
-                key={item.id}
-                onClick={() => selectCustomerQuestion(item)}
-                style={{
-                  background: '#1f1f1f', border: '1px solid rgba(212,175,106,0.3)', borderRadius: '8px', padding: '10px 14px',
-                  color: '#fff', fontSize: '12px', fontWeight: '600', textAlign: 'left', cursor: 'pointer', transition: 'all 0.2s'
-                }}
-              >
-                {item.label}
-              </button>
-            ))}
-          </div>
+      {/* Nota al pie */}
+      <div style={{
+        textAlign: 'center', color: '#555', fontSize: '12px', paddingTop: '8px',
+        borderTop: '1px solid rgba(255,255,255,0.06)',
+      }}>
+        ☁️ Cloud-First Protocol · Firebase → Rclone → Localhost · Todos los videos en resolución original
+        <span style={{ marginLeft: '12px', color: '#d4af6a' }}>
+          Presiona ESC para cerrar el reproductor
+        </span>
+      </div>
 
-          {/* Open Question Input & Mic */}
-          <div style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
-            <input 
-              type="text" 
-              value={inputText}
-              onChange={(e) => setInputText(e.target.value)}
-              onKeyDown={(e) => e.key === 'Enter' && handleCustomCustomerQuery(inputText)}
-              placeholder="Escribe o habla cualquier pregunta sobre collares, anillos, precios o envíos..."
-              style={{ flex: 1, background: '#1f1f1f', border: '1px solid rgba(255,255,255,0.15)', borderRadius: '8px', padding: '10px 14px', color: '#fff', fontSize: '13px' }}
-            />
-            <button 
-              onClick={toggleMic}
-              style={{ background: isListening ? '#ef4444' : '#25d366', color: '#fff', border: 'none', borderRadius: '8px', padding: '10px 16px', fontSize: '13px', fontWeight: '600', cursor: 'pointer' }}
-            >
-              {isListening ? '🔴 Escuchando...' : '🎙️ Hablar'}
-            </button>
-            <button 
-              onClick={() => handleCustomCustomerQuery(inputText)}
-              disabled={!inputText.trim()}
-              style={{ background: 'linear-gradient(135deg, #d4af6a, #aa8237)', color: '#000', border: 'none', borderRadius: '8px', padding: '10px 20px', fontWeight: '700', fontSize: '13px', cursor: 'pointer', opacity: !inputText.trim() ? 0.5 : 1 }}
-            >
-              🗣️ Consultar
-            </button>
-          </div>
-        </div>
-      )}
+      {/* MODAL DE VIDEO — se abre al hacer clic en una tarjeta */}
+      {activeModal && <VideoModal video={activeModal} onClose={closeVideo} />}
 
-      {/* MODE 2: DEMO ARQUITECTURA TÉCNICA APP (PARA INVESTIGADORES / INGENIEROS) */}
-      {viewMode === 'technical' && (
-        <div style={{ background: '#141414', border: '1px solid rgba(52,211,153,0.3)', borderRadius: '12px', padding: '20px', marginBottom: '16px' }}>
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '12px' }}>
-            <div>
-              <h3 style={{ margin: '0 0 4px 0', color: '#34d399', fontSize: '16px' }}>🛠️ Demo de Investigación de Arquitectura Técnica App</h3>
-              <span style={{ color: '#aaa', fontSize: '12px' }}>Preguntas especializadas sobre RAG 768-dim, WhatsApp Baileys $0 y WhisperFlow:</span>
-            </div>
-            <button 
-              onClick={startAutoPlayback}
-              disabled={isPlayingAuto}
-              style={{ background: 'linear-gradient(135deg, #d4af6a, #aa8237)', color: '#000', border: 'none', borderRadius: '6px', padding: '6px 14px', fontWeight: '700', fontSize: '12px', cursor: 'pointer' }}
-            >
-              {isPlayingAuto ? '⚡ Reproduciendo las 7 Q&A...' : '▶ Reproducir las 7 Preguntas de Arquitectura'}
-            </button>
-          </div>
-
-          {/* Q&A Pills */}
-          <div style={{ display: 'flex', gap: '6px', flexWrap: 'wrap' }}>
-            {SEVEN_QA_ITEMS.map((item, idx) => (
-              <button
-                key={item.id}
-                onClick={() => selectTechnicalQA(idx)}
-                style={{
-                  flex: 1, minWidth: '80px', padding: '8px 0', borderRadius: '6px', border: 'none',
-                  background: activeQAIndex === idx ? '#34d399' : '#222',
-                  color: activeQAIndex === idx ? '#000' : '#888',
-                  fontWeight: '700', fontSize: '12px', cursor: 'pointer'
-                }}
-              >
-                Q{item.id} Técnico
-              </button>
-            ))}
-          </div>
-        </div>
-      )}
-
-      {/* MODE 3: TUTORIAL VIDEO — Narración AlonsoNeural + EQ Profesional */}
-      {viewMode === 'tutorial' && (
-        <div style={{ background: '#0f0a1e', border: '1px solid rgba(124,58,237,0.4)', borderRadius: '12px', padding: '20px', marginBottom: '16px' }}>
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '14px', flexWrap: 'wrap', gap: '8px' }}>
-            <div>
-              <h3 style={{ margin: '0 0 4px 0', color: '#a78bfa', fontSize: '17px' }}>📹 Tutorial: Manejo Completo de la App HB Jewelry</h3>
-              <span style={{ color: '#888', fontSize: '12px' }}>Narrado por el Avatar Guillermo AI · Voz profesional EBU R128 · 76 segundos</span>
-            </div>
-            <button
-              onClick={playTutorialVideo}
-              style={{ background: 'linear-gradient(135deg, #7c3aed, #4f46e5)', color: '#fff', border: 'none', borderRadius: '8px', padding: '8px 18px', fontWeight: '700', fontSize: '13px', cursor: 'pointer' }}
-            >
-              ▶ Reproducir Tutorial
-            </button>
-          </div>
-
-          {/* Temario del Tutorial */}
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))', gap: '10px', marginBottom: '16px' }}>
-            {[
-              { icon: '💰', title: 'Módulo 1: Ventas', desc: 'Registro de pedidos, catálogo y clientes en tiempo real' },
-              { icon: '📊', title: 'Módulo 2: Analytics', desc: 'Dashboard de métricas diarias, semanales y mensuales' },
-              { icon: '🤖', title: 'Módulo 3: Avatar AI', desc: 'Asistente Guillermo: responde, recomienda y conecta' },
-              { icon: '☁️', title: 'Módulo 4: Nube 5TB', desc: 'Respaldo automático a Google Drive vía Rclone' },
-            ].map((m, i) => (
-              <div key={i} style={{ background: '#1a1030', border: '1px solid rgba(124,58,237,0.25)', borderRadius: '8px', padding: '12px' }}>
-                <div style={{ fontSize: '22px', marginBottom: '4px' }}>{m.icon}</div>
-                <div style={{ color: '#c4b5fd', fontWeight: '700', fontSize: '13px', marginBottom: '4px' }}>{m.title}</div>
-                <div style={{ color: '#888', fontSize: '12px', lineHeight: '1.4' }}>{m.desc}</div>
-              </div>
-            ))}
-          </div>
-
-          {/* Especificaciones de Audio */}
-          <div style={{ background: '#1a1030', borderRadius: '8px', padding: '10px 14px', display: 'flex', gap: '20px', flexWrap: 'wrap' }}>
-            <span style={{ color: '#a78bfa', fontSize: '11px', fontWeight: '600' }}>🎙️ Voz: es-US-AlonsoNeural</span>
-            <span style={{ color: '#a78bfa', fontSize: '11px', fontWeight: '600' }}>🎛️ EQ: Loudnorm -16 LUFS (EBU R128)</span>
-            <span style={{ color: '#a78bfa', fontSize: '11px', fontWeight: '600' }}>🎵 Música: -20dB auto-ducking</span>
-            <span style={{ color: '#a78bfa', fontSize: '11px', fontWeight: '600' }}>📐 Formato: 720x1280 · 30fps · H.264</span>
-          </div>
-        </div>
-      )}
-
+      {/* CSS de animaciones */}
+      <style>{`
+        @keyframes fadeIn {
+          from { opacity: 0; transform: scale(0.97); }
+          to   { opacity: 1; transform: scale(1); }
+        }
+        @keyframes spin {
+          to { transform: rotate(360deg); }
+        }
+        @keyframes pulse {
+          0%, 100% { opacity: 1; }
+          50% { opacity: 0.4; }
+        }
+      `}</style>
     </div>
   );
 };
