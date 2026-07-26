@@ -6,7 +6,7 @@
  * reject so callers can fallback to the simple keyword detector.
  */
 
-const OPENAI_API_KEY = process.env.REACT_APP_OPENAI_API_KEY;
+const OPENAI_API_KEY = (typeof process !== "undefined" && process.env) ? process.env.REACT_APP_OPENAI_API_KEY : (import.meta.env?.VITE_OPENAI_API_KEY || "");
 const OPENAI_ENDPOINT = "https://api.openai.com/v1/chat/completions";
 
 /** Detect language of a short text (es|en). Returns a promise that resolves to the language code */
