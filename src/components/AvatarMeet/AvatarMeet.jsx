@@ -7,6 +7,8 @@ const IS_PROD = window.location.hostname !== 'localhost';
 const cloudAsset = (f) => IS_PROD ? `${CLOUD_BASE_URL}/${f}` : `/${f}`;
 
 // ─── CATÁLOGO DE VIDEOS — cada video es una tarjeta ──────────────────────────
+// Mínimo 6 tarjetas para llenar la sección (2 filas × 3 columnas)
+// Agrega nuevos videos aquí y el shelf se expande automáticamente con scroll
 const VIDEO_CATALOG = [
   {
     id: 'tutorial',
@@ -19,7 +21,8 @@ const VIDEO_CATALOG = [
     description: 'Guía completa: Ventas, Analytics, Avatar AI y Nube 5TB. Narración AlonsoNeural con EQ profesional EBU R128.',
     gradient: 'linear-gradient(135deg, #1a0a3e 0%, #2d1265 50%, #0f0a1e 100%)',
     accentColor: '#a78bfa',
-    isVertical: true,   // 9:16 — se muestra centrado en modal
+    isVertical: true,
+    available: true,
   },
   {
     id: 'qa-avatar',
@@ -33,11 +36,12 @@ const VIDEO_CATALOG = [
     gradient: 'linear-gradient(135deg, #0a1e1a 0%, #0d3326 50%, #051a10 100%)',
     accentColor: '#34d399',
     isVertical: true,
+    available: true,
   },
   {
     id: 'avatar-base',
     src: cloudAsset('avatar_base.mp4'),
-    title: 'Avatar Base — Guillermo AI',
+    title: 'Avatar Base — Guillermo AI Loop',
     subtitle: 'Video base del avatar · Loop',
     duration: '0:15',
     tag: '🤖 AVATAR',
@@ -46,6 +50,7 @@ const VIDEO_CATALOG = [
     gradient: 'linear-gradient(135deg, #1a140a 0%, #2e2010 50%, #0f0a05 100%)',
     accentColor: '#d4af6a',
     isVertical: true,
+    available: true,
   },
   {
     id: 'showcase',
@@ -58,9 +63,39 @@ const VIDEO_CATALOG = [
     description: 'Video showcase de la colección HB Jewelry con fondo musical y efectos visuales.',
     gradient: 'linear-gradient(135deg, #1a0e00 0%, #3d2200 50%, #1a0e00 100%)',
     accentColor: '#fbbf24',
-    isVertical: false,  // 16:9 — se muestra normal
+    isVertical: false,
+    available: true,
+  },
+  {
+    id: 'coming-lipsync',
+    src: null,
+    title: 'Lip-Sync Real — SadTalker AI',
+    subtitle: 'Próximamente · Fase 2',
+    duration: '--',
+    tag: '🚀 PRÓXIMO',
+    tagColor: '#6366f1',
+    description: 'Video con boca sincronizada al audio real usando SadTalker. Foto PNG → video animado con movimiento de labios.',
+    gradient: 'linear-gradient(135deg, #0a0a1e 0%, #12123a 50%, #0a0a1e 100%)',
+    accentColor: '#6366f1',
+    isVertical: true,
+    available: false,  // placeholder — no disponible aún
+  },
+  {
+    id: 'coming-tiktok',
+    src: null,
+    title: 'TikTok Viral — Subtítulos Animados',
+    subtitle: 'Próximamente · Plantilla TikTok',
+    duration: '--',
+    tag: '📱 PRÓXIMO',
+    tagColor: '#ec4899',
+    description: 'Plantilla TikTok viral con subtítulos animados, lower-third y transiciones. Pipeline automatizado: guión → video.',
+    gradient: 'linear-gradient(135deg, #1a0a14 0%, #3a1428 50%, #1a0a14 100%)',
+    accentColor: '#ec4899',
+    isVertical: true,
+    available: false,  // placeholder — próximamente
   },
 ];
+
 
 // ─── COMPONENTE TARJETA DE VIDEO (estilo YouTube) ─────────────────────────────
 const VideoCard = ({ video, onPlay }) => {
@@ -68,13 +103,58 @@ const VideoCard = ({ video, onPlay }) => {
   const [thumbLoaded, setThumbLoaded] = useState(false);
   const [hovered, setHovered] = useState(false);
 
-  // Capturar primer frame como miniatura
+  // Capturar primer frame como miniatura (solo si hay src disponible)
   useEffect(() => {
     const vid = thumbRef.current;
-    if (!vid) return;
+    if (!vid || !video.available) return;
     vid.currentTime = 0.1;
     vid.addEventListener('loadeddata', () => setThumbLoaded(true), { once: true });
-  }, []);
+  }, [video.available]);
+
+  // ── TARJETA PRÓXIMAMENTE (sin video aún) ──
+  if (!video.available) {
+    return (
+      <div
+        id={`card-video-${video.id}`}
+        style={{
+          borderRadius: '14px', overflow: 'hidden',
+          background: video.gradient,
+          border: `1px solid ${video.accentColor}22`,
+          opacity: 0.75,
+          cursor: 'default',
+        }}
+      >
+        {/* Miniatura placeholder */}
+        <div style={{ position: 'relative', width: '100%', paddingTop: '56.25%', background: 'rgba(0,0,0,0.5)' }}>
+          <div style={{
+            position: 'absolute', inset: 0,
+            display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center',
+            gap: '8px',
+          }}>
+            <div style={{ fontSize: '36px' }}>🔒</div>
+            <div style={{ color: video.accentColor, fontWeight: '700', fontSize: '13px' }}>Próximamente</div>
+          </div>
+          {/* Tag */}
+          <div style={{
+            position: 'absolute', top: '10px', left: '10px',
+            background: video.tagColor, color: '#fff',
+            padding: '3px 10px', borderRadius: '20px', fontSize: '11px', fontWeight: '700',
+          }}>{video.tag}</div>
+          {/* Duration */}
+          <div style={{
+            position: 'absolute', bottom: '8px', right: '8px',
+            background: 'rgba(0,0,0,0.85)', color: '#fff',
+            padding: '2px 8px', borderRadius: '4px', fontSize: '12px', fontWeight: '700',
+          }}>{video.duration}</div>
+        </div>
+        <div style={{ padding: '14px 16px 16px' }}>
+          <div style={{ color: '#ccc', fontWeight: '700', fontSize: '14px', lineHeight: '1.4', marginBottom: '6px' }}>{video.title}</div>
+          <div style={{ color: video.accentColor, fontSize: '12px', fontWeight: '600', marginBottom: '8px' }}>{video.subtitle}</div>
+          <div style={{ color: '#666', fontSize: '12px', lineHeight: '1.5' }}>{video.description}</div>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div
@@ -353,16 +433,57 @@ const AvatarMeet = () => {
         </div>
       </div>
 
-      {/* GRID DE TARJETAS — estilo YouTube */}
-      <div style={{
-        display: 'grid',
-        gridTemplateColumns: 'repeat(auto-fill, minmax(260px, 1fr))',
-        gap: '20px',
-        marginBottom: '24px',
-      }}>
-        {VIDEO_CATALOG.map(video => (
-          <VideoCard key={video.id} video={video} onPlay={openVideo} />
-        ))}
+      {/* ── SHELF DE VIDEOS — Sección scrolleable fija (2 filas × 3 cols) ── */}
+      <div style={{ marginBottom: '20px' }}>
+
+        {/* Encabezado del shelf con contador */}
+        <div style={{
+          display: 'flex', justifyContent: 'space-between', alignItems: 'center',
+          marginBottom: '12px', paddingBottom: '8px',
+          borderBottom: '1px solid rgba(212,175,106,0.2)',
+        }}>
+          <span style={{ color: '#d4af6a', fontWeight: '700', fontSize: '14px' }}>🎬 Biblioteca de Videos</span>
+          <span style={{ color: '#555', fontSize: '12px' }}>
+            {VIDEO_CATALOG.filter(v => v.available).length} disponibles · {VIDEO_CATALOG.filter(v => !v.available).length} próximamente
+          </span>
+        </div>
+
+        {/* Contenedor scrolleable — altura fija = exactamente 2 filas de tarjetas */}
+        <div
+          id="video-shelf-scroll"
+          style={{
+            display: 'grid',
+            gridTemplateColumns: 'repeat(3, 1fr)',  /* 3 columnas fijas */
+            gap: '16px',
+            /* Altura fija = 2 filas: cada tarjeta ~290px (56.25% de (containerWidth/3)) + info ~110px */
+            maxHeight: '620px',
+            overflowY: 'auto',
+            overflowX: 'hidden',
+            paddingRight: '4px',
+            /* Scrollbar personalizado */
+            scrollbarWidth: 'thin',
+            scrollbarColor: '#d4af6a33 #111',
+          }}
+        >
+          {/* Scrollbar webkit */}
+          <style>{`
+            #video-shelf-scroll::-webkit-scrollbar { width: 6px; }
+            #video-shelf-scroll::-webkit-scrollbar-track { background: #111; border-radius: 3px; }
+            #video-shelf-scroll::-webkit-scrollbar-thumb { background: #d4af6a55; border-radius: 3px; }
+            #video-shelf-scroll::-webkit-scrollbar-thumb:hover { background: #d4af6a; }
+          `}</style>
+
+          {VIDEO_CATALOG.map(video => (
+            <VideoCard key={video.id} video={video} onPlay={openVideo} />
+          ))}
+        </div>
+
+        {/* Indicador de scroll si hay más de 6 */}
+        {VIDEO_CATALOG.length > 6 && (
+          <div style={{ textAlign: 'center', marginTop: '8px', color: '#555', fontSize: '11px' }}>
+            ↕ Desplaza para ver {VIDEO_CATALOG.length - 6} videos más
+          </div>
+        )}
       </div>
 
       {/* Nota al pie */}
