@@ -1,0 +1,14 @@
+{
+  "id": "podcast_claude_unlimited_2026",
+  "title": "OpenClaw 2026 — Ecosistema Ilimitado de IA (Claude + Google + Microsoft) en Firebase",
+  "speaker": "Guillermo AI Avatar (Polo Negro HB Jewelry Dorado)",
+  "duration_seconds": 95,
+  "rag_vectors_indexed": 580,
+  "firebase_live_url": "https://hb-jewelry-app.web.app/",
+  "formats": {
+    "youtube_16x9": "/assets/videos/podcast_guillermo_16x9.mp4",
+    "tiktok_9x16": "/assets/videos/podcast_guillermo_9x16.mp4"
+  },
+  "status": "active_in_firebase",
+  "timestamp": "2026-07-29 00:30:40"
+}

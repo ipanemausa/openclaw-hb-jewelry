@@ -1,0 +1,18 @@
+====================================================================
+# CLAUDE HYBRID ARTIFACT & HANDOFF MANIFEST - OPENCLAW v2026.7.1
+# Fecha/Hora: 2026-08-01 09:15:14
+====================================================================
+
+INFORMACIÓN DE INFRAESTRUCTURA REAL Y ESTADO ACTUAL:
+• Firebase Cloud Hosting Live: https://hb-jewelry-app.web.app/
+• GitHub Commit: backup: Auto-sync master pipeline closure [2026-08-01 09:15:14] (origin/main)
+• Google Drive 5TB Rclone: Sync OK (drive:HBJewelry & drive:openclaw-cloud-2026-backup)
+• Base Vectorial RAG (768-dim): 580 Fórmulas Numéricas Matemáticas activas
+• Contenedores Docker: 10/10 activos (WhatsApp 3001, Voice 8091, Gateway 8080)
+
+ROL DE CLAUDE (ARQUITECTO MAESTRO):
+Diseñar el siguiente artefacto DAG en TypeScript/JS con reglas de gobernanza y código modular.
+
+ROL DE ANTIGRAVITY AI IDE (EJECUTOR LOCAL AUTÓNOMO):
+Compilar en Vite, ejecutar pruebas E2E, verificar resiliencia en tiempo real en la PC, desplegar en Firebase y respaldar en Google Drive 5TB.
+====================================================================

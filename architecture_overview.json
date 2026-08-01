@@ -1,0 +1,39 @@
+{
+  "system": "HB Jewelry OpenClaw Enterprise Architecture Overview",
+  "version": "v2026.7.1",
+  "timestamp": "2026-07-29T00:00:00Z",
+  "live_url": "https://hb-jewelry-app.web.app/",
+  "containers": {
+    "total": 10,
+    "active": 10,
+    "list": [
+      "openclaw_gateway",
+      "claw-orchestrator",
+      "financial_rag_worker",
+      "video_veo_worker",
+      "voice_worker",
+      "openclaw_whatsapp",
+      "openclaw_app",
+      "chat_worker",
+      "openclaw_qdrant",
+      "openclaw_redis"
+    ]
+  },
+  "rag": {
+    "vector_dim": 768,
+    "formulas_indexed": 580,
+    "db": "Firebase Firestore Vector DB"
+  },
+  "pipeline_dag": {
+    "total_nodes": 8,
+    "e2e_v2_status": "PASSED_100_PERCENT",
+    "seo_validation_status": "PASSED_100_PERCENT"
+  },
+  "cloud_backup": {
+    "engine": "Rclone 5TB",
+    "remotes": [
+      "drive:HBJewelry",
+      "drive:openclaw-cloud-2026-backup"
+    ]
+  }
+}

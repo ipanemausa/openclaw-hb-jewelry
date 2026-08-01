@@ -1,0 +1,45 @@
+{
+  "system": "HB Jewelry Media Engine v2026.7.1",
+  "timestamp": 1784839143.9540074,
+  "document": {
+    "title": "Cadena Cubana HB Jewelry Oro Amarillo 14k Macizo",
+    "sku": "HB-CHAIN-CUBAN-14K",
+    "material": "Oro 14k Macizo Certificado",
+    "weight_grams": 45.5,
+    "length_inches": 24,
+    "price_usd": 1850.0,
+    "warranty": "Garantía de Autenticidad de Por Vida"
+  },
+  "summary": "Ficha comercial para Cadena Cubana HB Jewelry Oro Amarillo 14k Macizo: Oro 14k Macizo Certificado, 45.5g, 24\" a $1850.0 USD.",
+  "script_es": "Presentamos la exclusiva Cadena Cubana HB Jewelry Oro Amarillo 14k Macizo. Forjada en Oro 14k Macizo Certificado, peso de 45.5 gramos y acabado pulido a mano. Precio: $1850.0 USD con Garantía de Autenticidad de Por Vida.",
+  "script_en": "Introducing the exclusive Cadena Cubana HB Jewelry Oro Amarillo 14k Macizo. Crafted in solid 14k yellow gold, weighing 45.5 grams with hand-polished finish. Price: $1850.0 USD with lifetime warranty.",
+  "storyboard": [
+    {
+      "scene": 1,
+      "visual": "Acercamiento a los eslabones de la Cadena Cubana 14k con destellos de luz.",
+      "audio": "Exclusive HB Jewelry Cuban Chain 14k solid gold."
+    },
+    {
+      "scene": 2,
+      "visual": "Inspección de peso en balanza de precisión marcando 45.5g.",
+      "audio": "Hand-crafted solid gold weighing 45.5 grams."
+    },
+    {
+      "scene": 3,
+      "visual": "Prueba de broche de seguridad doble con sello grabado HB 14k.",
+      "audio": "Reinforced double security clasp for maximum durability."
+    },
+    {
+      "scene": 4,
+      "visual": "Avatar Guillermo AI presentando la joya con elegancia.",
+      "audio": "Available now for $1,850 USD with insured shipping."
+    },
+    {
+      "scene": 5,
+      "visual": "Llamado a la acción (CTA): 'Compra hoy en HB Jewelry app o escríbenos por WhatsApp $0'.",
+      "audio": "Order today on our official app or WhatsApp."
+    }
+  ],
+  "video_output": "/output_avatar_english_7qa.mp4",
+  "status": "TRANSFORMATION_CHAIN_COMPLETED_SUCCESSFULLY"
+}

@@ -1,0 +1,10 @@
+{
+  "item_id": "dev_claude_loop_agent",
+  "title": "Hack: Claude 4.6 Executing Autonomous Loops",
+  "category": "IA & Developer Tools",
+  "video_path": "/videos/generated/dev_claude_loop_agent.mp4",
+  "purity_spec": "OpenClaw 2026.7.1 Core Pipeline",
+  "vector_768_dim_hash": "a8f9c7e4d2b10398f",
+  "created_at": "2026-07-31 11:18:40",
+  "status": "APPROVED_QA_100%"
+}

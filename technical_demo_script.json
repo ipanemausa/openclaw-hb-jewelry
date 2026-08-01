@@ -1,0 +1,18 @@
+[
+  {
+    "speaker": "Usuario",
+    "text": "OpenClaw, cual es el estado de la arquitectura full-stack de HB Jewelry?"
+  },
+  {
+    "speaker": "Guillermo AI",
+    "text": "La arquitectura esta 100% activa. Contenedores Docker en puertos 8080, 8091 y 3001, vectorizacion RAG de 768 dimensiones e integracion con Google Drive 5TB."
+  },
+  {
+    "speaker": "Usuario",
+    "text": "Demuestra la velocidad del motor de voz y WhatsApp $0."
+  },
+  {
+    "speaker": "Guillermo AI",
+    "text": "Procesando latencia de sub-100ms con Gemini 2.0 Flash Live y recepcion de mensajes de clientes via Baileys +1 (954) 684-4445."
+  }
+]

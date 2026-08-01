@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://hb-jewelry-app.web.app/sitemap.xml
