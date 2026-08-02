@@ -22,6 +22,8 @@ import AvatarMeet from './components/AvatarMeet/AvatarMeet'
 import VoiceCall from './components/VoiceCall/VoiceCall'
 import Integraciones from './components/Integraciones/Integraciones'
 import FloatingVoiceWidget from './components/FloatingVoiceWidget/FloatingVoiceWidget'
+import Facturacion from './components/Facturacion/Facturacion'
+import BIEjecutivo from './components/BIEjecutivo/BIEjecutivo'
 
 export default function App() {
   const [activeSection, setActiveSection] = useState('dashboard')
@@ -49,6 +51,8 @@ export default function App() {
       case 'avatar':         return <AvatarMeet />
       case 'voicecall':      return <VoiceCall />
       case 'integraciones':  return <Integraciones />
+      case 'facturacion':    return <Facturacion />
+      case 'bi-ejecutivo':   return <BIEjecutivo />
       default:               return <Dashboard onNavigate={setActiveSection} />
     }
   }

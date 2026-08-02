@@ -23,6 +23,13 @@ const GROUPS = [
     ],
   },
   {
+    label: 'FINANZAS · ERP',
+    items: [
+      { id: 'bi-ejecutivo',  label: 'BI Ejecutivo',    icon: '📊' },
+      { id: 'facturacion',   label: 'Facturación',     icon: '🧾' },
+    ],
+  },
+  {
     label: 'MARKETING & ANALYTICS',
     items: [
       { id: 'marketing',     label: 'Marketing',       icon: '▣' },
@@ -31,6 +38,7 @@ const GROUPS = [
       { id: 'pipeline',      label: 'Pipeline',        icon: '○' },
     ],
   },
+
   {
     label: 'SISTEMA',
     items: [
