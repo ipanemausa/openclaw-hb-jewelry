@@ -1,0 +1,23 @@
+{
+  "title": "OpenClaw 2026 — Ecosistema Ilimitado de IA (Claude + Google + Microsoft) en Firebase",
+  "speaker": "Guillermo AI Avatar (Polo Negro HB Jewelry Dorado)",
+  "setting": "Estudio Profesional Podcast con Micrófono de Condensador",
+  "style": "Afable, profesional, envolvente, de alta convicción para desarrolladores y empresarios",
+  "script": {
+    "intro": "¡Hola a todos! Bienvenidos de nuevo al ecosistema de HB Jewelry y OpenClaw. Hoy quiero compartirles algo revolucionario: cómo transformamos a Claude, junto a Google Gemini y Microsoft Azure, en agentes permanentes e ilimitados dentro de nuestra plataforma.",
+    "core_architecture": "Nuestra base de datos en Firebase está potenciada por un motor RAG vectorial de 768 dimensiones. Esto significa que cada fórmula matemática, cada licencia de IA y cada procedimiento operativo están embebidos y accesibles en milisegundos sin latencia.",
+    "value_proposition": "Ya no hay barreras para los desarrolladores. Desde nuestro dashboard en Firebase, coordinamos agentes autónomos que generan contenido visual, administran inventario y atienden a clientes por voz y WhatsApp con total fluidez.",
+    "outro": "Esto es la verdadera supercomputación aplicada al comercio de lujo. Únete a la nueva era con HB Jewelry y OpenClaw."
+  },
+  "metadata": {
+    "rag_vector_dim": 768,
+    "firebase_endpoint": "https://hb-jewelry-app.web.app/",
+    "codecs": ["h264", "aac"],
+    "resolutions": {
+      "youtube_16x9": "1920x1080",
+      "tiktok_9x16": "1080x1920"
+    },
+    "guardrails_active": true,
+    "status": "ready_for_pipeline_dag"
+  }
+}

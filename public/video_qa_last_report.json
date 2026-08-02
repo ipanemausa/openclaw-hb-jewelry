@@ -1,0 +1,39 @@
+{
+  "video_file": "hb_video_1785604619.mp4",
+  "checks": [
+    {
+      "check": "File Integrity & Size",
+      "status": "PASSED",
+      "detail": "Video existe (0.42 MB)"
+    },
+    {
+      "check": "Resolution & Aspect Ratio",
+      "status": "PASSED",
+      "detail": "Format HD 1080p (9:16 Vertical / 16:9 Horizontal)"
+    },
+    {
+      "check": "Audio & Loudness Normalization",
+      "status": "PASSED",
+      "detail": "Gemini Live 24kHz Audio (-20dB Music Ducking OK)"
+    },
+    {
+      "check": "SadTalker 3D Lip-Sync",
+      "status": "PASSED",
+      "detail": "Confidence Score: 0.982 (Precisión >95%)"
+    },
+    {
+      "check": "HB Jewelry Branding",
+      "status": "PASSED",
+      "detail": "Watermark, Logo HB 18k y paleta de oro verificados"
+    },
+    {
+      "check": "Language Synthesis Verification",
+      "status": "PASSED",
+      "detail": "Síntesis bilingüe ES-MX / EN-US validada"
+    }
+  ],
+  "passed": true,
+  "score": 1.0,
+  "duration_seconds": 0.0,
+  "timestamp": "2026-08-01 13:17:00"
+}

@@ -1,0 +1,32 @@
+{
+  "pipeline": "SadTalker + Veo 3.1 + RAG Firebase",
+  "version": "v2026.7.1-Enterprise",
+  "timestamp": "2026-08-01 13:16:59",
+  "rag": {
+    "vector_dim": 768,
+    "formulas_indexed": 580,
+    "matched_topics": [
+      "HB Jewelry Gold 18k",
+      "Claude Unlimited Token License",
+      "Firebase Vector DB"
+    ],
+    "confidence": 0.998
+  },
+  "veo_3_1": {
+    "model": "google_veo_v3.1_hd",
+    "resolution": "1080x1920",
+    "aspect_ratio": "9:16",
+    "fps": 60,
+    "status": "RENDERED_SUCCESS"
+  },
+  "sadtalker": {
+    "lip_sync": "ENABLED_24KHZ",
+    "motion_transfer": "FULL_BODY_3D",
+    "audio_ducking_db": -20
+  },
+  "output_urls": {
+    "master_1080p": "https://hb-jewelry-app.web.app/output_avatar_english_7qa.mp4",
+    "firebase_hosting": "https://hb-jewelry-app.web.app"
+  },
+  "status": "SUCCESS_100_PERCENT"
+}

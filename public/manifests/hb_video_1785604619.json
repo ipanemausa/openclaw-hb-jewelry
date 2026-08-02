@@ -1,0 +1,50 @@
+{
+  "video_id": "hb_video_1785604619",
+  "title": "Comercial HB Jewelry - Anillo de Oro 18k Colección HB Master",
+  "language": "en-US",
+  "avatar": {
+    "avatar_id": "guillermo_ai_master_official",
+    "model_version": "v2026.7.1-Master3D",
+    "facial_stability": "STABLE_GEOMETRY_HEAD_TRACK",
+    "body_motion_engine": "Full Body Pose Transfer + Micro-Gestures",
+    "lighting_base": "Studio Lighting 3200K Warm Gold",
+    "posture": "Sitting Desk / Standing Boom Mic",
+    "clothing": "Black HB Jewelry Logo T-Shirt & Blue Jeans"
+  },
+  "rag": {
+    "video_id": "hb_video_1785604619",
+    "user_intent": "Crear video de venta de anillo de oro 18k para cliente USA",
+    "product_name": "Anillo de Oro 18k Colección HB Master",
+    "rag_vector_dim": 768,
+    "indexed_formulas_queried": [
+      102,
+      215,
+      340
+    ],
+    "extracted_knowledge": {
+      "purity": "Oro 18k Certificado (750 milésimas)",
+      "warranty": "Garantía de por vida y certificado digital NFT",
+      "price_usd": 1450.0,
+      "shipping": "Envío asegurado 24h Express a USA / PR"
+    },
+    "timestamp": "2026-08-01 13:17:00"
+  },
+  "prompt": {
+    "video_id": "hb_video_1785604619",
+    "script": "Looking for timeless elegance? Discover the HB Jewelry 18k Solid Gold Ring. Handcrafted with certified 18 karat gold and backed by a lifetime warranty. Order today at hb-jewelry-app.web.app with fast express delivery.",
+    "language": "en-US",
+    "voice_engine": "Gemini Live 24kHz Bilingual + Emotion Warm Professional",
+    "scene_engine": "Google Veo 3.1 HD 1080p Studio Lighting",
+    "facial_engine": "SadTalker 3D Lip-Sync + LivePortrait Motion",
+    "audio_ducking_db": -20
+  },
+  "output_paths": {
+    "video_mp4": "/videos/generated/2026/08/hb_video_1785604619.mp4",
+    "cdn_live_url": "https://hb-jewelry-app.web.app/videos/generated/2026/08/hb_video_1785604619.mp4",
+    "manifest_json": "/manifests/hb_video_1785604619.json",
+    "prompt_json": "/prompts/hb_video_1785604619_prompt.json",
+    "rag_context_json": "/rag_context/hb_video_1785604619_context.json"
+  },
+  "status": "PRODUCED_AND_VERIFIED",
+  "timestamp": "2026-08-01 13:17:00"
+}

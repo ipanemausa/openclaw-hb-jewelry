@@ -1,0 +1,69 @@
+{
+  "version": "2026.7.1",
+  "project": "HB Jewelry OpenClaw",
+  "avatar_identity": "Guillermo Master AI Avatar",
+  "face_reference": "avatar_pro.png",
+  "brand_rules": {
+    "tshirt_logo": "HB Gold Chest Emblem",
+    "pants": "Classic Blue Jeans",
+    "face_fidelity": "100% Authentic Guillermo Face & Glasses"
+  },
+  "avatars": [
+    {
+      "id": "studio_mic",
+      "name": "Guillermo — Studio (De Pie)",
+      "file": "avatars/studio_mic.png",
+      "posture": "De pie de cuerpo entero manejando micrófono en brazo boom",
+      "clothing": "Camiseta negra con logo HB dorado, blue jeans, tenis blancos",
+      "mic_setup": "Micrófono de condensador en brazo articulado"
+    },
+    {
+      "id": "desk_mic",
+      "name": "Guillermo — Escritorio (Sentado)",
+      "file": "avatars/desk_mic.png",
+      "posture": "Sentado en escritorio ejecutivo con micrófono al frente",
+      "clothing": "Camiseta negra con logo HB dorado, blue jeans",
+      "mic_setup": "Micrófono de estudio en brazo boom frontal"
+    },
+    {
+      "id": "azul",
+      "name": "Guillermo — Casual Azul",
+      "file": "avatars/azul.png",
+      "posture": "Cuerpo entero en pose explicativa relajada",
+      "clothing": "Camiseta azul marino con logo HB dorado, blue jeans, tenis",
+      "mic_setup": "Ninguno (Estudio abierto)"
+    },
+    {
+      "id": "blanco",
+      "name": "Guillermo — Premium Blanco",
+      "file": "avatars/blanco.png",
+      "posture": "Cuerpo entero con manos en los bolsillos",
+      "clothing": "Camiseta blanca con logo HB dorado, blue jeans, zapatos de piel",
+      "mic_setup": "Ninguno (Estudio abierto)"
+    },
+    {
+      "id": "verde",
+      "name": "Guillermo — Sport Verde",
+      "file": "avatars/verde.png",
+      "posture": "Cuerpo entero dando pulgar arriba (Thumbs Up)",
+      "clothing": "Camiseta verde esmeralda con logo HB dorado, blue jeans, tenis",
+      "mic_setup": "Ninguno (Estudio abierto)"
+    },
+    {
+      "id": "rojo",
+      "name": "Guillermo — Dynamic Rojo",
+      "file": "avatars/rojo.png",
+      "posture": "Cuerpo entero señalando al frente",
+      "clothing": "Camiseta roja con logo HB dorado, blue jeans, tenis oscuros",
+      "mic_setup": "Ninguno (Estudio abierto)"
+    },
+    {
+      "id": "dorado",
+      "name": "Guillermo — VIP Gold",
+      "file": "avatars/dorado.png",
+      "posture": "Cuerpo entero con brazos abiertos en bienvenida",
+      "clothing": "Camiseta negra con logo grande HB dorado, blue jeans, zapatos de piel",
+      "mic_setup": "Ninguno (Estudio abierto)"
+    }
+  ]
+}

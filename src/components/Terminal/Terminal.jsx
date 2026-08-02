@@ -43,38 +43,58 @@ export default function Terminal() {
     })
   }
 
-  // Health checks + tareas polling
+  // ─── SSE stream desde el intent-server local ─────────────────────────────
   useEffect(() => {
-    addLog('SYSTEM', 'terminal', '▶ Terminal iniciada — conectando con orquestador...')
+    addLog('SYSTEM', 'terminal', '▶ Terminal iniciada — conectando con intent-server...')
 
-    async function poll() {
-      // Simulación para el entorno público (Firebase Hosting)
+    let es = null
+
+    function connect() {
       try {
-        await fetch('/health').catch(() => null)
-        addLog('INFO', 'gateway', 'health → ok | port 8080')
-        setHealth(prev => ({ ...prev, gateway: 'healthy' }))
-      } catch (err) {}
-      
-      try {
-        await fetch('/api/chat/health').catch(() => null)
-        addLog('INFO', 'orchestrator', 'health → ok | port 8090')
-        setHealth(prev => ({ ...prev, orchestrator: 'healthy' }))
-      } catch (err) {}
-      
-      try {
-        await fetch('/api/tareas').catch(() => null)
-        addLog('INFO', 'dag', 'tareas → sincronizadas | DAG activo')
-        setTasks({
-          "sincronizacion_rclone": { estado: "completada" },
-          "vectorizacion_rag": { estado: "completada" },
-          "inferencia_v2v": { estado: "ejecutando" }
-        })
-      } catch (err) {}
+        es = new EventSource('/api/hb/logs/stream')
+
+        es.onopen = () => {
+          setHealth({ gateway: 'healthy', orchestrator: 'healthy' })
+          addLog('SUCCESS', 'terminal', '🔗 SSE conectado → localhost:3001 — logs en tiempo real')
+        }
+
+        es.onmessage = (e) => {
+          try {
+            const log = JSON.parse(e.data)
+            if (!pausedRef.current) {
+              setLogs(prev => {
+                const next = [...prev, log]
+                return next.slice(-300)
+              })
+            }
+          } catch (_) {}
+        }
+
+        es.onerror = () => {
+          setHealth({ gateway: null, orchestrator: null })
+          addLog('WARN', 'terminal', '⚠ SSE desconectado — reintentando en 5s...')
+          es?.close()
+          setTimeout(connect, 5000)
+        }
+      } catch (err) {
+        addLog('WARN', 'terminal', `SSE no disponible (Firebase hosting) — modo offline`)
+      }
     }
 
-    poll()
-    const interval = setInterval(poll, 8000)
-    return () => clearInterval(interval)
+    connect()
+
+    // Polling de health cada 8s como fallback visual
+    const hInterval = setInterval(async () => {
+      try {
+        const r = await fetch('/health')
+        if (r.ok) setHealth(prev => ({ ...prev, gateway: 'healthy' }))
+      } catch (_) {}
+    }, 8000)
+
+    return () => {
+      es?.close()
+      clearInterval(hInterval)
+    }
   }, [])
 
   // Auto-scroll

@@ -1,702 +1,449 @@
-import React, { useState, useRef, useEffect, useCallback, memo } from 'react'
+import React, { useState } from 'react';
+import IntentBar from '../IntentBar/IntentBar';
+import RealVoicePlayer from '../RealVoicePlayer/RealVoicePlayer';
 
-// ─── CLOUD-FIRST PROTOCOL (mismo patrón que AvatarMeet) ─────────────────────
-const CLOUD_BASE_URL = 'https://hb-jewelry-app.web.app'
-const IS_PROD = window.location.hostname !== 'localhost'
-const cloudAsset = (f) => IS_PROD ? `${CLOUD_BASE_URL}/${f}` : `/${f}`
+// ─── CLOUD-FIRST & DYNAMIC CACHE BUSTING ──────────────────────────────────────
+const GITHUB_PAGES_BASE = 'https://ipanemausa.github.io/openclaw-operativo-2026';
+const FIREBASE_BASE = 'https://hb-jewelry-app.web.app';
+const CLOUD_BASE = window.location.hostname.includes('github.io') ? GITHUB_PAGES_BASE : FIREBASE_BASE;
+const IS_PROD = window.location.hostname !== 'localhost';
+const asset = (f) => (IS_PROD ? `${CLOUD_BASE}/${f}?v=20260801_v100Width` : `/${f}?v=20260801_v100Width`);
 
-// ─── CATÁLOGO DE VARIANTES DE AVATAR GUILLERMO ───────────────────────────────
-// Cada variante mantiene fiel la imagen del avatar principal
-// Fase A: CSS filter para variantes de color (inmediato, sin nuevos assets)
-// Fase B: WebM VP9 con alpha por variante (cuando FFmpeg genere los WebMs)
-const AVATAR_VARIANTS = [
-  {
-    id: 'azul',
-    name: 'Casual Azul',
-    style: 'Confiado · Relajado',
-    shirtColor: '#1e40af',
-    filter: 'hue-rotate(195deg) saturate(1.6) brightness(0.95)',
-    gradient: 'linear-gradient(160deg, #0a1628 0%, #1e3a8a 60%, #0f1e4a 100%)',
-    accentColor: '#60a5fa',
-    glowColor: 'rgba(59,130,246,0.35)',
-    animation: 'float-slow',
-    badge: '👔 CASUAL',
-    badgeColor: '#1d4ed8',
-    jeans: true,
-  },
-  {
-    id: 'negro',
-    name: 'Formal Negro',
-    style: 'Profesional · Ejecutivo',
-    shirtColor: '#111827',
-    filter: 'saturate(0.15) brightness(0.75) contrast(1.1)',
-    gradient: 'linear-gradient(160deg, #050505 0%, #1f2937 60%, #111827 100%)',
-    accentColor: '#d4af6a',
-    glowColor: 'rgba(212,175,106,0.3)',
-    animation: 'subtle-sway',
-    badge: '💼 FORMAL',
-    badgeColor: '#374151',
-    jeans: true,
-  },
-  {
-    id: 'blanco',
-    name: 'Premium Blanco',
-    style: 'Elegante · Premium',
-    shirtColor: '#f1f5f9',
-    filter: 'saturate(0.3) brightness(1.15)',
-    gradient: 'linear-gradient(160deg, #0f172a 0%, #1e293b 60%, #0f172a 100%)',
-    accentColor: '#e2e8f0',
-    glowColor: 'rgba(226,232,240,0.2)',
-    animation: 'pulse-glow',
-    badge: '⭐ PREMIUM',
-    badgeColor: '#475569',
-    jeans: true,
-  },
-  {
-    id: 'verde',
-    name: 'Sport Verde',
-    style: 'Dinámico · Energético',
-    shirtColor: '#065f46',
-    filter: 'hue-rotate(105deg) saturate(2.2) brightness(0.9)',
-    gradient: 'linear-gradient(160deg, #022c22 0%, #065f46 60%, #022c22 100%)',
-    accentColor: '#34d399',
-    glowColor: 'rgba(52,211,153,0.3)',
-    animation: 'energetic-bob',
-    badge: '⚡ SPORT',
-    badgeColor: '#059669',
-    jeans: true,
-  },
-  {
-    id: 'rojo',
-    name: 'Dynamic Rojo',
-    style: 'Apasionado · Líder',
-    shirtColor: '#7f1d1d',
-    filter: 'hue-rotate(320deg) saturate(1.9) brightness(0.88)',
-    gradient: 'linear-gradient(160deg, #1c0505 0%, #7f1d1d 60%, #1c0505 100%)',
-    accentColor: '#f87171',
-    glowColor: 'rgba(248,113,113,0.3)',
-    animation: 'point-gesture',
-    badge: '🔥 DYNAMIC',
-    badgeColor: '#b91c1c',
-    jeans: true,
-  },
-  {
-    id: 'dorado',
-    name: 'VIP Dorado',
-    style: 'Exclusivo · Top Level',
-    shirtColor: '#92400e',
-    filter: 'sepia(0.75) saturate(2.5) hue-rotate(10deg) brightness(0.9)',
-    gradient: 'linear-gradient(160deg, #1a0f00 0%, #3d2c00 60%, #1a0f00 100%)',
-    accentColor: '#d4af6a',
-    glowColor: 'rgba(212,175,106,0.45)',
-    animation: 'welcome-glow',
-    badge: '👑 VIP',
-    badgeColor: '#b45309',
-    jeans: true,
-  },
-]
+// ─── REGISTROS DE ACTIVIDAD RECIENTE (PALETA DORADO HB #d4af6a) ──────────────
+const RECENT_ACTIVITIES = [
+  { timestamp: '2026-08-01 09:45:30', evento: 'Nube GitHub Pages CDN: https://ipanemausa.github.io/openclaw-operativo-2026/', division: 'Infraestructura Nube', estado: 'completado' },
+  { timestamp: '2026-08-01 09:40:00', evento: 'Firebase Hosting CDN: https://hb-jewelry-app.web.app/', division: 'Infraestructura Nube', estado: 'completado' },
+  { timestamp: '2026-08-01 09:35:00', evento: 'Localhost Server: http://localhost:5173/', division: 'Desarrollo Local', estado: 'completado' },
+  { timestamp: '2026-08-01 09:15:44', evento: 'Pipeline DAG: Respaldo Rclone a Google Drive 5TB', division: 'Sistema & IT', estado: 'completado' },
+  { timestamp: '2026-08-01 09:14:55', evento: 'Compresión Vectorial RAG 768D: 11.5 KB (97.66% ahorro)', division: 'Agentes IA', estado: 'completado' },
+  { timestamp: '2026-08-01 08:34:55', evento: 'Motor Video RAG: 4 Capas (Blur + Avatar + Teleprompter + Audio 48kHz)', division: 'Marketing AI', estado: 'completado' }
+];
 
-// ─── VIDEO CATALOG (top 4 para el dashboard) ──────────────────────────────────
-const DASH_VIDEOS = [
-  {
-    id: 'tutorial',
-    src: cloudAsset('hb_tutorial_narrado_v1.mp4'),
-    title: 'Tutorial App — 1:16',
-    tag: '📹 TUTORIAL', tagColor: '#7c3aed', accentColor: '#a78bfa',
-    gradient: 'linear-gradient(135deg, #1a0a3e 0%, #2d1265 100%)',
-    isVertical: true, available: true, duration: '1:16',
-  },
-  {
-    id: 'qa',
-    src: cloudAsset('output_avatar_english_7qa.mp4'),
-    title: 'Demo Técnico — 7 Q&A',
-    tag: '🛠️ TÉCNICO', tagColor: '#059669', accentColor: '#34d399',
-    gradient: 'linear-gradient(135deg, #0a1e1a 0%, #0d3326 100%)',
-    isVertical: true, available: true, duration: '0:15',
-  },
-  {
-    id: 'showcase',
-    src: cloudAsset('final_showcase.mp4'),
-    title: 'Showcase HB Jewelry',
-    tag: '💎 SHOWCASE', tagColor: '#d4af6a', accentColor: '#fbbf24',
-    gradient: 'linear-gradient(135deg, #1a0e00 0%, #3d2200 100%)',
-    isVertical: false, available: true, duration: '~30s',
-  },
-  {
-    id: 'avatar',
-    src: cloudAsset('avatar_base.mp4'),
-    title: 'Avatar Base — Loop',
-    tag: '🤖 AVATAR', tagColor: '#d4af6a', accentColor: '#d4af6a',
-    gradient: 'linear-gradient(135deg, #1a140a 0%, #2e2010 100%)',
-    isVertical: true, available: true, duration: '0:15',
-  },
-]
-
-// ─── HB LOGO EN DORADO ────────────────────────────────────────────────────────
-const HBLogo = ({ size = 28 }) => (
-  <svg width={size} height={size} viewBox="0 0 40 40" style={{ filter: 'drop-shadow(0 0 4px #d4af6a88)' }}>
-    <text x="50%" y="72%" textAnchor="middle" fill="#d4af6a"
-      style={{ fontFamily: 'Georgia,serif', fontSize: '26px', fontWeight: '700' }}>
-      HB
-    </text>
-  </svg>
-)
-
-// ─── AVATAR CARD ──────────────────────────────────────────────────────────────
-const AvatarCard = memo(({ variant, onSelect }) => {
-  const [hovered, setHovered] = useState(false)
-
-  return (
-    <div
-      id={`avatar-card-${variant.id}`}
-      onClick={() => onSelect(variant)}
-      onMouseEnter={() => setHovered(true)}
-      onMouseLeave={() => setHovered(false)}
-      style={{
-        cursor: 'pointer',
-        borderRadius: '16px',
-        overflow: 'hidden',
-        background: variant.gradient,
-        border: `1px solid ${variant.accentColor}44`,
-        position: 'relative',
-        transition: 'all 0.28s cubic-bezier(0.4,0,0.2,1)',
-        transform: hovered ? 'translateY(-6px) scale(1.03)' : 'none',
-        boxShadow: hovered
-          ? `0 16px 40px ${variant.glowColor}, 0 0 0 1px ${variant.accentColor}66`
-          : `0 4px 16px rgba(0,0,0,0.5)`,
-        aspectRatio: '3/4',
-        display: 'flex',
-        flexDirection: 'column',
-        alignItems: 'center',
-        justifyContent: 'flex-end',
-      }}
-    >
-      {/* Badge de tipo */}
-      <div style={{
-        position: 'absolute', top: '10px', left: '10px', zIndex: 3,
-        background: variant.badgeColor, color: '#fff',
-        padding: '3px 10px', borderRadius: '20px', fontSize: '10px', fontWeight: '800',
-        letterSpacing: '0.5px',
-      }}>
-        {variant.badge}
-      </div>
-
-      {/* Logo HB en dorado — arriba derecha */}
-      <div style={{ position: 'absolute', top: '10px', right: '10px', zIndex: 3 }}>
-        <HBLogo size={30} />
-      </div>
-
-      {/* AVATAR con filter de color — cuerpo completo */}
-      <div style={{
-        position: 'absolute', inset: 0,
-        display: 'flex', alignItems: 'center', justifyContent: 'center',
-        padding: '10px 6px 60px',
-      }}>
-        <img
-          src={cloudAsset('avatar_pro.png')}
-          alt={`Guillermo AI — ${variant.name}`}
-          style={{
-            width: '100%',
-            height: '100%',
-            objectFit: 'contain',
-            objectPosition: 'center top',
-            filter: variant.filter,
-            animation: `${variant.animation} 4s ease-in-out infinite`,
-            imageRendering: 'crisp-edges',
-          }}
-        />
-      </div>
-
-      {/* Gradiente inferior para texto */}
-      <div style={{
-        position: 'absolute', bottom: 0, left: 0, right: 0,
-        background: 'linear-gradient(to top, rgba(0,0,0,0.92) 0%, transparent 100%)',
-        padding: '24px 12px 14px',
-        zIndex: 2,
-      }}>
-        <div style={{ color: '#fff', fontWeight: '800', fontSize: '13px', marginBottom: '2px' }}>
-          {variant.name}
-        </div>
-        <div style={{ color: variant.accentColor, fontSize: '11px', fontWeight: '500' }}>
-          {variant.style}
-        </div>
-        {variant.jeans && (
-          <div style={{ color: '#4a7bc4', fontSize: '10px', marginTop: '2px', opacity: 0.8 }}>
-            👖 Blue Jeans
-          </div>
-        )}
-      </div>
-
-      {/* Hover overlay — ícono de selección */}
-      <div style={{
-        position: 'absolute', inset: 0, zIndex: 4,
-        display: 'flex', alignItems: 'center', justifyContent: 'center',
-        background: 'rgba(0,0,0,0.3)',
-        opacity: hovered ? 1 : 0,
-        transition: 'opacity 0.2s',
-      }}>
-        <div style={{
-          width: '52px', height: '52px', borderRadius: '50%',
-          background: 'rgba(255,255,255,0.95)',
-          display: 'flex', alignItems: 'center', justifyContent: 'center',
-          fontSize: '22px',
-          boxShadow: '0 4px 20px rgba(0,0,0,0.4)',
-        }}>
-          👁️
-        </div>
-      </div>
-    </div>
-  )
-})
-
-// ─── AVATAR MODAL — fullscreen responsive ─────────────────────────────────────
-const AvatarModal = ({ variant, onClose }) => {
-  useEffect(() => {
-    const h = (e) => { if (e.key === 'Escape') onClose() }
-    window.addEventListener('keydown', h)
-    return () => window.removeEventListener('keydown', h)
-  }, [onClose])
-
-  return (
-    <div
-      id="avatar-modal-overlay"
-      onClick={(e) => e.target.id === 'avatar-modal-overlay' && onClose()}
-      style={{
-        position: 'fixed', inset: 0, zIndex: 9999,
-        background: 'rgba(0,0,0,0.92)',
-        display: 'flex', alignItems: 'center', justifyContent: 'center',
-        padding: '20px',
-        backdropFilter: 'blur(12px)',
-        animation: 'fadeInModal 0.2s ease',
-      }}
-    >
-      <div style={{
-        position: 'relative',
-        width: 'min(420px, 90vw)',
-        maxHeight: '90vh',
-        borderRadius: '24px',
-        overflow: 'hidden',
-        background: variant.gradient,
-        border: `2px solid ${variant.accentColor}66`,
-        boxShadow: `0 32px 80px ${variant.glowColor}, 0 0 60px ${variant.glowColor}`,
-        display: 'flex', flexDirection: 'column', alignItems: 'center',
-      }}>
-        {/* Botón cerrar */}
-        <button
-          id="btn-close-avatar-modal"
-          onClick={onClose}
-          style={{
-            position: 'absolute', top: '14px', right: '14px', zIndex: 10,
-            width: '36px', height: '36px', borderRadius: '50%',
-            background: 'rgba(0,0,0,0.6)', border: '1px solid rgba(255,255,255,0.2)',
-            color: '#fff', fontSize: '18px', cursor: 'pointer',
-            display: 'flex', alignItems: 'center', justifyContent: 'center',
-          }}
-        >✕</button>
-
-        {/* Logo HB grande */}
-        <div style={{ position: 'absolute', top: '14px', left: '14px', zIndex: 10 }}>
-          <HBLogo size={40} />
-        </div>
-
-        {/* Avatar a pantalla completa */}
-        <img
-          src={cloudAsset('avatar_pro.png')}
-          alt={variant.name}
-          style={{
-            width: '100%',
-            maxHeight: '70vh',
-            objectFit: 'contain',
-            filter: variant.filter,
-            animation: `${variant.animation} 4s ease-in-out infinite`,
-            padding: '20px 20px 0',
-          }}
-        />
-
-        {/* Info */}
-        <div style={{
-          width: '100%', padding: '16px 20px 20px',
-          background: 'rgba(0,0,0,0.7)',
-          borderTop: `1px solid ${variant.accentColor}44`,
-        }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '6px' }}>
-            <span style={{
-              background: variant.badgeColor, color: '#fff',
-              padding: '3px 10px', borderRadius: '20px', fontSize: '11px', fontWeight: '800',
-            }}>{variant.badge}</span>
-            <span style={{ color: '#888', fontSize: '11px' }}>👖 Blue Jeans · Logo HB Dorado</span>
-          </div>
-          <div style={{ color: '#fff', fontWeight: '800', fontSize: '18px', marginBottom: '4px' }}>
-            Guillermo AI — {variant.name}
-          </div>
-          <div style={{ color: variant.accentColor, fontSize: '13px' }}>{variant.style}</div>
-          <div style={{ color: '#555', fontSize: '11px', marginTop: '8px' }}>
-            Presiona ESC o clic fuera para cerrar
-          </div>
-        </div>
-      </div>
-    </div>
-  )
-}
-
-// ─── VIDEO CARD (mini) para el Dashboard ─────────────────────────────────────
-const DashVideoCard = memo(({ video, onPlay }) => {
-  const [hovered, setHovered] = useState(false)
-  const thumbRef = useRef(null)
-  const [thumbLoaded, setThumbLoaded] = useState(false)
-
-  useEffect(() => {
-    const vid = thumbRef.current
-    if (!vid) return
-    vid.currentTime = 0.1
-    vid.addEventListener('loadeddata', () => setThumbLoaded(true), { once: true })
-  }, [])
-
-  return (
-    <div
-      id={`dash-video-${video.id}`}
-      onClick={() => onPlay(video)}
-      onMouseEnter={() => setHovered(true)}
-      onMouseLeave={() => setHovered(false)}
-      style={{
-        cursor: 'pointer', borderRadius: '12px', overflow: 'hidden',
-        background: video.gradient,
-        border: `1px solid ${video.accentColor}33`,
-        transition: 'all 0.22s ease',
-        transform: hovered ? 'translateY(-3px) scale(1.02)' : 'none',
-        boxShadow: hovered ? `0 10px 30px ${video.accentColor}25` : '0 3px 12px rgba(0,0,0,0.4)',
-      }}
-    >
-      {/* Thumbnail */}
-      <div style={{ position: 'relative', paddingTop: '56.25%', background: '#000' }}>
-        <video
-          ref={thumbRef}
-          src={video.src}
-          muted preload="metadata" playsInline
-          style={{
-            position: 'absolute', inset: 0, width: '100%', height: '100%',
-            objectFit: video.isVertical ? 'contain' : 'cover',
-            opacity: thumbLoaded ? 1 : 0, transition: 'opacity 0.3s',
-          }}
-        />
-        {!thumbLoaded && (
-          <div style={{ position: 'absolute', inset: 0, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-            <div style={{ width: '28px', height: '28px', border: `2px solid ${video.accentColor}`, borderTopColor: 'transparent', borderRadius: '50%', animation: 'spin 1s linear infinite' }} />
-          </div>
-        )}
-        <div style={{
-          position: 'absolute', inset: 0, opacity: hovered ? 1 : 0, transition: 'opacity 0.2s',
-          background: 'rgba(0,0,0,0.4)', display: 'flex', alignItems: 'center', justifyContent: 'center',
-        }}>
-          <div style={{ width: '44px', height: '44px', borderRadius: '50%', background: 'rgba(255,255,255,0.95)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-            <div style={{ width: 0, height: 0, borderStyle: 'solid', borderWidth: '9px 0 9px 16px', borderColor: 'transparent transparent transparent #111', marginLeft: '3px' }} />
-          </div>
-        </div>
-        <div style={{ position: 'absolute', top: '8px', left: '8px', background: video.tagColor, color: '#fff', padding: '2px 8px', borderRadius: '20px', fontSize: '10px', fontWeight: '800' }}>{video.tag}</div>
-        <div style={{ position: 'absolute', bottom: '6px', right: '6px', background: 'rgba(0,0,0,0.8)', color: '#fff', padding: '2px 6px', borderRadius: '3px', fontSize: '11px', fontWeight: '700' }}>{video.duration}</div>
-      </div>
-      <div style={{ padding: '10px 12px 12px' }}>
-        <div style={{ color: '#fff', fontWeight: '700', fontSize: '12px', lineHeight: '1.3' }}>{video.title}</div>
-      </div>
-    </div>
-  )
-})
-
-// ─── VIDEO MODAL (igual que AvatarMeet) ──────────────────────────────────────
-const DashVideoModal = ({ video, onClose }) => {
-  const videoRef = useRef(null)
-  const [soundUnlocked, setSoundUnlocked] = useState(false)
-
-  useEffect(() => {
-    const h = (e) => { if (e.key === 'Escape') onClose() }
-    window.addEventListener('keydown', h)
-    return () => window.removeEventListener('keydown', h)
-  }, [onClose])
-
-  useEffect(() => {
-    const vid = videoRef.current
-    if (!vid) return
-    vid.muted = true
-    vid.play().catch(() => {})
-  }, [])
-
-  const unlock = () => {
-    const vid = videoRef.current
-    if (!vid) return
-    vid.muted = false
-    setSoundUnlocked(true)
-    vid.play().catch(() => {})
-  }
-
-  return (
-    <div
-      id="dash-video-modal-overlay"
-      onClick={(e) => e.target.id === 'dash-video-modal-overlay' && onClose()}
-      style={{
-        position: 'fixed', inset: 0, zIndex: 9999,
-        background: 'rgba(0,0,0,0.93)', backdropFilter: 'blur(10px)',
-        display: 'flex', alignItems: 'center', justifyContent: 'center',
-        padding: '20px', animation: 'fadeInModal 0.2s ease',
-      }}
-    >
-      <div style={{
-        position: 'relative', width: '100%',
-        maxWidth: video.isVertical ? '400px' : '1000px',
-        borderRadius: '16px', overflow: 'hidden', background: '#000',
-        boxShadow: '0 24px 80px rgba(0,0,0,0.85)',
-      }}>
-        <button id="btn-close-dash-video" onClick={onClose} style={{
-          position: 'absolute', top: '12px', right: '12px', zIndex: 10,
-          width: '34px', height: '34px', borderRadius: '50%',
-          background: 'rgba(0,0,0,0.7)', border: '1px solid rgba(255,255,255,0.2)',
-          color: '#fff', fontSize: '16px', cursor: 'pointer',
-          display: 'flex', alignItems: 'center', justifyContent: 'center',
-        }}>✕</button>
-        {!soundUnlocked && (
-          <div id="btn-dash-unlock-sound" onClick={unlock} style={{
-            position: 'absolute', inset: 0, zIndex: 8, cursor: 'pointer',
-            display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center',
-            background: 'rgba(0,0,0,0.6)',
-          }}>
-            <div style={{ fontSize: '42px', marginBottom: '8px' }}>🔊</div>
-            <div style={{ color: '#fff', fontWeight: '800', fontSize: '16px' }}>Clic para activar sonido</div>
-          </div>
-        )}
-        <video ref={videoRef} src={video.src} muted playsInline controls autoPlay
-          style={{ width: '100%', maxHeight: '85vh', display: 'block', objectFit: 'contain', background: '#000' }} />
-        <div style={{ padding: '10px 14px', background: 'rgba(0,0,0,0.9)', borderTop: '1px solid rgba(255,255,255,0.07)' }}>
-          <div style={{ color: '#fff', fontWeight: '700', fontSize: '13px' }}>{video.title}</div>
-        </div>
-      </div>
-    </div>
-  )
-}
-
-// ─── STATS PANEL (el original, saneado) ──────────────────────────────────────
-const StatsPanel = ({ stack, tareas, gateway }) => {
-  const estadoColor = (s) => ({ completada: '#4ade80', pendiente: '#fbbf24', en_cola: '#60a5fa', ejecutando: '#fb923c' }[s] || '#a09d99')
-
-  return (
-    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: '14px' }}>
-      {/* Contenedores */}
-      <div style={{ background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(212,175,106,0.15)', borderRadius: '12px', padding: '16px' }}>
-        <div style={{ color: '#d4af6a', fontSize: '11px', letterSpacing: '2px', fontWeight: '700', marginBottom: '12px' }}>CONTENEDORES</div>
-        {stack.map(c => (
-          <div key={c.name} style={{ display: 'flex', justifyContent: 'space-between', padding: '5px 0', borderBottom: '1px solid rgba(255,255,255,0.04)', fontSize: '12px' }}>
-            <span style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-              <span style={{ width: '7px', height: '7px', borderRadius: '50%', background: c.status === 'running' ? '#4ade80' : '#fb7185', display: 'inline-block' }} />
-              {c.name}
-            </span>
-            <span style={{ color: c.status === 'running' ? '#4ade80' : '#fb7185', fontSize: '11px' }}>{c.status}</span>
-          </div>
-        ))}
-        {stack.length === 0 && <p style={{ color: '#555', fontSize: '12px', margin: 0 }}>Sin datos</p>}
-      </div>
-
-      {/* Gateway */}
-      <div style={{ background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(212,175,106,0.15)', borderRadius: '12px', padding: '16px' }}>
-        <div style={{ color: '#d4af6a', fontSize: '11px', letterSpacing: '2px', fontWeight: '700', marginBottom: '12px' }}>HB GATEWAY</div>
-        <div style={{ display: 'flex', justifyContent: 'space-between', padding: '5px 0', borderBottom: '1px solid rgba(255,255,255,0.04)', fontSize: '12px', marginBottom: '6px' }}>
-          <span>estado</span>
-          <span style={{ color: gateway.status === 'ok' ? '#4ade80' : '#fb7185' }}>{gateway.status || 'sin respuesta'}</span>
-        </div>
-        {(gateway.agents || []).map(a => (
-          <div key={a} style={{ display: 'flex', justifyContent: 'space-between', padding: '5px 0', borderBottom: '1px solid rgba(255,255,255,0.04)', fontSize: '12px' }}>
-            <span style={{ color: '#d4af6a' }}>{a}</span>
-            <span style={{ color: '#4ade80', fontSize: '11px' }}>activo</span>
-          </div>
-        ))}
-      </div>
-
-      {/* DAG Tareas */}
-      <div style={{ background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(212,175,106,0.15)', borderRadius: '12px', padding: '16px' }}>
-        <div style={{ color: '#d4af6a', fontSize: '11px', letterSpacing: '2px', fontWeight: '700', marginBottom: '12px' }}>DAG TAREAS</div>
-        {Object.entries(tareas).map(([k, v]) => (
-          <div key={k} style={{ display: 'flex', justifyContent: 'space-between', padding: '5px 0', borderBottom: '1px solid rgba(255,255,255,0.04)', fontSize: '12px' }}>
-            <span style={{ color: '#ccc' }}>{k.replace(/_/g, ' ')}</span>
-            <span style={{ fontSize: '10px', padding: '2px 8px', borderRadius: '4px', color: estadoColor(v.estado), border: `1px solid ${estadoColor(v.estado)}44`, background: `${estadoColor(v.estado)}18` }}>{v.estado}</span>
-          </div>
-        ))}
-        {Object.keys(tareas).length === 0 && <p style={{ color: '#555', fontSize: '12px', margin: 0 }}>Sin tareas</p>}
-      </div>
-    </div>
-  )
-}
-
-// ─── DASHBOARD PRINCIPAL ──────────────────────────────────────────────────────
 export default function Dashboard({ onNavigate }) {
-  const [stack, setStack]       = useState([])
-  const [tareas, setTareas]     = useState({})
-  const [gateway, setGateway]   = useState({})
-  const [loading, setLoading]   = useState(true)
-  const [avatarModal, setAvatarModal] = useState(null)
-  const [videoModal, setVideoModal]   = useState(null)
+  const [hoverAvatars, setHoverAvatars] = useState(false);
+  const [hoverVideos, setHoverVideos] = useState(false);
+  const [hoverCard, setHoverCard] = useState(null);
+  const [showPlayer, setShowPlayer] = useState(false);
 
-  useEffect(() => {
-    async function load() {
-      const [s, t, g] = await Promise.allSettled([
-        fetch('/stack').then(r => r.json()).catch(() => ({
-          containers: [
-            { name: 'gateway', status: 'running' },
-            { name: 'orchestrator', status: 'running' },
-            { name: 'deepfake_node', status: 'running' },
-            { name: 'rag_worker', status: 'running' },
-          ]
-        })),
-        fetch('/api/tareas').then(r => r.json()).catch(() => ({
-          tareas: {
-            sincronizacion_rclone: { estado: 'completada' },
-            vectorizacion_rag: { estado: 'completada' },
-            inferencia_v2v: { estado: 'ejecutando' },
-          }
-        })),
-        fetch('/api/mcp/status').then(r => r.json()).catch(() => ({
-          status: 'ok',
-          agents: ['Omnilingual Voice', 'Deepfake V2V', 'Financial RAG'],
-        })),
-      ])
-      if (s.status === 'fulfilled') setStack(s.value.containers || [])
-      if (t.status === 'fulfilled') setTareas(t.value.tareas || {})
-      if (g.status === 'fulfilled') setGateway(g.value)
-      setLoading(false)
+  const handleNav = (target) => {
+    if (onNavigate) {
+      onNavigate(target);
     }
-    load()
-    const interval = setInterval(load, 10000)
-    return () => clearInterval(interval)
-  }, [])
-
-  const openAvatar = useCallback((v) => setAvatarModal(v), [])
-  const closeAvatar = useCallback(() => setAvatarModal(null), [])
-  const openVideo = useCallback((v) => setVideoModal(v), [])
-  const closeVideo = useCallback(() => setVideoModal(null), [])
-
-  if (loading) return (
-    <div style={{ padding: '2rem', color: '#d4af6a', fontFamily: 'monospace', fontSize: '14px' }}>
-      ⚙️ Cargando OpenClaw Dashboard...
-    </div>
-  )
+  };
 
   return (
-    <div style={{ padding: '16px 20px', maxWidth: '1100px', margin: '0 auto', fontFamily: "'Inter','Segoe UI',sans-serif" }}>
-
-      {/* ── HEADER ── */}
-      <div style={{
-        display: 'flex', justifyContent: 'space-between', alignItems: 'center',
-        marginBottom: '20px', paddingBottom: '14px',
-        borderBottom: '1px solid rgba(212,175,106,0.25)',
-      }}>
+    <div style={{ padding: '24px 36px', width: '100%', maxWidth: '100%', boxSizing: 'border-box', color: '#f0ede8', fontFamily: 'Inter, system-ui, sans-serif' }}>
+      {/* PLAYER MODAL */}
+      {showPlayer && <RealVoicePlayer onClose={() => setShowPlayer(false)} />}
+      
+      {/* ─── CABECERA EJECUTIVA AMIGABLE Y ELEGANTE CON ANCHO COMPLETO ─── */}
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 24, paddingBottom: 16, borderBottom: '1px solid rgba(212,175,106,0.15)' }}>
         <div>
-          <h1 style={{ margin: 0, color: '#d4af6a', fontSize: '20px', fontWeight: '800', letterSpacing: '1px' }}>
-            💎 HB Jewelry — OpenClaw Dashboard
+          <div style={{ display: 'inline-flex', alignItems: 'center', gap: 6, padding: '4px 14px', borderRadius: 20, background: 'rgba(212,175,106,0.08)', border: '1px solid rgba(212,175,106,0.2)', color: '#d4af6a', fontSize: 11, fontWeight: 700, letterSpacing: 0.5 }}>
+            <span>✨ OPENCLAW ENTERPRISE v2026.7.1</span>
+            <span style={{ color: '#4ade80', fontSize: 10 }}>● ONLINE</span>
+          </div>
+
+          <h1 style={{ fontSize: 26, fontWeight: 800, color: '#d4af6a', margin: '8px 0 4px 0', letterSpacing: '-0.3px' }}>
+            Plataforma Integral de Control Corporativo
           </h1>
-          <span style={{ color: '#555', fontSize: '12px' }}>Auto-refresh 10s · Cloud-First Protocol · Firebase Live</span>
+          <p style={{ fontSize: 13, color: '#a09d99', margin: 0 }}>
+            Ecosistema de gestión unificado para Directivas, CEO, Gerencia, Supervisores y Operaciones
+          </p>
         </div>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '6px', background: 'rgba(52,211,153,0.1)', border: '1px solid rgba(52,211,153,0.3)', borderRadius: '20px', padding: '6px 14px' }}>
-          <div style={{ width: '8px', height: '8px', borderRadius: '50%', background: '#34d399', animation: 'pulse-dot 2s infinite' }} />
-          <span style={{ color: '#34d399', fontSize: '12px', fontWeight: '700' }}>{IS_PROD ? 'Firebase Live' : 'Dev Local'}</span>
+
+        <div style={{ display: 'flex', gap: 12, alignItems: 'center' }}>
+          <button onClick={() => setShowPlayer(true)} style={{
+            background: 'linear-gradient(135deg, rgba(132,204,22,0.15), rgba(132,204,22,0.05))',
+            border: '1px solid rgba(132,204,22,0.4)',
+            borderRadius: 10, padding: '8px 16px',
+            color: '#84cc16', fontSize: 12, fontWeight: 700,
+            cursor: 'pointer', fontFamily: 'inherit',
+            display: 'flex', alignItems: 'center', gap: 6
+          }}>
+            <span style={{ fontSize: 14 }}>▶</span>
+            <div>
+              <div>Mi Voz Real · B-Roll</div>
+              <div style={{ color: 'rgba(132,204,22,0.6)', fontSize: 9 }}>78s · FM 48kHz · EBU R128</div>
+            </div>
+          </button>
+          <div style={{ background: 'rgba(22,20,18,0.8)', border: '1px solid rgba(212,175,106,0.2)', padding: '8px 16px', borderRadius: 10, textAlign: 'right', backdropFilter: 'blur(10px)' }}>
+            <div style={{ color: '#d4af6a', fontSize: 12, fontWeight: 700 }}>HB Jewelry 18k</div>
+            <div style={{ color: '#a09d99', fontSize: 10 }}>Firebase CDN</div>
+          </div>
+          <div style={{ background: 'rgba(22,20,18,0.8)', border: '1px solid rgba(212,175,106,0.2)', padding: '8px 16px', borderRadius: 10, textAlign: 'right', backdropFilter: 'blur(10px)' }}>
+            <div style={{ color: '#d4af6a', fontSize: 12, fontWeight: 700 }}>Drive 5TB</div>
+            <div style={{ color: '#a09d99', fontSize: 10 }}>Rclone Sync</div>
+          </div>
         </div>
       </div>
 
-      {/* ── AVATAR SHELF ── */}
-      <div style={{ marginBottom: '24px' }}>
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '12px', paddingBottom: '8px', borderBottom: '1px solid rgba(212,175,106,0.18)' }}>
-          <span style={{ color: '#d4af6a', fontWeight: '700', fontSize: '14px' }}>👤 Avatar Personal — Guillermo AI</span>
-          <span style={{ color: '#555', fontSize: '12px' }}>6 variantes · Cuerpo completo · Blue Jeans · Logo HB</span>
-        </div>
+      {/* ─── INTENT COMMANDER — COMANDOS AUTÓNOMOS DE 1 LÍNEA ─── */}
+      <IntentBar />
 
-        {/* Grid 3×2 con scroll — altura fija exactamente 2 filas */}
+      {/* ─── SECCIÓN 1: 2 BOTONES MAESTROS (AMPLIADOS A PANTALLA COMPLETA) ─── */}
+      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 20, marginBottom: 28 }}>
+        
+        {/* BOTÓN 1: DESPLEGAR AVATARES 3D */}
         <div
-          id="avatar-shelf-scroll"
+          onClick={() => handleNav('avatar')}
+          onMouseEnter={() => setHoverAvatars(true)}
+          onMouseLeave={() => setHoverAvatars(false)}
           style={{
-            display: 'grid',
-            gridTemplateColumns: 'repeat(3, 1fr)',
-            gap: '14px',
-            maxHeight: '580px',
-            overflowY: 'auto',
-            overflowX: 'hidden',
-            paddingRight: '4px',
-            scrollbarWidth: 'thin',
-            scrollbarColor: '#d4af6a44 #111',
+            cursor: 'pointer',
+            padding: '22px 28px',
+            borderRadius: 14,
+            background: hoverAvatars ? 'rgba(212,175,106,0.12)' : 'rgba(22,20,18,0.7)',
+            border: hoverAvatars ? '1px solid #d4af6a' : '1px solid rgba(212,175,106,0.2)',
+            transition: 'all 0.25s ease',
+            transform: hoverAvatars ? 'translateY(-2px)' : 'none',
+            boxShadow: hoverAvatars ? '0 12px 30px rgba(212,175,106,0.18)' : '0 4px 15px rgba(0,0,0,0.4)',
+            display: 'flex',
+            alignItems: 'center',
+            justify: 'space-between',
+            backdropFilter: 'blur(12px)'
           }}
         >
-          <style>{`
-            #avatar-shelf-scroll::-webkit-scrollbar { width: 5px; }
-            #avatar-shelf-scroll::-webkit-scrollbar-track { background: #0a0a0a; border-radius: 3px; }
-            #avatar-shelf-scroll::-webkit-scrollbar-thumb { background: #d4af6a55; border-radius: 3px; }
-            #avatar-shelf-scroll::-webkit-scrollbar-thumb:hover { background: #d4af6a; }
+          <div style={{ display: 'flex', alignItems: 'center', gap: 18 }}>
+            <div style={{ width: 54, height: 54, borderRadius: 14, background: 'rgba(212,175,106,0.15)', border: '1px solid rgba(212,175,106,0.3)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 26 }}>
+              👤
+            </div>
+            <div>
+              <div style={{ color: '#6b6866', fontSize: 10, fontWeight: 700, letterSpacing: 1, textTransform: 'uppercase', marginBottom: 2 }}>
+                Parrilla 6 Columnas
+              </div>
+              <div style={{ color: '#d4af6a', fontSize: 18, fontWeight: 800 }}>
+                Avatares Digitales 3D (Guillermo AI)
+              </div>
+              <div style={{ color: '#a09d99', fontSize: 12, marginTop: 2 }}>
+                8 modelos de Guillermo AI con imágenes PNG e Inspector 3D.
+              </div>
+            </div>
+          </div>
 
-            @keyframes float-slow { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-8px)} }
-            @keyframes subtle-sway { 0%,100%{transform:rotate(0deg) translateY(0)} 25%{transform:rotate(0.8deg) translateY(-3px)} 75%{transform:rotate(-0.8deg) translateY(3px)} }
-            @keyframes pulse-glow { 0%,100%{filter:brightness(1) saturate(0.3)} 50%{filter:brightness(1.18) saturate(0.5)} }
-            @keyframes energetic-bob { 0%,100%{transform:translateY(0) scale(1)} 33%{transform:translateY(-7px) scale(1.015)} 66%{transform:translateY(3px) scale(0.99)} }
-            @keyframes point-gesture { 0%,100%{transform:translateX(0) rotate(0deg)} 40%{transform:translateX(4px) rotate(0.5deg)} 80%{transform:translateX(-2px) rotate(-0.3deg)} }
-            @keyframes welcome-glow { 0%,100%{transform:scale(1) translateY(0)} 50%{transform:scale(1.025) translateY(-5px)} }
-            @keyframes fadeInModal { from{opacity:0;transform:scale(0.96)} to{opacity:1;transform:scale(1)} }
-            @keyframes pulse-dot { 0%,100%{opacity:1} 50%{opacity:0.4} }
-            @keyframes spin { to{transform:rotate(360deg)} }
-          `}</style>
-
-          {AVATAR_VARIANTS.map(variant => (
-            <AvatarCard key={variant.id} variant={variant} onSelect={openAvatar} />
-          ))}
+          <div style={{
+            padding: '8px 20px',
+            borderRadius: 24,
+            background: hoverAvatars ? '#d4af6a' : 'rgba(212,175,106,0.15)',
+            border: '1px solid #d4af6a',
+            color: hoverAvatars ? '#000' : '#d4af6a',
+            fontWeight: 800,
+            fontSize: 12,
+            transition: 'all 0.25s ease',
+            display: 'flex',
+            alignItems: 'center',
+            gap: 6
+          }}>
+            <span>DESPLEGAR</span>
+            <span>➔</span>
+          </div>
         </div>
+
+        {/* BOTÓN 2: VER VIDEOS Y ESTUDIO */}
+        <div
+          onClick={() => handleNav('marketing')}
+          onMouseEnter={() => setHoverVideos(true)}
+          onMouseLeave={() => setHoverVideos(false)}
+          style={{
+            cursor: 'pointer',
+            padding: '22px 28px',
+            borderRadius: 14,
+            background: hoverVideos ? 'rgba(212,175,106,0.12)' : 'rgba(22,20,18,0.7)',
+            border: hoverVideos ? '1px solid #d4af6a' : '1px solid rgba(212,175,106,0.2)',
+            transition: 'all 0.25s ease',
+            transform: hoverVideos ? 'translateY(-2px)' : 'none',
+            boxShadow: hoverVideos ? '0 12px 30px rgba(212,175,106,0.18)' : '0 4px 15px rgba(0,0,0,0.4)',
+            display: 'flex',
+            alignItems: 'center',
+            justify: 'space-between',
+            backdropFilter: 'blur(12px)'
+          }}
+        >
+          <div style={{ display: 'flex', alignItems: 'center', gap: 18 }}>
+            <div style={{ width: 54, height: 54, borderRadius: 14, background: 'rgba(212,175,106,0.15)', border: '1px solid rgba(212,175,106,0.3)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 26 }}>
+              🎬
+            </div>
+            <div>
+              <div style={{ color: '#6b6866', fontSize: 10, fontWeight: 700, letterSpacing: 1, textTransform: 'uppercase', marginBottom: 2 }}>
+                8 Videos MP4 Únicos
+              </div>
+              <div style={{ color: '#d4af6a', fontSize: 18, fontWeight: 800 }}>
+                Estudio de Video & Cursos de Automatización
+              </div>
+              <div style={{ color: '#a09d99', fontSize: 12, marginTop: 2 }}>
+                Videos con voz FM 48kHz y subtítulos bilingües en 2 columnas.
+              </div>
+            </div>
+          </div>
+
+          <div style={{
+            padding: '8px 20px',
+            borderRadius: 24,
+            background: hoverVideos ? '#d4af6a' : 'rgba(212,175,106,0.15)',
+            border: '1px solid #d4af6a',
+            color: hoverVideos ? '#000' : '#d4af6a',
+            fontWeight: 800,
+            fontSize: 12,
+            transition: 'all 0.25s ease',
+            display: 'flex',
+            alignItems: 'center',
+            gap: 6
+          }}>
+            <span>DESPLEGAR</span>
+            <span>➔</span>
+          </div>
+        </div>
+
       </div>
 
-      {/* ── VIDEO SHELF ── */}
-      <div style={{ marginBottom: '24px' }}>
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '12px', paddingBottom: '8px', borderBottom: '1px solid rgba(212,175,106,0.18)' }}>
-          <span style={{ color: '#d4af6a', fontWeight: '700', fontSize: '14px' }}>🎬 Videos HB Jewelry</span>
-          <button
-            onClick={() => onNavigate && onNavigate('avatar-meet')}
-            style={{ background: 'none', border: '1px solid rgba(212,175,106,0.4)', color: '#d4af6a', padding: '4px 12px', borderRadius: '20px', fontSize: '11px', cursor: 'pointer', fontWeight: '600' }}
-          >
-            Ver todos →
-          </button>
+      {/* ─── SECCIÓN 2: CONTROL OPERATIVO POR DIVISIONES (GRID DE 3 COLUMNAS A PANTALLA COMPLETA) ─── */}
+      <div style={{ marginBottom: 28 }}>
+        <div style={{ color: '#d4af6a', fontSize: 11, fontWeight: 800, letterSpacing: 1.2, textTransform: 'uppercase', marginBottom: 14, display: 'flex', alignItems: 'center', gap: 8 }}>
+          <span>⚡ LA AUTONOMÍA — CONTROL OPERATIVO POR DIVISIONES</span>
+          <div style={{ flexGrow: 1, height: 1, background: 'rgba(212,175,106,0.15)' }} />
         </div>
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(220px, 1fr))', gap: '14px' }}>
-          {DASH_VIDEOS.map(v => (
-            <DashVideoCard key={v.id} video={v} onPlay={openVideo} />
-          ))}
-        </div>
-      </div>
 
-      {/* ── STATS PANEL ── */}
-      <div style={{ marginBottom: '16px' }}>
-        <div style={{ color: '#d4af6a', fontWeight: '700', fontSize: '14px', marginBottom: '12px', paddingBottom: '8px', borderBottom: '1px solid rgba(212,175,106,0.18)' }}>
-          📊 Estado del Sistema
-        </div>
-        <StatsPanel stack={stack} tareas={tareas} gateway={gateway} />
-      </div>
-
-      {/* ── ACCIONES RÁPIDAS ── */}
-      <div style={{ display: 'flex', gap: '10px', flexWrap: 'wrap', paddingTop: '16px', borderTop: '1px solid rgba(255,255,255,0.05)' }}>
-        {[
-          { label: '➕ Producto', section: 'productos' },
-          { label: '📦 Pedidos', section: 'ordenes' },
-          { label: '📈 Reportes', section: 'reportes' },
-          { label: '🤖 Avatar AI', section: 'avatar-meet' },
-          { label: '📊 Analytics', section: 'analytics' },
-        ].map(({ label, section }) => (
-          <button
-            key={section}
-            onClick={() => onNavigate && onNavigate(section)}
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 18 }}>
+          
+          {/* TARJETA 1: AGENTES AUTÓNOMOS */}
+          <div
+            onClick={() => handleNav('chat')}
+            onMouseEnter={() => setHoverCard('chat')}
+            onMouseLeave={() => setHoverCard(null)}
             style={{
-              background: 'rgba(212,175,106,0.08)', border: '1px solid rgba(212,175,106,0.3)',
-              color: '#d4af6a', padding: '8px 16px', borderRadius: '8px',
-              fontSize: '12px', fontWeight: '600', cursor: 'pointer',
-              transition: 'all 0.2s',
+              cursor: 'pointer',
+              padding: 20,
+              borderRadius: 12,
+              background: hoverCard === 'chat' ? 'rgba(212,175,106,0.08)' : 'rgba(22,20,18,0.6)',
+              border: hoverCard === 'chat' ? '1px solid #d4af6a' : '1px solid rgba(212,175,106,0.15)',
+              transition: 'all 0.2s ease',
+              backdropFilter: 'blur(8px)'
             }}
-            onMouseEnter={e => { e.target.style.background = 'rgba(212,175,106,0.18)'; e.target.style.transform = 'translateY(-1px)' }}
-            onMouseLeave={e => { e.target.style.background = 'rgba(212,175,106,0.08)'; e.target.style.transform = 'none' }}
           >
-            {label}
-          </button>
-        ))}
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 10 }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+                <span style={{ fontSize: 18 }}>🤖</span>
+                <strong style={{ color: '#f0ede8', fontSize: 14 }}>Agentes Autónomos & RAG</strong>
+              </div>
+              <span style={{ padding: '2px 8px', borderRadius: 10, background: 'rgba(212,175,106,0.15)', color: '#d4af6a', fontSize: 10, fontWeight: 700 }}>5 Activos</span>
+            </div>
+            <p style={{ color: '#a09d99', fontSize: 11, margin: '0 0 12px 0', lineHeight: 1.4 }}>
+              Memoria vectorial RAG 768-dim en Firestore y 7 Hacks de Claude 4.6.
+            </p>
+            <div style={{ color: '#d4af6a', fontSize: 11, fontWeight: 700, display: 'flex', alignItems: 'center', gap: 4 }}>
+              <span>GESTIONAR AGENTES</span>
+              <span>➔</span>
+            </div>
+          </div>
+
+          {/* TARJETA 2: AUDITORÍA Y TRAZABILIDAD */}
+          <div
+            onClick={() => handleNav('auditoria')}
+            onMouseEnter={() => setHoverCard('audit')}
+            onMouseLeave={() => setHoverCard(null)}
+            style={{
+              cursor: 'pointer',
+              padding: 20,
+              borderRadius: 12,
+              background: hoverCard === 'audit' ? 'rgba(212,175,106,0.08)' : 'rgba(22,20,18,0.6)',
+              border: hoverCard === 'audit' ? '1px solid #d4af6a' : '1px solid rgba(212,175,106,0.15)',
+              transition: 'all 0.2s ease',
+              backdropFilter: 'blur(8px)'
+            }}
+          >
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 10 }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+                <span style={{ fontSize: 18 }}>🔒</span>
+                <strong style={{ color: '#f0ede8', fontSize: 14 }}>Auditoría & Trazabilidad</strong>
+              </div>
+              <span style={{ padding: '2px 8px', borderRadius: 10, background: 'rgba(74,222,128,0.15)', color: '#4ade80', fontSize: 10, fontWeight: 700 }}>100% Ok</span>
+            </div>
+            <p style={{ color: '#a09d99', fontSize: 11, margin: '0 0 12px 0', lineHeight: 1.4 }}>
+              Registro de logs en tiempo real y protocolo de blindaje AGENTS.md.
+            </p>
+            <div style={{ color: '#d4af6a', fontSize: 11, fontWeight: 700, display: 'flex', alignItems: 'center', gap: 4 }}>
+              <span>VER AUDITORÍA</span>
+              <span>➔</span>
+            </div>
+          </div>
+
+          {/* TARJETA 3: TAREAS & PIPELINE DAG */}
+          <div
+            onClick={() => handleNav('pipeline')}
+            onMouseEnter={() => setHoverCard('pipe')}
+            onMouseLeave={() => setHoverCard(null)}
+            style={{
+              cursor: 'pointer',
+              padding: 20,
+              borderRadius: 12,
+              background: hoverCard === 'pipe' ? 'rgba(212,175,106,0.08)' : 'rgba(22,20,18,0.6)',
+              border: hoverCard === 'pipe' ? '1px solid #d4af6a' : '1px solid rgba(212,175,106,0.15)',
+              transition: 'all 0.2s ease',
+              backdropFilter: 'blur(8px)'
+            }}
+          >
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 10 }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+                <span style={{ fontSize: 18 }}>⚡</span>
+                <strong style={{ color: '#f0ede8', fontSize: 14 }}>Tareas & Pipeline DAG</strong>
+              </div>
+              <span style={{ padding: '2px 8px', borderRadius: 10, background: 'rgba(212,175,106,0.15)', color: '#d4af6a', fontSize: 10, fontWeight: 700 }}>Drive 5TB</span>
+            </div>
+            <p style={{ color: '#a09d99', fontSize: 11, margin: '0 0 12px 0', lineHeight: 1.4 }}>
+              Estado de tareas en segundo plano, respaldos Rclone y despliegue continuo.
+            </p>
+            <div style={{ color: '#d4af6a', fontSize: 11, fontWeight: 700, display: 'flex', alignItems: 'center', gap: 4 }}>
+              <span>MONITOR PIPELINE</span>
+              <span>➔</span>
+            </div>
+          </div>
+
+          {/* TARJETA 4: VENTAS & CATÁLOGO 18K */}
+          <div
+            onClick={() => handleNav('ventas')}
+            onMouseEnter={() => setHoverCard('ventas')}
+            onMouseLeave={() => setHoverCard(null)}
+            style={{
+              cursor: 'pointer',
+              padding: 20,
+              borderRadius: 12,
+              background: hoverCard === 'ventas' ? 'rgba(212,175,106,0.08)' : 'rgba(22,20,18,0.6)',
+              border: hoverCard === 'ventas' ? '1px solid #d4af6a' : '1px solid rgba(212,175,106,0.15)',
+              transition: 'all 0.2s ease',
+              backdropFilter: 'blur(8px)'
+            }}
+          >
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 10 }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+                <span style={{ fontSize: 18 }}>🛍️</span>
+                <strong style={{ color: '#f0ede8', fontSize: 14 }}>Ventas & Catálogo 18k</strong>
+              </div>
+              <span style={{ padding: '2px 8px', borderRadius: 10, background: 'rgba(74,222,128,0.15)', color: '#4ade80', fontSize: 10, fontWeight: 700 }}>Activo</span>
+            </div>
+            <p style={{ color: '#a09d99', fontSize: 11, margin: '0 0 12px 0', lineHeight: 1.4 }}>
+              Joyería Fina HB Jewelry con checkout automático y cierre a WhatsApp $0.
+            </p>
+            <div style={{ color: '#d4af6a', fontSize: 11, fontWeight: 700, display: 'flex', alignItems: 'center', gap: 4 }}>
+              <span>IR A VENTAS</span>
+              <span>➔</span>
+            </div>
+          </div>
+
+          {/* TARJETA 5: WHATSAPP BUSINESS ($0) */}
+          <div
+            onClick={() => handleNav('whatsapp')}
+            onMouseEnter={() => setHoverCard('wa')}
+            onMouseLeave={() => setHoverCard(null)}
+            style={{
+              cursor: 'pointer',
+              padding: 20,
+              borderRadius: 12,
+              background: hoverCard === 'wa' ? 'rgba(212,175,106,0.08)' : 'rgba(22,20,18,0.6)',
+              border: hoverCard === 'wa' ? '1px solid #d4af6a' : '1px solid rgba(212,175,106,0.15)',
+              transition: 'all 0.2s ease',
+              backdropFilter: 'blur(8px)'
+            }}
+          >
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 10 }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+                <span style={{ fontSize: 18 }}>💬</span>
+                <strong style={{ color: '#f0ede8', fontSize: 14 }}>WhatsApp Business ($0)</strong>
+              </div>
+              <span style={{ padding: '2px 8px', borderRadius: 10, background: 'rgba(212,175,106,0.15)', color: '#d4af6a', fontSize: 10, fontWeight: 700 }}>Puerto 3001</span>
+            </div>
+            <p style={{ color: '#a09d99', fontSize: 11, margin: '0 0 12px 0', lineHeight: 1.4 }}>
+              Canal de comunicación 24/7 sin costo por mensaje ni intermediarios.
+            </p>
+            <div style={{ color: '#d4af6a', fontSize: 11, fontWeight: 700, display: 'flex', alignItems: 'center', gap: 4 }}>
+              <span>CANAL WHATSAPP</span>
+              <span>➔</span>
+            </div>
+          </div>
+
+          {/* TARJETA 6: CONTROL DE INVENTARIO */}
+          <div
+            onClick={() => handleNav('inventario')}
+            onMouseEnter={() => setHoverCard('inv')}
+            onMouseLeave={() => setHoverCard(null)}
+            style={{
+              cursor: 'pointer',
+              padding: 20,
+              borderRadius: 12,
+              background: hoverCard === 'inv' ? 'rgba(212,175,106,0.08)' : 'rgba(22,20,18,0.6)',
+              border: hoverCard === 'inv' ? '1px solid #d4af6a' : '1px solid rgba(212,175,106,0.15)',
+              transition: 'all 0.2s ease',
+              backdropFilter: 'blur(8px)'
+            }}
+          >
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 10 }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+                <span style={{ fontSize: 18 }}>📦</span>
+                <strong style={{ color: '#f0ede8', fontSize: 14 }}>Control de Inventario</strong>
+              </div>
+              <span style={{ padding: '2px 8px', borderRadius: 10, background: 'rgba(74,222,128,0.15)', color: '#4ade80', fontSize: 10, fontWeight: 700 }}>Stock Ok</span>
+            </div>
+            <p style={{ color: '#a09d99', fontSize: 11, margin: '0 0 12px 0', lineHeight: 1.4 }}>
+              Gestión de stock de piezas finas en oro 18k e indicadores de inventario.
+            </p>
+            <div style={{ color: '#d4af6a', fontSize: 11, fontWeight: 700, display: 'flex', alignItems: 'center', gap: 4 }}>
+              <span>VER INVENTARIO</span>
+              <span>➔</span>
+            </div>
+          </div>
+
+        </div>
       </div>
 
-      {/* ── MODALES ── */}
-      {avatarModal && <AvatarModal variant={avatarModal} onClose={closeAvatar} />}
-      {videoModal && <DashVideoModal video={videoModal} onClose={closeVideo} />}
+      {/* ─── SECCIÓN 3: REGISTROS DE ACTIVIDAD RECIENTE (TABLA A PANTALLA COMPLETA) ─── */}
+      <div style={{ background: 'rgba(22,20,18,0.6)', border: '1px solid rgba(212,175,106,0.15)', borderRadius: 14, padding: 20, backdropFilter: 'blur(10px)' }}>
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 16 }}>
+          <div style={{ color: '#d4af6a', fontSize: 11, fontWeight: 800, letterSpacing: 1.2, textTransform: 'uppercase', display: 'flex', alignItems: 'center', gap: 8 }}>
+            <span>📌 ACCIONES RECIENTES & DEPLOYS DIRECTOS</span>
+          </div>
+          
+          {/* BOTONES PILL DORADOS LIVIANOS Y AMIGABLES */}
+          <div style={{ display: 'flex', gap: 10 }}>
+            <button onClick={() => handleNav('productos')} style={{ cursor: 'pointer', background: 'rgba(212,175,106,0.1)', border: '1px solid #d4af6a', color: '#d4af6a', padding: '6px 14px', borderRadius: 20, fontSize: 11, fontWeight: 700, transition: 'all 0.2s ease' }}>
+              ➕ Agregar Producto
+            </button>
+            <button onClick={() => handleNav('ordenes')} style={{ cursor: 'pointer', background: 'rgba(212,175,106,0.1)', border: '1px solid #d4af6a', color: '#d4af6a', padding: '6px 14px', borderRadius: 20, fontSize: 11, fontWeight: 700, transition: 'all 0.2s ease' }}>
+              📦 Ver Pedidos
+            </button>
+            <button onClick={() => handleNav('reportes')} style={{ cursor: 'pointer', background: 'rgba(212,175,106,0.1)', border: '1px solid #d4af6a', color: '#d4af6a', padding: '6px 14px', borderRadius: 20, fontSize: 11, fontWeight: 700, transition: 'all 0.2s ease' }}>
+              📊 Reportes Financieros
+            </button>
+            <button onClick={() => handleNav('pipeline')} style={{ cursor: 'pointer', background: 'rgba(212,175,106,0.2)', border: '1px solid #d4af6a', color: '#d4af6a', padding: '6px 14px', borderRadius: 20, fontSize: 11, fontWeight: 800, transition: 'all 0.2s ease' }}>
+              ⚡ Ejecutar Pipeline
+            </button>
+          </div>
+        </div>
+
+        <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 12 }}>
+          <thead>
+            <tr style={{ borderBottom: '1px solid rgba(212,175,106,0.15)', color: '#6b6866', textAlign: 'left' }}>
+              <th style={{ padding: '8px 12px', width: '160px' }}>TIMESTAMP</th>
+              <th style={{ padding: '8px 12px' }}>EVENTO CORPORATIVO</th>
+              <th style={{ padding: '8px 12px', width: '180px' }}>DIVISIÓN</th>
+              <th style={{ padding: '8px 12px', width: '110px' }}>ESTADO</th>
+            </tr>
+          </thead>
+          <tbody>
+            {RECENT_ACTIVITIES.map((act, idx) => (
+              <tr key={idx} style={{ borderBottom: '1px solid rgba(255,255,255,0.03)', color: '#c0bcb8' }}>
+                <td style={{ padding: '10px 12px', color: '#d4af6a', fontWeight: 600 }}>{act.timestamp}</td>
+                <td style={{ padding: '10px 12px' }}>{act.evento}</td>
+                <td style={{ padding: '10px 12px', color: '#a09d99' }}>{act.division}</td>
+                <td style={{ padding: '10px 12px' }}>
+                  <span style={{ padding: '2px 8px', borderRadius: 10, background: 'rgba(74,222,128,0.12)', color: '#4ade80', fontSize: 10, fontWeight: 700 }}>
+                    {act.estado}
+                  </span>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+
     </div>
-  )
+  );
 }

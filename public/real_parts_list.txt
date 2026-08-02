@@ -1,0 +1,8 @@
+file 'C:\openclaw\hb-jewelry\public\real_part_0.mp3'
+file 'C:\openclaw\hb-jewelry\public\pause_08s.mp3'
+file 'C:\openclaw\hb-jewelry\public\real_part_1.mp3'
+file 'C:\openclaw\hb-jewelry\public\pause_08s.mp3'
+file 'C:\openclaw\hb-jewelry\public\real_part_2.mp3'
+file 'C:\openclaw\hb-jewelry\public\pause_08s.mp3'
+file 'C:\openclaw\hb-jewelry\public\real_part_3.mp3'
+file 'C:\openclaw\hb-jewelry\public\pause_08s.mp3'

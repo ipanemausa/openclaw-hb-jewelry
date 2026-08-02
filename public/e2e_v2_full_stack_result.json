@@ -1,0 +1,81 @@
+{
+  "system": "HB Jewelry OpenClaw E2E V2 Full Stack Suite v2026.7.1",
+  "timestamp": 1785604655.6608925,
+  "date": "2026-08-01 13:17:35",
+  "passed": true,
+  "total_checks": 9,
+  "trace": [
+    {
+      "check": "Firebase Main Web App",
+      "url": "https://hb-jewelry-cloud-2026-2dff9.web.app/",
+      "status": "PASSED",
+      "http_code": 200,
+      "latency_ms": 133.41,
+      "error": null
+    },
+    {
+      "check": "SEO robots.txt",
+      "url": "https://hb-jewelry-cloud-2026-2dff9.web.app/robots.txt",
+      "status": "PASSED",
+      "http_code": 200,
+      "latency_ms": 273.76,
+      "error": null
+    },
+    {
+      "check": "SEO sitemap.xml",
+      "url": "https://hb-jewelry-cloud-2026-2dff9.web.app/sitemap.xml",
+      "status": "PASSED",
+      "http_code": 200,
+      "latency_ms": 69.66,
+      "error": null
+    },
+    {
+      "check": "Avatar Master Asset PNG",
+      "url": "https://hb-jewelry-cloud-2026-2dff9.web.app/avatar_pro.png",
+      "status": "PASSED",
+      "http_code": 200,
+      "latency_ms": 127.83,
+      "error": null
+    },
+    {
+      "check": "Avatar Desk Mic Asset PNG",
+      "url": "https://hb-jewelry-cloud-2026-2dff9.web.app/avatars/desk_mic.png",
+      "status": "PASSED",
+      "http_code": 200,
+      "latency_ms": 416.71,
+      "error": null
+    },
+    {
+      "check": "Video Q&A MP4 Asset",
+      "url": "https://hb-jewelry-cloud-2026-2dff9.web.app/output_avatar_english_7qa.mp4",
+      "status": "PASSED",
+      "http_code": 200,
+      "latency_ms": 316.17,
+      "error": null
+    },
+    {
+      "check": "Video Showcase MP4 Asset",
+      "url": "https://hb-jewelry-cloud-2026-2dff9.web.app/final_showcase.mp4",
+      "status": "PASSED",
+      "http_code": 200,
+      "latency_ms": 518.83,
+      "error": null
+    },
+    {
+      "check": "RAG Vector Status Manifest",
+      "url": "https://hb-jewelry-cloud-2026-2dff9.web.app/sadtalker_veo_rag_status.json",
+      "status": "PASSED",
+      "http_code": 200,
+      "latency_ms": 289.3,
+      "error": null
+    },
+    {
+      "check": "DAG Execution Result Manifest",
+      "url": "https://hb-jewelry-cloud-2026-2dff9.web.app/dag_pipeline_execution_result.json",
+      "status": "PASSED",
+      "http_code": 200,
+      "latency_ms": 196.76,
+      "error": null
+    }
+  ]
+}

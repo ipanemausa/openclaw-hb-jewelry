@@ -5,6 +5,10 @@ const GATEWAY_URL      = process.env.VITE_GATEWAY_URL      || 'http://localhost:
 const ORCHESTRATOR_URL = process.env.VITE_ORCHESTRATOR_URL || 'http://localhost:8090'
 
 export default defineConfig({
+  base: '/',
+  define: {
+    IS_PROD: 'window.location.hostname !== "localhost"'
+  },
   plugins: [react()],
   server: {
     proxy: {
@@ -26,6 +30,10 @@ export default defineConfig({
       },
       '/dashboard': {
         target: GATEWAY_URL,
+        changeOrigin: true
+      },
+      '/api/hb': {
+        target: 'http://localhost:3001',
         changeOrigin: true
       },
       '/api': {

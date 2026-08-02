@@ -1,0 +1,68 @@
+{
+  "version": "2026.7.1",
+  "video": "vectorizacion_15min_educativo",
+  "total_duration": 900,
+  "voice": "Guillermo Real Voice — FM Broadcast 48kHz EBU R128",
+  "events": [
+    {
+      "start_time": 15,
+      "end_time": 35,
+      "label": "📐 Coordenadas XYZ — Espacio 3D"
+    },
+    {
+      "start_time": 60,
+      "end_time": 80,
+      "label": "🔢 768 Dimensiones — text-embedding-004"
+    },
+    {
+      "start_time": 140,
+      "end_time": 165,
+      "label": "📊 Vector: [0.12, -0.87, 0.34 ... × 768]"
+    },
+    {
+      "start_time": 200,
+      "end_time": 225,
+      "label": "📐 Distancia Coseno — Ángulo entre vectores"
+    },
+    {
+      "start_time": 280,
+      "end_time": 305,
+      "label": "🎯 Distancia A↔B: 0.04 | A↔C: 0.91"
+    },
+    {
+      "start_time": 360,
+      "end_time": 385,
+      "label": "🎙️ Voz: 48,000 muestras/s — Teorema Nyquist"
+    },
+    {
+      "start_time": 420,
+      "end_time": 450,
+      "label": "📻 EBU R128 — -14 LUFS Estándar YouTube"
+    },
+    {
+      "start_time": 480,
+      "end_time": 510,
+      "label": "🖼️ 1080p = 6,220,800 valores RGB"
+    },
+    {
+      "start_time": 560,
+      "end_time": 590,
+      "label": "💾 RAG: 97.66% ahorro | 474KB → 11.5KB"
+    },
+    {
+      "start_time": 640,
+      "end_time": 670,
+      "label": "🤖 OpenClaw: AUDITA → vector → acción"
+    },
+    {
+      "start_time": 720,
+      "end_time": 750,
+      "label": "🚀 Tu empresa vectorizada en Firestore 768D"
+    },
+    {
+      "start_time": 820,
+      "end_time": 860,
+      "label": "⚡ Automatización guiada por geometría"
+    }
+  ]
+}

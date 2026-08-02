@@ -1,0 +1,18 @@
+{
+  "video_id": "hb_video_1785299343",
+  "user_intent": "Crear video de venta de anillo de oro 18k para cliente USA",
+  "product_name": "Anillo de Oro 18k Colección HB Master",
+  "rag_vector_dim": 768,
+  "indexed_formulas_queried": [
+    102,
+    215,
+    340
+  ],
+  "extracted_knowledge": {
+    "purity": "Oro 18k Certificado (750 milésimas)",
+    "warranty": "Garantía de por vida y certificado digital NFT",
+    "price_usd": 1450.0,
+    "shipping": "Envío asegurado 24h Express a USA / PR"
+  },
+  "timestamp": "2026-07-29 00:29:04"
+}

@@ -1,0 +1,6 @@
+file 'C:\openclaw\hb-jewelry\public\target_TECH_AUTOMATION_0.mp3'
+file 'C:\openclaw\hb-jewelry\public\pause_08s.mp3'
+file 'C:\openclaw\hb-jewelry\public\target_TECH_AUTOMATION_1.mp3'
+file 'C:\openclaw\hb-jewelry\public\pause_08s.mp3'
+file 'C:\openclaw\hb-jewelry\public\target_TECH_AUTOMATION_2.mp3'
+file 'C:\openclaw\hb-jewelry\public\pause_08s.mp3'
