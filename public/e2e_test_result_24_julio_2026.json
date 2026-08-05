@@ -7,47 +7,47 @@
     {
       "step": "1. User Input (Voice)",
       "detail": "Audio capturado vía WhisperFlow $0 Mic ('Show me the 14k Cuban chain price').",
-      "timestamp": 1785956225.9758136
+      "timestamp": 1785964282.3264205
     },
     {
       "step": "2. Speech-to-Text",
       "detail": "Transcripción: 'Show me the 14k Cuban chain price'",
-      "timestamp": 1785956225.9758217
+      "timestamp": 1785964282.3264465
     },
     {
       "step": "3. Agent Runtime",
       "detail": "Agente 'guillermo_ai' activado. Contexto previo recuperado.",
-      "timestamp": 1785956225.9758275
+      "timestamp": 1785964282.3264642
     },
     {
       "step": "4. Event Bus",
       "detail": "Evento 'USER_QUERY_RECEIVED' emitido a todos los motores.",
-      "timestamp": 1785956225.9758317
+      "timestamp": 1785964282.326476
     },
     {
       "step": "5. Knowledge Engine (RAG)",
       "detail": "Consulta vectorial en Firestore (768-dim). Coincidencia: Cadena Cubana Oro 14k -> $1,850 USD (Sub-100ms).",
-      "timestamp": 1785956225.9758358
+      "timestamp": 1785964282.326486
     },
     {
       "step": "6. Response Generated",
       "detail": "Respuesta: 'The 14k solid gold Cuban chain is $1,850 USD with lifetime warranty.'",
-      "timestamp": 1785956225.9758413
+      "timestamp": 1785964282.3265014
     },
     {
       "step": "7. Media Engine",
       "detail": "Generado output manifest y storyboard vertical 9:16.",
-      "timestamp": 1785956225.9758453
+      "timestamp": 1785964282.3265152
     },
     {
       "step": "8. Text-to-Speech",
       "detail": "Síntesis de voz Gemini Live 24kHz bilingüe con Audio Ducking -20dB.",
-      "timestamp": 1785956225.9758492
+      "timestamp": 1785964282.3265276
     },
     {
       "step": "9. Digital Human Avatar",
       "detail": "Video renderizado y listo en reproductor /output_avatar_english_7qa.mp4",
-      "timestamp": 1785956225.9758537
+      "timestamp": 1785964282.3265393
     }
   ]
 }
