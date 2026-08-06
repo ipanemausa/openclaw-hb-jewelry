@@ -1,0 +1,44 @@
+[
+  {
+    "chapter": 1,
+    "title": "Introducción y Diagnóstico: La Revolución de la IA Empresarial",
+    "dur_target_sec": 300,
+    "broll_type": "pip_software",
+    "text": "Bienvenidos a esta Masterclass de Automatización Empresarial e Inteligencia Artificial B2B. Hoy analizaremos cómo las empresas líderes están transformando su infraestructura operativa mediante agentes autónomos, reduciendo costos a cero y escalando sus ventas sin depender de plataformas de pago costosas."
+  },
+  {
+    "chapter": 2,
+    "title": "El Patrón de las 4 Áreas Universales en la Empresa",
+    "dur_target_sec": 300,
+    "broll_type": "avatar_studio",
+    "text": "Toda empresa u organización se rige por cuatro pilares fundamentales: Atracción y Marketing, Conversión y Ventas, Operaciones y Logística, y Finanzas con Inteligencia de Negocio. Cuando conectamos un cerebro RAG de 768 dimensiones a estas cuatro áreas, la empresa opera con una precisión sin precedentes."
+  },
+  {
+    "chapter": 3,
+    "title": "Demostración en Vivo: Canal WhatsApp Business $0 Intermediarios",
+    "dur_target_sec": 300,
+    "broll_type": "full_screen_demo",
+    "text": "Observemos la pantalla en tiempo real. Este agente autónomo atiende solicitudes entrantes de clientes, responde preguntas técnicas utilizando la base de conocimiento vectorial de la empresa y califica prospectos sin intervención humana y sin pagar comisiones por mensaje."
+  },
+  {
+    "chapter": 4,
+    "title": "Fábrica Audiovisual AI: Micro-Lotes de 15 Frames sin Costo de API",
+    "dur_target_sec": 300,
+    "broll_type": "pip_software",
+    "text": "El verdadero secreto de la escala audiovisual es la resiliencia en la producción. Mediante la técnica de micro-lotes de 15 fotogramas con restauración facial GFPGAN en alta definición, generamos contenidos largos para YouTube y redes sociales utilizando modelos neuronales 100% locales en tu propio hardware."
+  },
+  {
+    "chapter": 5,
+    "title": "Arquitectura de Agentes Autonomous & Docker MCP Toolkit",
+    "dur_target_sec": 300,
+    "broll_type": "diagram_infographic",
+    "text": "Mediante el protocolo Model Context Protocol de Anthropic y Docker Desktop MCP Toolkit, nuestros agentes se conectan directamente con bases de datos PostgreSQL, bases vectoriales Qdrant y repositorios de GitHub. La información fluye de manera bidireccional sin copiar y pegar."
+  },
+  {
+    "chapter": 6,
+    "title": "Plan de Acción e Implementación Inmediata para Tu Empresa",
+    "dur_target_sec": 300,
+    "broll_type": "avatar_studio",
+    "text": "El futuro de las empresas no consiste en usar chats manuales, sino en construir un ecosistema de agentes autónomos interconectados. Toda esta arquitectura está lista, probada y respaldada en la nube para ser clonada e implementada en cualquier organización."
+  }
+]

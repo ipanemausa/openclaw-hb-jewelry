@@ -1,0 +1,13 @@
+{
+  "avatar_position": "left",
+  "avatar_shape": "circular_gold_border",
+  "background": "cinematic_space_landscape_loop",
+  "subtitles_style": {
+    "mode": "line_by_line",
+    "active_word_highlight": true,
+    "previous_word_fade": true,
+    "font_size": 28,
+    "active_color": "#FFD700",
+    "inactive_color": "#FFFFFF"
+  }
+}
