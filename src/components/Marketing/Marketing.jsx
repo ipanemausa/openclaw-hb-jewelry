@@ -7,6 +7,15 @@ const asset = (f) => (IS_PROD ? `${window.location.origin}/${f}?v=20260801_NO_CA
 // ─── CATÁLOGO DE VIDEOS REALES (POSTERS DIVERSIFICADOS DE LA COLECCIÓN DE AVATARES) ───
 const VIDEO_CATALOG = [
   {
+    id: 'guillermo-940f-master',
+    src: asset('videos/guillermo_940f_master.mp4'),
+    poster: asset('avatars/dorado.png'),
+    title: '🏆 Video Maestro 940 Frames: Guillermo AI Studio',
+    tag: 'MASTER 940F (31s)',
+    dur: '0:31',
+    description: 'Video maestro de 940 frames procesado en micro-lotes de 15 frames con audio EBU R128 y subtítulos Word-Karaoke.'
+  },
+  {
     id: 'talk-grow-educational',
     src: asset('videos/talk_grow_format/real_talk_grow_educational.mp4'),
     poster: asset('avatars/negro.png'),
