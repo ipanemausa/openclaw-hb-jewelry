@@ -8,12 +8,12 @@ const asset = (f) => (IS_PROD ? `${window.location.origin}/${f}?v=20260801_NO_CA
 const VIDEO_CATALOG = [
   {
     id: 'jack-ma-style-b2b-master',
-    src: asset('videos/jack_ma_style/jack_ma_style_b2b_master.mp4'),
+    src: asset('videos/jack_ma_style/jack_ma_b2b_full_master.mp4'),
     poster: asset('avatars/negro.png'),
-    title: '🌌 Jack Ma Style: Inteligencia Artificial B2B Cinemática',
-    tag: 'JACK MA STYLE (15s)',
+    title: '🌌 Jack Ma Style (4 Capas Quemadas en MP4): IA B2B Cinemática',
+    tag: 'JACK MA FULL (15s)',
     dur: '0:15',
-    description: 'Fondo espacial/paisaje cinemático HD con avatar en la esquina izquierda y subtítulos dinámicos palabra por palabra.'
+    description: 'Video 1080p con TODAS LAS CAPAS QUEMADAS EN EL ARCHIVO MP4: Fondo + Avatar a la izquierda + Subtítulos Karaoke dorados activados por palabra.'
   },
   {
     id: 'agencia-b2b-intro',
