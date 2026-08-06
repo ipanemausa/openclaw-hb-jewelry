@@ -7,6 +7,15 @@ const asset = (f) => (IS_PROD ? `${window.location.origin}/${f}?v=20260801_NO_CA
 // ─── CATÁLOGO DE VIDEOS REALES (POSTERS DIVERSIFICADOS DE LA COLECCIÓN DE AVATARES) ───
 const VIDEO_CATALOG = [
   {
+    id: 'jack-ma-style-b2b-master',
+    src: asset('videos/jack_ma_style/jack_ma_style_b2b_master.mp4'),
+    poster: asset('avatars/negro.png'),
+    title: '🌌 Jack Ma Style: Inteligencia Artificial B2B Cinemática',
+    tag: 'JACK MA STYLE (15s)',
+    dur: '0:15',
+    description: 'Fondo espacial/paisaje cinemático HD con avatar en la esquina izquierda y subtítulos dinámicos palabra por palabra.'
+  },
+  {
     id: 'agencia-b2b-intro',
     src: asset('videos/guillermo_940f_master.mp4'),
     poster: asset('avatars/dorado.png'),
