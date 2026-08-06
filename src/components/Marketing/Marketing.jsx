@@ -7,6 +7,33 @@ const asset = (f) => (IS_PROD ? `${window.location.origin}/${f}?v=20260801_NO_CA
 // ─── CATÁLOGO DE VIDEOS REALES (POSTERS DIVERSIFICADOS DE LA COLECCIÓN DE AVATARES) ───
 const VIDEO_CATALOG = [
   {
+    id: 'agencia-b2b-intro',
+    src: asset('videos/guillermo_940f_master.mp4'),
+    poster: asset('avatars/dorado.png'),
+    title: '🚀 Agencia IA: Asesoría & Automatización Empresarial',
+    tag: 'AGENCIA B2B (15s)',
+    dur: '0:15',
+    description: 'Presentación ejecutiva de automatización de procesos, WhatsApp $0 y agentes autónomos para empresas.'
+  },
+  {
+    id: 'real-estate-ai',
+    src: asset('videos/adaptive_targets/video_broll_catalog_18k.mp4'),
+    poster: asset('avatars/blanco.png'),
+    title: '🏢 Real Estate IA: Citas 24/7 & Calificación de Leads',
+    tag: 'REAL ESTATE IA',
+    dur: '0:20',
+    description: 'Demostración de agentes de Inteligencia Artificial para agencias inmobiliarias y venta de propiedades.'
+  },
+  {
+    id: 'servicios-profesionales-ai',
+    src: asset('videos/guillermo_940f_fast_master.mp4'),
+    poster: asset('avatars/azul.png'),
+    title: '💼 Servicios Profesionales & Salud: Agendas Autónomas',
+    tag: 'SERVICIOS & SALUD',
+    dur: '0:18',
+    description: 'Automatización de agendamiento de citas, filtro de clientes y atención médica/legal 24/7.'
+  },
+  {
     id: 'guillermo-940f-master',
     src: asset('videos/guillermo_940f_master.mp4'),
     poster: asset('avatars/dorado.png'),
