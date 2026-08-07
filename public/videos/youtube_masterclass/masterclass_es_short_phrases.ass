@@ -1,5 +1,5 @@
 [Script Info]
-Title: Short Phrase Teleprompter Text (es)
+Title: Short Phrase Teleprompter Text Right Side (es)
 ScriptType: v4.00+
 WrapStyle: 0
 ScaledBorderAndShadow: yes
@@ -9,37 +9,37 @@ PlayResY: 1080
 
 [V4+ Styles]
 Format: Name, Fontname, Fontsize, PrimaryColour, SecondaryColour, OutlineColour, BackColour, Bold, Italic, Underline, StrikeOut, ScaleX, ScaleY, Spacing, Angle, BorderStyle, Outline, Shadow, Alignment, MarginL, MarginR, MarginV, Encoding
-Style: ShortPhraseStyle,Montserrat,54,&H00FFFFFF,&H0000D7FF,&H00000000,&H90000000,-1,0,0,0,100,100,2,0,1,3,2,7,740,80,320,1
+Style: ShortPhraseStyle,Montserrat,54,&H00FFFFFF,&H0000D7FF,&H00000000,&H90000000,-1,0,0,0,100,100,2,0,1,3,2,5,100,100,100,1
 
 [Events]
 Format: Layer, Start, End, Style, Name, MarginL, MarginR, MarginV, Effect, Text
-Dialogue: 0,0:00:00.80,0:00:03.30,ShortPhraseStyle,,0,0,0,,{\k50}Bienvenidos {\k50}a {\k50}este {\k50}análisis {\k50}estratégico.
-Dialogue: 0,0:00:03.60,0:00:06.10,ShortPhraseStyle,,0,0,0,,{\k41}Examinaremos {\k41}la {\k41}infraestructura {\k41}de {\k41}IA {\k41}B2B.
-Dialogue: 0,0:00:06.40,0:00:08.90,ShortPhraseStyle,,0,0,0,,{\k50}Sustituimos {\k50}licencias {\k50}de {\k50}pago {\k50}mensual
-Dialogue: 0,0:00:09.20,0:00:11.70,ShortPhraseStyle,,0,0,0,,{\k41}por {\k41}agentes {\k41}autónomos {\k41}en {\k41}tu {\k41}servidor.
-Dialogue: 0,0:00:12.00,0:00:14.50,ShortPhraseStyle,,0,0,0,,{\k41}Cero {\k41}fricción {\k41}operativa {\k41}y {\k41}máximo {\k41}control.
-Dialogue: 0,0:00:14.80,0:00:17.30,ShortPhraseStyle,,0,0,0,,{\k41}Toda {\k41}empresa {\k41}sólida {\k41}tiene {\k41}4 {\k41}pilares:
-Dialogue: 0,0:00:17.60,0:00:20.10,ShortPhraseStyle,,0,0,0,,{\k50}Marketing, {\k50}Ventas, {\k50}Logística {\k50}y {\k50}Finanzas.
-Dialogue: 0,0:00:20.40,0:00:22.90,ShortPhraseStyle,,0,0,0,,{\k35}Conectamos {\k35}un {\k35}motor {\k35}RAG {\k35}de {\k35}768 {\k35}dimensiones
-Dialogue: 0,0:00:23.20,0:00:25.70,ShortPhraseStyle,,0,0,0,,{\k50}para {\k50}responder {\k50}con {\k50}datos {\k50}exactos
-Dialogue: 0,0:00:26.00,0:00:28.50,ShortPhraseStyle,,0,0,0,,{\k83}sin {\k83}inventar {\k83}información.
-Dialogue: 0,0:00:28.80,0:00:31.30,ShortPhraseStyle,,0,0,0,,{\k41}Con {\k41}la {\k41}actualización {\k41}reciente {\k41}de {\k41}Meta,
-Dialogue: 0,0:00:31.60,0:00:34.10,ShortPhraseStyle,,0,0,0,,{\k41}tus {\k41}clientes {\k41}usan {\k41}tu {\k41}Alias {\k41}empresarial.
-Dialogue: 0,0:00:34.40,0:00:36.90,ShortPhraseStyle,,0,0,0,,{\k50}Protegemos {\k50}el {\k50}número {\k50}telefónico {\k50}privado
-Dialogue: 0,0:00:37.20,0:00:39.70,ShortPhraseStyle,,0,0,0,,{\k50}mediante {\k50}el {\k50}token {\k50}encriptado {\k50}BSUID.
-Dialogue: 0,0:00:40.00,0:00:42.50,ShortPhraseStyle,,0,0,0,,{\k35}Respuestas {\k35}automáticas {\k35}24/7 {\k35}sin {\k35}costo {\k35}por {\k35}mensaje.
-Dialogue: 0,0:00:42.80,0:00:45.30,ShortPhraseStyle,,0,0,0,,{\k35}Procesamos {\k35}video {\k35}en {\k35}micro-lotes {\k35}de {\k35}15 {\k35}frames
-Dialogue: 0,0:00:45.60,0:00:48.10,ShortPhraseStyle,,0,0,0,,{\k50}asistidos {\k50}por {\k50}restauración {\k50}facial {\k50}GFPGAN.
-Dialogue: 0,0:00:48.40,0:00:50.90,ShortPhraseStyle,,0,0,0,,{\k41}Generamos {\k41}avatares {\k41}HD {\k41}con {\k41}voz {\k41}48kHz
-Dialogue: 0,0:00:51.20,0:00:53.70,ShortPhraseStyle,,0,0,0,,{\k41}sin {\k41}pagar {\k41}APIs {\k41}en {\k41}la {\k41}nube
-Dialogue: 0,0:00:54.00,0:00:56.50,ShortPhraseStyle,,0,0,0,,{\k41}ni {\k41}costos {\k41}por {\k41}minuto {\k41}de {\k41}render.
-Dialogue: 0,0:00:56.80,0:00:59.30,ShortPhraseStyle,,0,0,0,,{\k41}Con {\k41}el {\k41}estándar {\k41}Model {\k41}Context {\k41}Protocol
-Dialogue: 0,0:00:59.60,0:01:02.10,ShortPhraseStyle,,0,0,0,,{\k50}y {\k50}Docker {\k50}Desktop {\k50}MCP {\k50}Toolkit,
-Dialogue: 0,0:01:02.40,0:01:04.90,ShortPhraseStyle,,0,0,0,,{\k50}nuestros {\k50}agentes {\k50}leen {\k50}bases {\k50}PostgreSQL
-Dialogue: 0,0:01:05.20,0:01:07.70,ShortPhraseStyle,,0,0,0,,{\k41}y {\k41}repositorios {\k41}GitHub {\k41}de {\k41}forma {\k41}segura
-Dialogue: 0,0:01:08.00,0:01:10.50,ShortPhraseStyle,,0,0,0,,{\k62}dentro {\k62}de {\k62}contenedores {\k62}aislados.
-Dialogue: 0,0:01:10.80,0:01:13.30,ShortPhraseStyle,,0,0,0,,{\k35}El {\k35}futuro {\k35}es {\k35}desplegar {\k35}tu {\k35}propio {\k35}ecosistema.
-Dialogue: 0,0:01:13.60,0:01:16.10,ShortPhraseStyle,,0,0,0,,{\k50}Toda {\k50}la {\k50}infraestructura {\k50}está {\k50}blindada
-Dialogue: 0,0:01:16.40,0:01:18.90,ShortPhraseStyle,,0,0,0,,{\k62}bajo {\k62}la {\k62}versión {\k62}v2.0-stable,
-Dialogue: 0,0:01:19.20,0:01:21.70,ShortPhraseStyle,,0,0,0,,{\k35}respaldada {\k35}en {\k35}GitHub {\k35}y {\k35}Google {\k35}Drive {\k35}5TB,
-Dialogue: 0,0:01:22.00,0:01:24.50,ShortPhraseStyle,,0,0,0,,{\k62}lista {\k62}para {\k62}despliegue {\k62}inmediato.
+Dialogue: 0,0:00:00.80,0:00:03.30,ShortPhraseStyle,,0,0,0,,{\pos(1280,360)}{\k50}Bienvenidos {\k50}a {\k50}este {\k50}análisis {\k50}estratégico.
+Dialogue: 0,0:00:03.60,0:00:06.10,ShortPhraseStyle,,0,0,0,,{\pos(1280,360)}{\k41}Examinaremos {\k41}la {\k41}infraestructura {\k41}de {\k41}IA {\k41}B2B.
+Dialogue: 0,0:00:06.40,0:00:08.90,ShortPhraseStyle,,0,0,0,,{\pos(1280,360)}{\k50}Sustituimos {\k50}licencias {\k50}de {\k50}pago {\k50}mensual
+Dialogue: 0,0:00:09.20,0:00:11.70,ShortPhraseStyle,,0,0,0,,{\pos(1280,360)}{\k41}por {\k41}agentes {\k41}autónomos {\k41}en {\k41}tu {\k41}servidor.
+Dialogue: 0,0:00:12.00,0:00:14.50,ShortPhraseStyle,,0,0,0,,{\pos(1280,360)}{\k41}Cero {\k41}fricción {\k41}operativa {\k41}y {\k41}máximo {\k41}control.
+Dialogue: 0,0:00:14.80,0:00:17.30,ShortPhraseStyle,,0,0,0,,{\pos(1280,360)}{\k41}Toda {\k41}empresa {\k41}sólida {\k41}tiene {\k41}4 {\k41}pilares:
+Dialogue: 0,0:00:17.60,0:00:20.10,ShortPhraseStyle,,0,0,0,,{\pos(1280,360)}{\k50}Marketing, {\k50}Ventas, {\k50}Logística {\k50}y {\k50}Finanzas.
+Dialogue: 0,0:00:20.40,0:00:22.90,ShortPhraseStyle,,0,0,0,,{\pos(1280,360)}{\k35}Conectamos {\k35}un {\k35}motor {\k35}RAG {\k35}de {\k35}768 {\k35}dimensiones
+Dialogue: 0,0:00:23.20,0:00:25.70,ShortPhraseStyle,,0,0,0,,{\pos(1280,360)}{\k50}para {\k50}responder {\k50}con {\k50}datos {\k50}exactos
+Dialogue: 0,0:00:26.00,0:00:28.50,ShortPhraseStyle,,0,0,0,,{\pos(1280,360)}{\k83}sin {\k83}inventar {\k83}información.
+Dialogue: 0,0:00:28.80,0:00:31.30,ShortPhraseStyle,,0,0,0,,{\pos(1280,360)}{\k41}Con {\k41}la {\k41}actualización {\k41}reciente {\k41}de {\k41}Meta,
+Dialogue: 0,0:00:31.60,0:00:34.10,ShortPhraseStyle,,0,0,0,,{\pos(1280,360)}{\k41}tus {\k41}clientes {\k41}usan {\k41}tu {\k41}Alias {\k41}empresarial.
+Dialogue: 0,0:00:34.40,0:00:36.90,ShortPhraseStyle,,0,0,0,,{\pos(1280,360)}{\k50}Protegemos {\k50}el {\k50}número {\k50}telefónico {\k50}privado
+Dialogue: 0,0:00:37.20,0:00:39.70,ShortPhraseStyle,,0,0,0,,{\pos(1280,360)}{\k50}mediante {\k50}el {\k50}token {\k50}encriptado {\k50}BSUID.
+Dialogue: 0,0:00:40.00,0:00:42.50,ShortPhraseStyle,,0,0,0,,{\pos(1280,360)}{\k35}Respuestas {\k35}automáticas {\k35}24/7 {\k35}sin {\k35}costo {\k35}por {\k35}mensaje.
+Dialogue: 0,0:00:42.80,0:00:45.30,ShortPhraseStyle,,0,0,0,,{\pos(1280,360)}{\k35}Procesamos {\k35}video {\k35}en {\k35}micro-lotes {\k35}de {\k35}15 {\k35}frames
+Dialogue: 0,0:00:45.60,0:00:48.10,ShortPhraseStyle,,0,0,0,,{\pos(1280,360)}{\k50}asistidos {\k50}por {\k50}restauración {\k50}facial {\k50}GFPGAN.
+Dialogue: 0,0:00:48.40,0:00:50.90,ShortPhraseStyle,,0,0,0,,{\pos(1280,360)}{\k41}Generamos {\k41}avatares {\k41}HD {\k41}con {\k41}voz {\k41}48kHz
+Dialogue: 0,0:00:51.20,0:00:53.70,ShortPhraseStyle,,0,0,0,,{\pos(1280,360)}{\k41}sin {\k41}pagar {\k41}APIs {\k41}en {\k41}la {\k41}nube
+Dialogue: 0,0:00:54.00,0:00:56.50,ShortPhraseStyle,,0,0,0,,{\pos(1280,360)}{\k41}ni {\k41}costos {\k41}por {\k41}minuto {\k41}de {\k41}render.
+Dialogue: 0,0:00:56.80,0:00:59.30,ShortPhraseStyle,,0,0,0,,{\pos(1280,360)}{\k41}Con {\k41}el {\k41}estándar {\k41}Model {\k41}Context {\k41}Protocol
+Dialogue: 0,0:00:59.60,0:01:02.10,ShortPhraseStyle,,0,0,0,,{\pos(1280,360)}{\k50}y {\k50}Docker {\k50}Desktop {\k50}MCP {\k50}Toolkit,
+Dialogue: 0,0:01:02.40,0:01:04.90,ShortPhraseStyle,,0,0,0,,{\pos(1280,360)}{\k50}nuestros {\k50}agentes {\k50}leen {\k50}bases {\k50}PostgreSQL
+Dialogue: 0,0:01:05.20,0:01:07.70,ShortPhraseStyle,,0,0,0,,{\pos(1280,360)}{\k41}y {\k41}repositorios {\k41}GitHub {\k41}de {\k41}forma {\k41}segura
+Dialogue: 0,0:01:08.00,0:01:10.50,ShortPhraseStyle,,0,0,0,,{\pos(1280,360)}{\k62}dentro {\k62}de {\k62}contenedores {\k62}aislados.
+Dialogue: 0,0:01:10.80,0:01:13.30,ShortPhraseStyle,,0,0,0,,{\pos(1280,360)}{\k35}El {\k35}futuro {\k35}es {\k35}desplegar {\k35}tu {\k35}propio {\k35}ecosistema.
+Dialogue: 0,0:01:13.60,0:01:16.10,ShortPhraseStyle,,0,0,0,,{\pos(1280,360)}{\k50}Toda {\k50}la {\k50}infraestructura {\k50}está {\k50}blindada
+Dialogue: 0,0:01:16.40,0:01:18.90,ShortPhraseStyle,,0,0,0,,{\pos(1280,360)}{\k62}bajo {\k62}la {\k62}versión {\k62}v2.0-stable,
+Dialogue: 0,0:01:19.20,0:01:21.70,ShortPhraseStyle,,0,0,0,,{\pos(1280,360)}{\k35}respaldada {\k35}en {\k35}GitHub {\k35}y {\k35}Google {\k35}Drive {\k35}5TB,
+Dialogue: 0,0:01:22.00,0:01:24.50,ShortPhraseStyle,,0,0,0,,{\pos(1280,360)}{\k62}lista {\k62}para {\k62}despliegue {\k62}inmediato.
