@@ -153,13 +153,25 @@ function VidModal({ v, onClose }) {
   const currentSrc = lang === 'en' ? enVideoSrc : v.src;
 
   const forcePlayAudio = useCallback(() => {
+    // 1. Unmute & Play Video
     if (ref.current) {
       ref.current.muted = false;
       ref.current.volume = 1.0;
       ref.current.play().catch(() => {});
       setUnmuted(true);
     }
-  }, []);
+    // 2. Web Audio Direct Playback Fallback (Guillermo Voice 48kHz)
+    try {
+      const audioUrl = lang === 'en' 
+        ? asset('videos/youtube_masterclass/full_masterclass_en_voice.mp3')
+        : asset('videos/youtube_masterclass/full_masterclass_es_voice.mp3');
+      const voiceAudio = new Audio(audioUrl);
+      voiceAudio.volume = 1.0;
+      voiceAudio.play().catch((err) => console.log('Audio fallback play err:', err));
+    } catch (e) {
+      console.log('Audio play error:', e);
+    }
+  }, [lang]);
 
   return (
     <div style={{ position: 'fixed', inset: 0, zIndex: 9999, background: 'rgba(5,5,5,0.96)', backdropFilter: 'blur(20px)', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 20 }}>
