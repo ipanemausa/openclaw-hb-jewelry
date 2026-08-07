@@ -1,5 +1,5 @@
 [Script Info]
-Title: Jack Ma Style Real Voice Karaoke
+Title: Jack Ma Style B2B Executive Script
 ScriptType: v4.00+
 WrapStyle: 0
 ScaledBorderAndShadow: yes
@@ -9,10 +9,10 @@ PlayResY: 1080
 
 [V4+ Styles]
 Format: Name, Fontname, Fontsize, PrimaryColour, SecondaryColour, OutlineColour, BackColour, Bold, Italic, Underline, StrikeOut, ScaleX, ScaleY, Spacing, Angle, BorderStyle, Outline, Shadow, Alignment, MarginL, MarginR, MarginV, Encoding
-Style: KaraokeStyle,Montserrat,88,&H00FFFFFF,&H0000D7FF,&H00000000,&H80000000,-1,0,0,0,100,100,2,0,1,4,3,6,720,80,180,1
+Style: KaraokeStyle,Montserrat,72,&H00FFFFFF,&H0000D7FF,&H00000000,&H80000000,-1,0,0,0,100,100,2,0,1,4,3,6,750,80,180,1
 
 [Events]
 Format: Layer, Start, End, Style, Name, MarginL, MarginR, MarginV, Effect, Text
-Dialogue: 0,0:00:00.50,0:00:06.00,KaraokeStyle,,0,0,0,,{\k40}Bienvenidos {\k30}a {\k40}nuestra {\k50}agencia {\k40}de {\k50}inteligencia {\k50}artificial {\k50}y {\k60}asesoría {\k60}empresarial.
-Dialogue: 0,0:00:06.20,0:00:12.00,KaraokeStyle,,0,0,0,,{\k50}Automatizamos {\k40}los {\k50}procesos {\k40}de {\k30}tu {\k50}empresa, {\k40}optimizamos {\k50}ventas {\k40}por {\k60}WhatsApp.
-Dialogue: 0,0:00:12.30,0:00:18.00,KaraokeStyle,,0,0,0,,{\k50}Y {\k50}reducimos {\k40}tus {\k50}costos {\k50}operativos {\k40}al {\k60}cien {\k50}por {\k60}ciento.
+Dialogue: 0,0:00:00.50,0:00:06.00,KaraokeStyle,,0,0,0,,{\k40}Bienvenidos {\k30}a {\k40}nuestra {\k50}plataforma {\k40}de {\k50}inteligencia {\k50}artificial {\k50}y {\k60}consultoría {\k60}empresarial {\k50}B2B.
+Dialogue: 0,0:00:06.20,0:00:12.50,KaraokeStyle,,0,0,0,,{\k50}Transformamos {\k40}y {\k50}automatizamos {\k40}los {\k30}procesos {\k50}operativos, {\k40}optimizando {\k50}ventas {\k40}por {\k60}WhatsApp {\k50}a {\k40}costo {\k50}cero.
+Dialogue: 0,0:00:12.80,0:00:18.50,KaraokeStyle,,0,0,0,,{\k50}Y {\k50}elevamos {\k40}la {\k50}productividad {\k50}y {\k40}rentabilidad {\k50}con {\k40}arquitectura {\k60}de {\k50}agentes {\k60}autónomos.
