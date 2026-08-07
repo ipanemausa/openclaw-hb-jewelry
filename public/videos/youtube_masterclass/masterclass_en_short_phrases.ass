@@ -1,0 +1,45 @@
+[Script Info]
+Title: Short Phrase Karaoke Subtitles (en)
+ScriptType: v4.00+
+WrapStyle: 0
+ScaledBorderAndShadow: yes
+YCbCr Matrix: TV.601
+PlayResX: 1920
+PlayResY: 1080
+
+[V4+ Styles]
+Format: Name, Fontname, Fontsize, PrimaryColour, SecondaryColour, OutlineColour, BackColour, Bold, Italic, Underline, StrikeOut, ScaleX, ScaleY, Spacing, Angle, BorderStyle, Outline, Shadow, Alignment, MarginL, MarginR, MarginV, Encoding
+Style: ShortPhraseStyle,Montserrat,46,&H00FFFFFF,&H0000D7FF,&H00000000,&H90000000,-1,0,0,0,100,100,2,0,1,3,2,2,100,100,110,1
+
+[Events]
+Format: Layer, Start, End, Style, Name, MarginL, MarginR, MarginV, Effect, Text
+Dialogue: 0,0:00:00.80,0:00:03.30,ShortPhraseStyle,,0,0,0,,{\k50}Welcome {\k50}to {\k50}this {\k50}executive {\k50}briefing.
+Dialogue: 0,0:00:03.60,0:00:06.10,ShortPhraseStyle,,0,0,0,,{\k50}We {\k50}analyze {\k50}B2B {\k50}AI {\k50}Infrastructure.
+Dialogue: 0,0:00:06.40,0:00:08.90,ShortPhraseStyle,,0,0,0,,{\k62}Replacing {\k62}legacy {\k62}SaaS {\k62}subscriptions
+Dialogue: 0,0:00:09.20,0:00:11.70,ShortPhraseStyle,,0,0,0,,{\k62}with {\k62}on-premise {\k62}autonomous {\k62}agents.
+Dialogue: 0,0:00:12.00,0:00:14.50,ShortPhraseStyle,,0,0,0,,{\k41}Zero {\k41}operational {\k41}friction {\k41}and {\k41}total {\k41}sovereignty.
+Dialogue: 0,0:00:14.80,0:00:17.30,ShortPhraseStyle,,0,0,0,,{\k41}Every {\k41}enterprise {\k41}rests {\k41}on {\k41}4 {\k41}pillars:
+Dialogue: 0,0:00:17.60,0:00:20.10,ShortPhraseStyle,,0,0,0,,{\k50}Marketing, {\k50}Sales, {\k50}Logistics, {\k50}and {\k50}Finance.
+Dialogue: 0,0:00:20.40,0:00:22.90,ShortPhraseStyle,,0,0,0,,{\k41}Connecting {\k41}a {\k41}768-dimensional {\k41}RAG {\k41}vector {\k41}engine
+Dialogue: 0,0:00:23.20,0:00:25.70,ShortPhraseStyle,,0,0,0,,{\k62}for {\k62}exact {\k62}data {\k62}retrieval
+Dialogue: 0,0:00:26.00,0:00:28.50,ShortPhraseStyle,,0,0,0,,{\k83}without {\k83}AI {\k83}hallucinations.
+Dialogue: 0,0:00:28.80,0:00:31.30,ShortPhraseStyle,,0,0,0,,{\k62}Leveraging {\k62}Meta's {\k62}newest {\k62}update,
+Dialogue: 0,0:00:31.60,0:00:34.10,ShortPhraseStyle,,0,0,0,,{\k41}clients {\k41}connect {\k41}via {\k41}your {\k41}business {\k41}handle.
+Dialogue: 0,0:00:34.40,0:00:36.90,ShortPhraseStyle,,0,0,0,,{\k50}We {\k50}safeguard {\k50}private {\k50}phone {\k50}numbers
+Dialogue: 0,0:00:37.20,0:00:39.70,ShortPhraseStyle,,0,0,0,,{\k62}using {\k62}encrypted {\k62}BSUID {\k62}tokens.
+Dialogue: 0,0:00:40.00,0:00:42.50,ShortPhraseStyle,,0,0,0,,{\k41}24/7 {\k41}automated {\k41}responses {\k41}at {\k41}zero {\k41}cost.
+Dialogue: 0,0:00:42.80,0:00:45.30,ShortPhraseStyle,,0,0,0,,{\k50}Processing {\k50}video {\k50}in {\k50}15-frame {\k50}micro-batches
+Dialogue: 0,0:00:45.60,0:00:48.10,ShortPhraseStyle,,0,0,0,,{\k50}enhanced {\k50}by {\k50}GFPGAN {\k50}facial {\k50}restoration.
+Dialogue: 0,0:00:48.40,0:00:50.90,ShortPhraseStyle,,0,0,0,,{\k41}Generating {\k41}1080p {\k41}avatars {\k41}with {\k41}48kHz {\k41}audio
+Dialogue: 0,0:00:51.20,0:00:53.70,ShortPhraseStyle,,0,0,0,,{\k62}bypassing {\k62}cloud {\k62}API {\k62}fees
+Dialogue: 0,0:00:54.00,0:00:56.50,ShortPhraseStyle,,0,0,0,,{\k50}and {\k50}zero {\k50}per-minute {\k50}rendering {\k50}costs.
+Dialogue: 0,0:00:56.80,0:00:59.30,ShortPhraseStyle,,0,0,0,,{\k62}Using {\k62}Model {\k62}Context {\k62}Protocol
+Dialogue: 0,0:00:59.60,0:01:02.10,ShortPhraseStyle,,0,0,0,,{\k50}and {\k50}Docker {\k50}Desktop {\k50}MCP {\k50}Toolkit,
+Dialogue: 0,0:01:02.40,0:01:04.90,ShortPhraseStyle,,0,0,0,,{\k62}agents {\k62}query {\k62}PostgreSQL {\k62}databases
+Dialogue: 0,0:01:05.20,0:01:07.70,ShortPhraseStyle,,0,0,0,,{\k62}and {\k62}GitHub {\k62}repositories {\k62}securely
+Dialogue: 0,0:01:08.00,0:01:10.50,ShortPhraseStyle,,0,0,0,,{\k62}within {\k62}isolated {\k62}container {\k62}environments.
+Dialogue: 0,0:01:10.80,0:01:13.30,ShortPhraseStyle,,0,0,0,,{\k35}The {\k35}future {\k35}lies {\k35}in {\k35}proprietary {\k35}AI {\k35}ecosystems.
+Dialogue: 0,0:01:13.60,0:01:16.10,ShortPhraseStyle,,0,0,0,,{\k50}Our {\k50}complete {\k50}architecture {\k50}is {\k50}locked
+Dialogue: 0,0:01:16.40,0:01:18.90,ShortPhraseStyle,,0,0,0,,{\k62}under {\k62}release {\k62}tag {\k62}v2.0-stable,
+Dialogue: 0,0:01:19.20,0:01:21.70,ShortPhraseStyle,,0,0,0,,{\k31}backed {\k31}up {\k31}to {\k31}GitHub {\k31}and {\k31}5TB {\k31}Google {\k31}Drive,
+Dialogue: 0,0:01:22.00,0:01:24.50,ShortPhraseStyle,,0,0,0,,{\k50}ready {\k50}for {\k50}turnkey {\k50}enterprise {\k50}deployment.

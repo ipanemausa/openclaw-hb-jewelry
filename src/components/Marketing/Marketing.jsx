@@ -8,16 +8,18 @@ const asset = (f) => (IS_PROD ? `${window.location.origin}/${f}?v=${STABLE_CACHE
 const VIDEO_CATALOG = [
   {
     id: 'jack-ma-style-b2b-master',
-    src: asset('videos/jack_ma_style/jack_ma_b2b_full_master.mp4'),
+    src: asset('videos/youtube_masterclass/youtube_30min_masterclass_full_1080p.mp4'),
+    src_en: asset('videos/youtube_masterclass/youtube_30min_masterclass_en_1080p.mp4'),
     poster: asset('thumbnails/thumb_jack_ma_b2b.png'),
     title: '🌌 Jack Ma Style: IA B2B Cinemática & WhatsApp $0',
     tag: 'JACK MA FULL (15s)',
     dur: '0:15',
-    description: 'Video 1080p cinemático con composición HD sin bordes: Fondo espacial, Avatar frontal y subtítulos Karaoke dorados.'
+    description: 'Video 1080p cinemático con composición HD sin bordes: Fondo espacial, Avatar frontal y subtítulos Karaoke cortos.'
   },
   {
     id: 'agencia-b2b-intro',
-    src: asset('videos/guillermo_940f_master.mp4'),
+    src: asset('videos/youtube_masterclass/youtube_30min_masterclass_full_1080p.mp4'),
+    src_en: asset('videos/youtube_masterclass/youtube_30min_masterclass_en_1080p.mp4'),
     poster: asset('thumbnails/thumb_agencia_ai.png'),
     title: '🚀 Agencia IA: Asesoría & Automatización Empresarial',
     tag: 'AGENCIA B2B (15s)',
@@ -26,7 +28,8 @@ const VIDEO_CATALOG = [
   },
   {
     id: 'real-estate-ai',
-    src: asset('videos/adaptive_targets/video_broll_catalog_18k.mp4'),
+    src: asset('videos/youtube_masterclass/youtube_30min_masterclass_full_1080p.mp4'),
+    src_en: asset('videos/youtube_masterclass/youtube_30min_masterclass_en_1080p.mp4'),
     poster: asset('thumbnails/thumb_real_estate_ai.png'),
     title: '🏢 Real Estate IA: Citas 24/7 & Calificación de Leads',
     tag: 'REAL ESTATE IA',
@@ -35,7 +38,8 @@ const VIDEO_CATALOG = [
   },
   {
     id: 'servicios-profesionales-ai',
-    src: asset('videos/guillermo_940f_fast_master.mp4'),
+    src: asset('videos/youtube_masterclass/youtube_30min_masterclass_full_1080p.mp4'),
+    src_en: asset('videos/youtube_masterclass/youtube_30min_masterclass_en_1080p.mp4'),
     poster: asset('thumbnails/thumb_servicios_salud.png'),
     title: '💼 Servicios Profesionales & Salud: Agendas Autónomas',
     tag: 'SERVICIOS & SALUD',
@@ -44,7 +48,8 @@ const VIDEO_CATALOG = [
   },
   {
     id: 'guillermo-940f-master',
-    src: asset('videos/guillermo_940f_master.mp4'),
+    src: asset('videos/youtube_masterclass/youtube_30min_masterclass_full_1080p.mp4'),
+    src_en: asset('videos/youtube_masterclass/youtube_30min_masterclass_en_1080p.mp4'),
     poster: asset('thumbnails/thumb_guillermo_940f.png'),
     title: '🏆 Video Maestro 940 Frames: Guillermo AI Studio',
     tag: 'MASTER 940F (31s)',
@@ -53,7 +58,8 @@ const VIDEO_CATALOG = [
   },
   {
     id: 'talk-grow-educational',
-    src: asset('videos/talk_grow_format/real_talk_grow_educational.mp4'),
+    src: asset('videos/youtube_masterclass/youtube_30min_masterclass_full_1080p.mp4'),
+    src_en: asset('videos/youtube_masterclass/youtube_30min_masterclass_en_1080p.mp4'),
     poster: asset('thumbnails/thumb_claude_7hacks.png'),
     title: 'Educativo 3D: 7 Hacks de Claude AI 4.6',
     tag: 'TALK-GROW 3D',
@@ -63,6 +69,7 @@ const VIDEO_CATALOG = [
   {
     id: 'yt-special-claude-master',
     src: asset('videos/youtube_masterclass/youtube_30min_masterclass_full_1080p.mp4'),
+    src_en: asset('videos/youtube_masterclass/youtube_30min_masterclass_en_1080p.mp4'),
     poster: asset('thumbnails/thumb_youtube_masterclass.png'),
     title: 'YouTube Master: Masterclass B2B 30 Minutos (54,000F)',
     tag: 'MASTERCLASS 30M',
@@ -71,7 +78,8 @@ const VIDEO_CATALOG = [
   },
   {
     id: 'podcast',
-    src: asset('hb_tutorial_avatar_v1.mp4'),
+    src: asset('videos/youtube_masterclass/youtube_30min_masterclass_full_1080p.mp4'),
+    src_en: asset('videos/youtube_masterclass/youtube_30min_masterclass_en_1080p.mp4'),
     poster: asset('thumbnails/thumb_podcast_ecosistema.png'),
     title: 'Podcast: Ecosistema Ilimitado AI',
     tag: 'PODCAST',
@@ -80,7 +88,8 @@ const VIDEO_CATALOG = [
   },
   {
     id: 'tutorial',
-    src: asset('hb_tutorial_narrado_v1.mp4'),
+    src: asset('videos/youtube_masterclass/youtube_30min_masterclass_full_1080p.mp4'),
+    src_en: asset('videos/youtube_masterclass/youtube_30min_masterclass_en_1080p.mp4'),
     poster: asset('thumbnails/thumb_tutorial_hb18k.png'),
     title: 'Tutorial: Manejo Completo de App HB 18k',
     tag: 'TUTORIAL APP',
@@ -89,7 +98,8 @@ const VIDEO_CATALOG = [
   },
   {
     id: 'qa-english',
-    src: asset('output_avatar_english_7qa.mp4'),
+    src: asset('videos/youtube_masterclass/youtube_30min_masterclass_full_1080p.mp4'),
+    src_en: asset('videos/youtube_masterclass/youtube_30min_masterclass_en_1080p.mp4'),
     poster: asset('thumbnails/thumb_qa_english_rag.png'),
     title: 'Técnico: Demo Arquitectura 7 Q&A RAG (English)',
     tag: 'TECHNICAL DEMO',
@@ -98,7 +108,8 @@ const VIDEO_CATALOG = [
   },
   {
     id: 'showcase-18k',
-    src: asset('final_showcase.mp4'),
+    src: asset('videos/youtube_masterclass/youtube_30min_masterclass_full_1080p.mp4'),
+    src_en: asset('videos/youtube_masterclass/youtube_30min_masterclass_en_1080p.mp4'),
     poster: asset('thumbnails/thumb_showcase_18k.png'),
     title: 'Showcase: Colección Joyería 18k & WhatsApp $0',
     tag: 'SHOWCASE 18K',
@@ -107,7 +118,8 @@ const VIDEO_CATALOG = [
   },
   {
     id: 'tiktok-viral',
-    src: asset('tiktok_showcase.mp4'),
+    src: asset('videos/youtube_masterclass/youtube_30min_masterclass_full_1080p.mp4'),
+    src_en: asset('videos/youtube_masterclass/youtube_30min_masterclass_en_1080p.mp4'),
     poster: asset('thumbnails/thumb_tiktok_viral.png'),
     title: 'TikTok Viral: Promocional Vertical 1080p',
     tag: 'TIKTOK 9:16',
