@@ -1,7 +1,11 @@
 import React, { useRef, useState, useEffect, useCallback } from 'react'
 import BRollOverlay from '../BRollOverlay/BRollOverlay'
 
-const VIDEO_SRC = '/videos/real_voice_master/guillermo_real_voice_master.mp4'
+const IS_PROD = typeof window !== 'undefined' && window.location.hostname !== 'localhost';
+const STABLE_CACHE_KEY = 'v20260806_stable';
+const asset = (f) => (IS_PROD ? `${window.location.origin}${f.startsWith('/') ? '' : '/'}${f}?v=${STABLE_CACHE_KEY}` : `${f.startsWith('/') ? '' : '/'}${f}?v=${STABLE_CACHE_KEY}`);
+
+const VIDEO_SRC = asset('videos/real_voice_master/guillermo_real_voice_master.mp4');
 
 export default function RealVoicePlayer({ onClose }) {
   const videoRef = useRef(null)

@@ -421,8 +421,22 @@ export default function AvatarMeet() {
               ◀
             </button>
 
-            {/* CONTENEDOR DE LA IMAGEN AUTÉNTICA DE GUILLERMO EN ALTA RESOLUCIÓN */}
+            {/* CONTENEDOR DE LA IMAGEN AUTÉNTICA DE GUILLERMO EN ALTA RESOLUCIÓN CON AURA DIFUMINADA Y MOVIMIENTO */}
             <div style={{ position: 'relative', height: '72vh', maxWidth: '60vw', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+              {/* AURA PÚRPURA Y DORADA DIFUMINADA CON MOVIMIENTO CONTINUO */}
+              <div 
+                style={{ 
+                  position: 'absolute', 
+                  width: 480, 
+                  height: 480, 
+                  borderRadius: '50%', 
+                  background: 'radial-gradient(circle, rgba(124,58,237,0.35) 0%, rgba(212,175,106,0.25) 45%, transparent 70%)', 
+                  filter: 'blur(50px)', 
+                  zIndex: 1,
+                  pointerEvents: 'none',
+                  animation: 'pulseAura 4s ease-in-out infinite alternate'
+                }} 
+              />
               <img
                 src={selectedAvatar.img}
                 alt={selectedAvatar.name}
@@ -430,6 +444,7 @@ export default function AvatarMeet() {
                   maxHeight: '100%',
                   maxWidth: '100%',
                   objectFit: 'contain',
+                  zIndex: 2,
                   filter: 'drop-shadow(0 16px 40px rgba(0,0,0,0.9))'
                 }}
               />

@@ -32,9 +32,13 @@ export default function VoiceCall() {
   const playAudioChunk = useCallback(async (audioData) => {
     try {
       if (!playbackCtxRef.current) {
-        playbackCtxRef.current = new AudioContext({ sampleRate: 24000 })
+        const AudioCtx = window.AudioContext || window.webkitAudioContext;
+        playbackCtxRef.current = new AudioCtx({ sampleRate: 24000 });
       }
-      const ctx = playbackCtxRef.current
+      const ctx = playbackCtxRef.current;
+      if (ctx.state === 'suspended') {
+        await ctx.resume();
+      }
       const buffer = ctx.createBuffer(1, audioData.byteLength / 2, 24000)
       const channelData = buffer.getChannelData(0)
       const int16 = new Int16Array(audioData)
@@ -46,7 +50,7 @@ export default function VoiceCall() {
       source.connect(ctx.destination)
       source.start()
     } catch (e) {
-      console.error('Audio playback error:', e)
+      console.warn('Audio playback info:', e)
     }
   }, [])
 
