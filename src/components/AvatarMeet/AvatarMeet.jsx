@@ -2,7 +2,8 @@ import React, { useState, useEffect } from 'react';
 
 // ─── CLOUD-FIRST & DYNAMIC CACHE BUSTING ──────────────────────────────────────
 const IS_PROD = typeof window !== 'undefined' && window.location.hostname !== 'localhost';
-const cloudAsset = (f) => (IS_PROD ? `${window.location.origin}/${f}?v=20260801_NO_CACHE_${Date.now()}` : `/${f}?v=20260801_NO_CACHE_${Date.now()}`);
+const STABLE_CACHE_KEY = 'v20260806_stable';
+const cloudAsset = (f) => (IS_PROD ? `${window.location.origin}/${f}?v=${STABLE_CACHE_KEY}` : `/${f}?v=${STABLE_CACHE_KEY}`);
 
 // ─── CATÁLOGO DE 10 AVATARES EXCLUSIVOS 3D (100% ROSTRO REAL DE GUILLERMO AI) ───
 const AVATAR_CATALOG = [

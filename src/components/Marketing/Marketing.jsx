@@ -1,8 +1,8 @@
 import React, { useState, useRef, useEffect, useCallback } from 'react';
 
-// ─── CLOUD-FIRST & DYNAMIC CACHE BUSTING ─────────────────────────────────────────────
 const IS_PROD = typeof window !== 'undefined' && window.location.hostname !== 'localhost';
-const asset = (f) => (IS_PROD ? `${window.location.origin}/${f}?v=20260801_NO_CACHE_${Date.now()}` : `/${f}?v=20260801_NO_CACHE_${Date.now()}`);
+const STABLE_CACHE_KEY = 'v20260806_stable';
+const asset = (f) => (IS_PROD ? `${window.location.origin}/${f}?v=${STABLE_CACHE_KEY}` : `/${f}?v=${STABLE_CACHE_KEY}`);
 
 // ─── CATÁLOGO DE VIDEOS REALES (POSTERS DIVERSIFICADOS DE LA COLECCIÓN DE AVATARES) ───
 const VIDEO_CATALOG = [
