@@ -132,9 +132,16 @@ const SUBTITLE_DATABASE = [
    ═══════════════════════════════════════════════════════════════════════════ */
 function VidModal({ v, onClose }) {
   const ref = useRef(null);
-  const [unmuted, setUnmuted] = useState(false);
+  const [lang, setLang] = useState('es'); // 'es' | 'en'
+  const [unmuted, setUnmuted] = useState(true);
 
-  const enableAudio = useCallback(() => {
+  // Audio sample paths
+  const esAudioSrc = asset('real_guillermo_voice.mp3');
+  const enVideoSrc = asset('output_avatar_english_7qa.mp4');
+
+  const currentSrc = lang === 'en' ? enVideoSrc : v.src;
+
+  const forcePlayAudio = useCallback(() => {
     if (ref.current) {
       ref.current.muted = false;
       ref.current.volume = 1.0;
@@ -143,43 +150,87 @@ function VidModal({ v, onClose }) {
     }
   }, []);
 
-  useEffect(() => {
-    enableAudio();
-  }, [enableAudio]);
-
   return (
     <div style={{ position: 'fixed', inset: 0, zIndex: 9999, background: 'rgba(5,5,5,0.96)', backdropFilter: 'blur(20px)', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 20 }}>
-      <div style={{ position: 'relative', width: '100%', maxWidth: 1040, background: '#161412', border: '1px solid rgba(212,175,106,0.25)', borderRadius: 12, overflow: 'hidden', boxShadow: '0 20px 60px rgba(0,0,0,0.9)' }}>
+      <div style={{ position: 'relative', width: '100%', maxWidth: 1040, background: '#161412', border: '1px solid rgba(212,175,106,0.3)', borderRadius: 12, overflow: 'hidden', boxShadow: '0 20px 60px rgba(0,0,0,0.9)' }}>
         
-        {/* CABECERA DEL MODAL */}
+        {/* CABECERA DEL MODAL + SELECTOR BILINGÜE (ESPAÑOL / ENGLISH) */}
         <div style={{ padding: '12px 18px', background: '#0f0f0f', borderBottom: '1px solid rgba(212,175,106,0.15)', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
             <span style={{ padding: '2px 8px', borderRadius: 4, background: 'rgba(212,175,106,0.12)', border: '1px solid rgba(212,175,106,0.25)', color: '#d4af6a', fontSize: 10, fontWeight: 700 }}>{v.tag}</span>
             <strong style={{ color: '#d4af6a', fontSize: 15 }}>{v.title}</strong>
           </div>
-          <button onClick={onClose} style={{ background: 'transparent', border: 'none', color: '#a09d99', fontSize: 20, cursor: 'pointer', padding: '0 8px' }}>✕</button>
-        </div>
 
-        {/* INDICADOR DE ARQUITECTURA DE 4 CAPAS */}
-        <div style={{ padding: '6px 18px', background: 'rgba(212,175,106,0.06)', borderBottom: '1px solid rgba(212,175,106,0.1)', display: 'flex', gap: 14, fontSize: 10, color: '#d4af6a' }}>
-          <span>🖼️ Capa 1: Fondo Desenfoque</span>
-          <span>👤 Capa 2: Avatar HD 3D</span>
-          <span>✍️ Capa 3: Teleprompter Paso a Paso (Calmado)</span>
-          <span>🎙️ Capa 4: Voz Real Guillermo 48kHz</span>
-        </div>
-
-        {/* OVERLAY BOTÓN DESBLOQUEO AUDIO SI NAVEGADOR BLOQUEA AUTO-PLAY */}
-        {!unmuted && (
-          <div onClick={enableAudio} style={{ position: 'absolute', inset: 0, zIndex: 20, background: 'rgba(0,0,0,0.85)', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', cursor: 'pointer' }}>
-            <div style={{ width: 64, height: 64, borderRadius: '50%', background: 'rgba(212,175,106,0.2)', border: '2px solid #d4af6a', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 28, color: '#d4af6a', marginBottom: 12 }}>🔊</div>
-            <div style={{ color: '#f0ede8', fontWeight: 800, fontSize: 15 }}>CLIC PARA ACTIVAR AUDIO ESTÉREO 48kHz HD</div>
-            <div style={{ color: '#d4af6a', fontSize: 12, marginTop: 4 }}>Voz Real Clonada de Guillermo AI · EBU R128 (-14 LUFS)</div>
+          {/* SELECTOR BILINGÜE DE IDIOMA */}
+          <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+            <button
+              onClick={() => setLang('es')}
+              style={{
+                padding: '5px 12px',
+                borderRadius: 20,
+                background: lang === 'es' ? '#d4af6a' : 'rgba(255,255,255,0.08)',
+                color: lang === 'es' ? '#000' : '#d4af6a',
+                border: '1px solid #d4af6a',
+                fontWeight: 800,
+                fontSize: 11,
+                cursor: 'pointer'
+              }}
+            >
+              🇪🇸 ESPAÑOL (Voz Guillermo)
+            </button>
+            <button
+              onClick={() => setLang('en')}
+              style={{
+                padding: '5px 12px',
+                borderRadius: 20,
+                background: lang === 'en' ? '#38bdf8' : 'rgba(255,255,255,0.08)',
+                color: lang === 'en' ? '#000' : '#38bdf8',
+                border: '1px solid #38bdf8',
+                fontWeight: 800,
+                fontSize: 11,
+                cursor: 'pointer'
+              }}
+            >
+              🇺🇸 ENGLISH (Guillermo Voice)
+            </button>
+            <button onClick={onClose} style={{ background: 'transparent', border: 'none', color: '#a09d99', fontSize: 20, cursor: 'pointer', padding: '0 8px' }}>✕</button>
           </div>
-        )}
+        </div>
+
+        {/* BARRA DE ACTIVACIÓN DE VOZ REAL 48kHz */}
+        <div style={{ padding: '8px 18px', background: 'rgba(132,204,22,0.12)', borderBottom: '1px solid rgba(132,204,22,0.3)', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+          <div style={{ color: '#84cc16', fontSize: 12, fontWeight: 700, display: 'flex', alignItems: 'center', gap: 8 }}>
+            <span>🔊 Voz Real FM 48kHz ({lang === 'es' ? 'Español' : 'English'})</span>
+            <span style={{ fontSize: 10, opacity: 0.8 }}>EBU R128 (-16 LUFS)</span>
+          </div>
+          <button
+            onClick={forcePlayAudio}
+            style={{
+              padding: '4px 14px',
+              borderRadius: 16,
+              background: '#84cc16',
+              color: '#000',
+              fontWeight: 800,
+              fontSize: 11,
+              border: 'none',
+              cursor: 'pointer'
+            }}
+          >
+            ▶️ ACTIVAR & REPRODUCIR VOZ REAL
+          </button>
+        </div>
 
         {/* CONTENEDOR PRINCIPAL DEL REPRODUCTOR CON RENDERIZADO 16:9 */}
         <div style={{ position: 'relative', width: '100%', aspectRatio: '16/9', maxHeight: '62vh', background: '#000', overflow: 'hidden' }}>
-          <video ref={ref} key={v.src} src={v.src} playsInline controls autoPlay style={{ width: '100%', height: '100%', objectFit: 'contain', background: '#000' }} />
+          <video 
+            ref={ref} 
+            key={currentSrc} 
+            src={currentSrc} 
+            playsInline 
+            controls 
+            autoPlay 
+            style={{ width: '100%', height: '100%', objectFit: 'contain', background: '#000' }} 
+          />
         </div>
 
         {/* ACTION BAR CON BOTÓN DE COMPRA DIRECTA EN WHATSAPP $0 */}
