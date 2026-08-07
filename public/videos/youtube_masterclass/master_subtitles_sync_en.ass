@@ -1,0 +1,32 @@
+[Script Info]
+Title: Masterclass Right Side Teleprompter (en)
+ScriptType: v4.00+
+WrapStyle: 0
+ScaledBorderAndShadow: yes
+YCbCr Matrix: TV.601
+PlayResX: 1920
+PlayResY: 1080
+
+[V4+ Styles]
+Format: Name, Fontname, Fontsize, PrimaryColour, SecondaryColour, OutlineColour, BackColour, Bold, Italic, Underline, StrikeOut, ScaleX, ScaleY, Spacing, Angle, BorderStyle, Outline, Shadow, Alignment, MarginL, MarginR, MarginV, Encoding
+Style: RightTeleprompterStyle,Montserrat,52,&H00FFFFFF,&H0000D7FF,&H00000000,&H90000000,-1,0,0,0,100,100,2,0,1,3,2,5,100,100,100,1
+
+[Events]
+Format: Layer, Start, End, Style, Name, MarginL, MarginR, MarginV, Effect, Text
+Dialogue: 0,0:00:00.80,0:00:04.00,RightTeleprompterStyle,,0,0,0,,{\pos(1280,380)}{\k35}Welcome {\k35}to {\k35}this {\k35}executive {\k35}analysis {\k35}of {\k35}B2B {\k35}Artificial {\k35}Intelligence.
+Dialogue: 0,0:00:04.40,0:00:07.60,RightTeleprompterStyle,,0,0,0,,{\pos(1280,380)}{\k40}Today {\k40}we {\k40}examine {\k40}replacing {\k40}legacy {\k40}SaaS {\k40}software {\k40}subscriptions.
+Dialogue: 0,0:00:08.00,0:00:11.20,RightTeleprompterStyle,,0,0,0,,{\pos(1280,380)}{\k35}We {\k35}deploy {\k35}autonomous {\k35}AI {\k35}agents {\k35}directly {\k35}on {\k35}your {\k35}infrastructure.
+Dialogue: 0,0:00:11.60,0:00:14.80,RightTeleprompterStyle,,0,0,0,,{\pos(1280,380)}{\k40}Zero {\k40}per-user {\k40}licensing {\k40}fees {\k40}and {\k40}total {\k40}data {\k40}sovereignty.
+Dialogue: 0,0:00:15.20,0:00:18.40,RightTeleprompterStyle,,0,0,0,,{\pos(1280,380)}{\k40}Every {\k40}resilient {\k40}enterprise {\k40}operates {\k40}on {\k40}4 {\k40}core {\k40}pillars:
+Dialogue: 0,0:00:18.80,0:00:22.00,RightTeleprompterStyle,,0,0,0,,{\pos(1280,380)}{\k45}Marketing {\k45}Attraction, {\k45}Sales {\k45}Conversion, {\k45}Logistics, {\k45}and {\k45}Finance.
+Dialogue: 0,0:00:22.40,0:00:25.60,RightTeleprompterStyle,,0,0,0,,{\pos(1280,380)}{\k40}Connecting {\k40}a {\k40}768-dimensional {\k40}RAG {\k40}vector {\k40}engine {\k40}to {\k40}Firestore.
+Dialogue: 0,0:00:26.00,0:00:29.20,RightTeleprompterStyle,,0,0,0,,{\pos(1280,380)}{\k35}Your {\k35}system {\k35}responds {\k35}with {\k35}precise {\k35}data {\k35}without {\k35}AI {\k35}hallucinations.
+Dialogue: 0,0:00:29.60,0:00:32.80,RightTeleprompterStyle,,0,0,0,,{\pos(1280,380)}{\k35}Leveraging {\k35}Meta's {\k35}newest {\k35}update, {\k35}clients {\k35}use {\k35}your {\k35}Business {\k35}Handle.
+Dialogue: 0,0:00:33.20,0:00:36.40,RightTeleprompterStyle,,0,0,0,,{\pos(1280,380)}{\k35}We {\k35}protect {\k35}private {\k35}phone {\k35}numbers {\k35}using {\k35}encrypted {\k35}BSUID {\k35}tokens.
+Dialogue: 0,0:00:36.80,0:00:40.00,RightTeleprompterStyle,,0,0,0,,{\pos(1280,380)}{\k35}24/7 {\k35}automated {\k35}WhatsApp {\k35}Business {\k35}customer {\k35}support {\k35}at {\k35}zero {\k35}cost.
+Dialogue: 0,0:00:40.40,0:00:43.60,RightTeleprompterStyle,,0,0,0,,{\pos(1280,380)}{\k40}Processing {\k40}AI {\k40}video {\k40}in {\k40}15-frame {\k40}micro-batches {\k40}with {\k40}GFPGAN.
+Dialogue: 0,0:00:44.00,0:00:47.20,RightTeleprompterStyle,,0,0,0,,{\pos(1280,380)}{\k35}Producing {\k35}1080p {\k35}digital {\k35}human {\k35}presenters {\k35}with {\k35}48kHz {\k35}stereo {\k35}audio.
+Dialogue: 0,0:00:47.60,0:00:50.80,RightTeleprompterStyle,,0,0,0,,{\pos(1280,380)}{\k35}Using {\k35}Anthropic's {\k35}Model {\k35}Context {\k35}Protocol {\k35}and {\k35}Docker {\k35}MCP {\k35}Toolkit,
+Dialogue: 0,0:00:51.20,0:00:54.40,RightTeleprompterStyle,,0,0,0,,{\pos(1280,380)}{\k40}our {\k40}agents {\k40}query {\k40}PostgreSQL {\k40}databases {\k40}and {\k40}GitHub {\k40}repositories.
+Dialogue: 0,0:00:54.80,0:00:58.00,RightTeleprompterStyle,,0,0,0,,{\pos(1280,380)}{\k35}This {\k35}entire {\k35}architecture {\k35}is {\k35}locked {\k35}under {\k35}release {\k35}tag {\k35}v2.0-stable.
+Dialogue: 0,0:00:58.40,0:01:01.60,RightTeleprompterStyle,,0,0,0,,{\pos(1280,380)}{\k29}Backed {\k29}up {\k29}to {\k29}GitHub {\k29}and {\k29}5TB {\k29}Google {\k29}Drive {\k29}for {\k29}instant {\k29}deployment.
