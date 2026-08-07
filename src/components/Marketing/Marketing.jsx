@@ -135,9 +135,8 @@ function VidModal({ v, onClose }) {
   const [lang, setLang] = useState('es'); // 'es' | 'en'
   const [unmuted, setUnmuted] = useState(true);
 
-  // Audio sample paths
-  const esAudioSrc = asset('real_guillermo_voice.mp3');
-  const enVideoSrc = asset('output_avatar_english_7qa.mp4');
+  // Audio & Master Composite Video paths (4 Capas: Fondo + Avatar HD + Subtítulos ASS + Voz Real 48kHz)
+  const enVideoSrc = v.src_en ? asset(v.src_en) : asset('videos/youtube_masterclass/youtube_30min_masterclass_en_1080p.mp4');
 
   const currentSrc = lang === 'en' ? enVideoSrc : v.src;
 

@@ -1,0 +1,21 @@
+[Script Info]
+Title: OpenClaw 30-Min Masterclass Subtitles
+ScriptType: v4.00+
+WrapStyle: 0
+ScaledBorderAndShadow: yes
+YCbCr Matrix: TV.601
+PlayResX: 1920
+PlayResY: 1080
+
+[V4+ Styles]
+Format: Name, Fontname, Fontsize, PrimaryColour, SecondaryColour, OutlineColour, BackColour, Bold, Italic, Underline, StrikeOut, ScaleX, ScaleY, Spacing, Angle, BorderStyle, Outline, Shadow, Alignment, MarginL, MarginR, MarginV, Encoding
+Style: MasterclassStyle,Montserrat,64,&H00FFFFFF,&H0000D7FF,&H00000000,&H80000000,-1,0,0,0,100,100,2,0,1,4,3,6,720,80,160,1
+
+[Events]
+Format: Layer, Start, End, Style, Name, MarginL, MarginR, MarginV, Effect, Text
+Dialogue: 0,0:00:01.00,0:00:26.00,MasterclassStyle,,0,0,0,,{\k30}Module 1: Enterprise AI Diagnosis & Strategic Revolution \N {\k40}Welcome to this executive briefing on B2B Artificial Intelligence Infrastructure. Today, we evaluate how industry-leading enterprises are replacing legacy SaaS subscriptions with autonomous on-premise agents. By eliminating per-user licensing friction, organizations can scale operational throughput while retaining total sovereignty over their data assets.
+Dialogue: 0,0:00:28.00,0:00:53.00,MasterclassStyle,,0,0,0,,{\k30}Module 2: The 4 Universal Enterprise Pillars Framework \N {\k40}Every resilient enterprise operates on four foundational pillars: Marketing Attraction, Sales Conversion, Operational Logistics, and Financial Intelligence. By deploying a 768-dimensional RAG vector engine across these domains, organizations achieve mathematical precision and zero-latency decision making.
+Dialogue: 0,0:00:55.00,0:01:20.00,MasterclassStyle,,0,0,0,,{\k30}Module 3: Live Demo: $0 WhatsApp Business & Meta BSUID Privacy Standard \N {\k40}Consider this real-time execution. Levering Meta's newest username architecture, clients connect seamlessly via your business handle (@YourCompany) while keeping their personal numbers private. Our system natively ingests Meta's BSUID payload, safeguarding customer privacy while maintaining uninterrupted CRM tracking.
+Dialogue: 0,0:01:22.00,0:01:47.00,MasterclassStyle,,0,0,0,,{\k30}Module 4: On-Premise AI Video Factory (15-Frame Micro-Batches & GFPGAN) \N {\k40}Sustainable video generation demands architectural resilience. By segmenting neural synthesis into 15-frame micro-batches coupled with GFPGAN facial restoration, we produce pristine 1080p digital presenters with 48kHz broadcast audio natively on local GPUs—bypassing cloud API fees entirely.
+Dialogue: 0,0:01:49.00,0:02:14.00,MasterclassStyle,,0,0,0,,{\k30}Module 5: Autonomous Architecture & Docker MCP Toolkit Integration \N {\k40}Utilizing Anthropic's Model Context Protocol (MCP) alongside the Docker Desktop MCP Toolkit, our agents interface directly with enterprise PostgreSQL databases and GitHub repositories. Data flows seamlessly within isolated container environments, guaranteeing enterprise-grade security.
+Dialogue: 0,0:02:16.00,0:02:41.00,MasterclassStyle,,0,0,0,,{\k30}Module 6: Strategic Roadmap & Turnkey Enterprise Deployment \N {\k40}The competitive edge of modern enterprise lies in deploying proprietary agentic ecosystems. This complete architecture is verified, locked under tag v2.0-stable, and fully prepared for immediate turn-key implementation across your organization.
