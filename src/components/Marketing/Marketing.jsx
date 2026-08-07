@@ -9,16 +9,16 @@ const VIDEO_CATALOG = [
   {
     id: 'jack-ma-style-b2b-master',
     src: asset('videos/jack_ma_style/jack_ma_b2b_full_master.mp4'),
-    poster: asset('avatars/negro.png'),
-    title: '🌌 Jack Ma Style (4 Capas Quemadas en MP4): IA B2B Cinemática',
+    poster: asset('thumbnails/thumb_jack_ma_b2b.png'),
+    title: '🌌 Jack Ma Style: IA B2B Cinemática & WhatsApp $0',
     tag: 'JACK MA FULL (15s)',
     dur: '0:15',
-    description: 'Video 1080p con TODAS LAS CAPAS QUEMADAS EN EL ARCHIVO MP4: Fondo + Avatar a la izquierda + Subtítulos Karaoke dorados activados por palabra.'
+    description: 'Video 1080p cinemático con composición HD sin bordes: Fondo espacial, Avatar frontal y subtítulos Karaoke dorados.'
   },
   {
     id: 'agencia-b2b-intro',
     src: asset('videos/guillermo_940f_master.mp4'),
-    poster: asset('avatars/dorado.png'),
+    poster: asset('thumbnails/thumb_agencia_ai.png'),
     title: '🚀 Agencia IA: Asesoría & Automatización Empresarial',
     tag: 'AGENCIA B2B (15s)',
     dur: '0:15',
@@ -27,7 +27,7 @@ const VIDEO_CATALOG = [
   {
     id: 'real-estate-ai',
     src: asset('videos/adaptive_targets/video_broll_catalog_18k.mp4'),
-    poster: asset('avatars/blanco.png'),
+    poster: asset('thumbnails/thumb_real_estate_ai.png'),
     title: '🏢 Real Estate IA: Citas 24/7 & Calificación de Leads',
     tag: 'REAL ESTATE IA',
     dur: '0:20',
@@ -36,7 +36,7 @@ const VIDEO_CATALOG = [
   {
     id: 'servicios-profesionales-ai',
     src: asset('videos/guillermo_940f_fast_master.mp4'),
-    poster: asset('avatars/azul.png'),
+    poster: asset('thumbnails/thumb_servicios_salud.png'),
     title: '💼 Servicios Profesionales & Salud: Agendas Autónomas',
     tag: 'SERVICIOS & SALUD',
     dur: '0:18',
@@ -45,7 +45,7 @@ const VIDEO_CATALOG = [
   {
     id: 'guillermo-940f-master',
     src: asset('videos/guillermo_940f_master.mp4'),
-    poster: asset('avatars/dorado.png'),
+    poster: asset('thumbnails/thumb_guillermo_940f.png'),
     title: '🏆 Video Maestro 940 Frames: Guillermo AI Studio',
     tag: 'MASTER 940F (31s)',
     dur: '0:31',
@@ -54,7 +54,7 @@ const VIDEO_CATALOG = [
   {
     id: 'talk-grow-educational',
     src: asset('videos/talk_grow_format/real_talk_grow_educational.mp4'),
-    poster: asset('avatars/negro.png'),
+    poster: asset('thumbnails/thumb_claude_7hacks.png'),
     title: 'Educativo 3D: 7 Hacks de Claude AI 4.6',
     tag: 'TALK-GROW 3D',
     dur: '0:15',
@@ -62,17 +62,17 @@ const VIDEO_CATALOG = [
   },
   {
     id: 'yt-special-claude-master',
-    src: asset('videos/talk_grow_format/youtube_master_10min_educational.mp4'),
-    poster: asset('avatars/blanco.png'),
-    title: 'YouTube Master: Agentes AI & 7 Hacks (10 Min)',
-    tag: 'MASTER 1080p',
-    dur: '1:00',
-    description: 'Curso intensivo de agentes autónomos y vectorización RAG en Firestore.'
+    src: asset('videos/youtube_masterclass/youtube_30min_masterclass_full_1080p.mp4'),
+    poster: asset('thumbnails/thumb_youtube_masterclass.png'),
+    title: 'YouTube Master: Masterclass B2B 30 Minutos (54,000F)',
+    tag: 'MASTERCLASS 30M',
+    dur: '30:00',
+    description: 'Masterclass B2B completa de 30 minutos con avatar frontal HD, audio EBU R128 (-16 LUFS) y subtítulos bilingües C1/C2.'
   },
   {
     id: 'podcast',
     src: asset('hb_tutorial_avatar_v1.mp4'),
-    poster: asset('avatars/azul.png'),
+    poster: asset('thumbnails/thumb_podcast_ecosistema.png'),
     title: 'Podcast: Ecosistema Ilimitado AI',
     tag: 'PODCAST',
     dur: '1:35',
@@ -81,7 +81,7 @@ const VIDEO_CATALOG = [
   {
     id: 'tutorial',
     src: asset('hb_tutorial_narrado_v1.mp4'),
-    poster: asset('avatars/dorado.png'),
+    poster: asset('thumbnails/thumb_tutorial_hb18k.png'),
     title: 'Tutorial: Manejo Completo de App HB 18k',
     tag: 'TUTORIAL APP',
     dur: '1:16',
@@ -90,7 +90,7 @@ const VIDEO_CATALOG = [
   {
     id: 'qa-english',
     src: asset('output_avatar_english_7qa.mp4'),
-    poster: asset('avatars/rojo.png'),
+    poster: asset('thumbnails/thumb_qa_english_rag.png'),
     title: 'Técnico: Demo Arquitectura 7 Q&A RAG (English)',
     tag: 'TECHNICAL DEMO',
     dur: '0:15',
@@ -99,7 +99,7 @@ const VIDEO_CATALOG = [
   {
     id: 'showcase-18k',
     src: asset('final_showcase.mp4'),
-    poster: asset('avatars/verde.png'),
+    poster: asset('thumbnails/thumb_showcase_18k.png'),
     title: 'Showcase: Colección Joyería 18k & WhatsApp $0',
     tag: 'SHOWCASE 18K',
     dur: '0:45',
@@ -108,20 +108,11 @@ const VIDEO_CATALOG = [
   {
     id: 'tiktok-viral',
     src: asset('tiktok_showcase.mp4'),
-    poster: asset('avatars/studio_mic.png'),
+    poster: asset('thumbnails/thumb_tiktok_viral.png'),
     title: 'TikTok Viral: Promocional Vertical 1080p',
     tag: 'TIKTOK 9:16',
     dur: '0:30',
     description: 'Video vertical promocional optimizado para redes sociales.'
-  },
-  {
-    id: 'showcase-human-loop',
-    src: asset('showcase_human_loop.mp4'),
-    poster: asset('avatars/desk_mic.png'),
-    title: 'Avatar Base: Guillermo AI Studio Loop',
-    tag: 'AVATAR LOOP',
-    dur: '0:20',
-    description: 'Video base en estudio con loop continuo para gesticulación vocal.'
   }
 ];
 
